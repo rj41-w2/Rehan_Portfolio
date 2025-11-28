@@ -6,10 +6,9 @@ import {
 
 import { DATA } from './data/user';
 import { callGemini } from './utils/gemini';
-import Contact from './components/Contact'; // Importing the Contact component
+import Contact from './components/Contact'; // Importing the updated Contact component
 
 export default function App() {
-  const darkMode = true;
   const [activeSection, setActiveSection] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
@@ -21,8 +20,6 @@ export default function App() {
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
   const chatEndRef = useRef(null);
-  const [contactMessage, setContactMessage] = useState("");
-  const [isDrafting, setIsDrafting] = useState(false);
 
   useEffect(() => {
     try {
@@ -59,17 +56,6 @@ export default function App() {
     
     setChatMessages(prev => [...prev, { role: 'model', text: response }]);
     setIsChatLoading(false);
-  };
-
-  const draftMessage = async (type) => {
-    setIsDrafting(true);
-    const prompt = type === 'recruiter' 
-      ? `Write a short professional message to ${DATA.profile.name} about a job opportunity.` 
-      : `Write a short friendly message to ${DATA.profile.name} for a coffee chat.`;
-    
-    const response = await callGemini(prompt, "You are a writing assistant.");
-    setContactMessage(response.replace(/^"|"$/g, ''));
-    setIsDrafting(false);
   };
 
   return (

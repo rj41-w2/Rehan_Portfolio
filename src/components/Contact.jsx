@@ -1,6 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Loader2, PenTool, Send, Mail, Linkedin, Github } from 'lucide-react';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { DATA } from '../data/user';
 import { callGemini } from '../utils/gemini';
 
@@ -9,11 +8,7 @@ export default function Contact() {
   const [contactMessage, setContactMessage] = useState("");
   const [isDrafting, setIsDrafting] = useState(false);
   
-  // Captcha States
-  const [captchaToken, setCaptchaToken] = useState(null);
-  const captchaRef = useRef(null);
-
-  // AI Drafting Logic (Real Gemini Call)
+  // AI Drafting Logic
   const draftMessage = async (type) => {
     setIsDrafting(true);
     try {
@@ -31,23 +26,15 @@ export default function Contact() {
     }
   };
 
-  // Submit Logic with hCaptcha
+  // Simple Submit Logic (Only Web3Forms)
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 1. Captcha Validation
-    if (!captchaToken) {
-      alert("⚠️ Please complete the captcha verification first!");
-      return;
-    }
-
     setResult("Sending...");
 
     const formData = new FormData(e.target);
     
-    // Keys & Token
+    // Key add karein
     formData.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
-    formData.append("h-captcha-response", import.meta.env.VITE_HCAPTCHA_SITE_KEY);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -61,8 +48,6 @@ export default function Contact() {
         setResult("Message Sent Successfully! ✅");
         setContactMessage("");
         e.target.reset();
-        setCaptchaToken(null);
-        if (captchaRef.current) captchaRef.current.resetCaptcha();
       } else {
         console.log("Error", data);
         setResult(data.message || "Something went wrong!");
@@ -78,6 +63,7 @@ export default function Contact() {
         <h2 className="text-3xl font-bold mb-8 text-center">Get In Touch</h2>
         
         <form onSubmit={handleSubmit} className="space-y-6">
+          
           <div className="grid md:grid-cols-2 gap-6">
             <input 
               type="text" 
@@ -115,16 +101,6 @@ export default function Contact() {
               onChange={(e) => setContactMessage(e.target.value)} 
               className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none"
             ></textarea>
-          </div>
-
-          {/* hCaptcha Component */}
-          <div className="flex justify-center my-4">
-             <HCaptcha
-               sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
-               onVerify={token => setCaptchaToken(token)}
-               ref={captchaRef}
-               theme="dark"
-             />
           </div>
 
           <button 

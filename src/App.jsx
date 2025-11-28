@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Github, Linkedin, Mail, Moon, Sun, ExternalLink, Code, BookOpen, 
-  Terminal, User, FileText, Send, Menu, X, ChevronDown, Sparkles, 
-  MessageSquare, Bot, Loader2, Minimize2, PenTool 
+  Github, ExternalLink, BookOpen, User, FileText, Send, Menu, X, 
+  Sparkles, MessageSquare, Bot, Loader2, Minimize2 
 } from 'lucide-react';
 
 import { DATA } from './data/user';
 import { callGemini } from './utils/gemini';
+import Contact from './components/Contact'; // Importing the Contact component
 
 export default function App() {
   const darkMode = true;
   const [activeSection, setActiveSection] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // Chat State
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([
     { role: 'model', text: `Hi! I'm ${DATA.profile.name.split(" ")[0]}'s AI assistant. Ask me anything!` }
@@ -27,7 +29,7 @@ export default function App() {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
     } catch (e) {
-      // ignore (e.g., localStorage not available)
+      // ignore
     }
   }, []);
 
@@ -198,38 +200,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-50 dark:bg-slate-800/50 px-4">
-        <div className="max-w-3xl mx-auto card rounded-2xl shadow-xl p-8 md:p-12">
-          <h2 className="text-3xl font-bold mb-8 text-center">Get In Touch</h2>
-          <form onSubmit={(e) => {e.preventDefault(); alert("Sent!");}} className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <input type="text" placeholder="Name" className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none" />
-              <input type="email" placeholder="Email" className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none" />
-            </div>
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium">Message</label>
-                <div className="flex gap-2">
-                  <button type="button" onClick={() => draftMessage('recruiter')} className="text-xs text-blue-600 flex items-center gap-1 hover:bg-blue-50 px-2 py-1 rounded">
-                    {isDrafting ? <Loader2 size={10} className="animate-spin"/> : <PenTool size={10}/>} Recruiter
-                  </button>
-                  <button type="button" onClick={() => draftMessage('student')} className="text-xs text-purple-600 flex items-center gap-1 hover:bg-purple-50 px-2 py-1 rounded">
-                    {isDrafting ? <Loader2 size={10} className="animate-spin"/> : <PenTool size={10}/>} Student
-                  </button>
-                </div>
-              </div>
-              <textarea rows="4" value={contactMessage} onChange={(e) => setContactMessage(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
-            </div>
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg flex justify-center items-center gap-2"><Send size={18}/> Send Message</button>
-          </form>
-          <div className="mt-8 flex justify-center gap-6">
-            <a href={`mailto:${DATA.profile.email}`}><Mail className="hover:text-blue-600 cursor-pointer"/></a>
-            <a href={DATA.profile.linkedin}><Linkedin className="hover:text-blue-600 cursor-pointer"/></a>
-            <a href={DATA.profile.github}><Github className="hover:text-blue-600 cursor-pointer"/></a>
-          </div>
-        </div>
-      </section>
+      {/* Contact Section (Now imported from component) */}
+      <Contact />
 
       {/* Footer */}
       <footer className="py-6 text-center text-gray-500 dark:text-gray-400 text-sm bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800">

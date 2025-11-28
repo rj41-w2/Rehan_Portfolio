@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	.card {
+		/* stylelint-disable at-rule-no-unknown */
+		@apply bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-xl p-6;
+		/* stylelint-enable at-rule-no-unknown */
+	}
+}

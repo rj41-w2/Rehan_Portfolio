@@ -8,7 +8,7 @@ export const DATA = {
     degree: "BS Computer Science",
     College: "Aspire Group of Colleges",
     Degree: "Intermediate Computer Science",
-    email: "rehanjamilwattoo@gmail.com",
+    email: "rehanjamilwattoo@outlook.com",
     github: "https://github.com/rehanjamil41",
     linkedin: "https://www.linkedin.com/in/rehanjamil41/",
     resumeLink: "#"

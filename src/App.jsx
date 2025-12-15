@@ -6,7 +6,7 @@ import {
 
 import { DATA } from './data/user';
 import { callGemini } from './utils/gemini';
-import Contact from './components/Contact'; // Importing the updated Contact component
+import Contact from './components/Contact'; 
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
@@ -66,10 +66,10 @@ export default function App() {
           
           {/* Logo Section */}
           <div className="flex items-center gap-2 font-bold text-xl cursor-pointer" onClick={() => scrollToSection('home')}>
-            <div className="bg-blue-600 w-8 h-8 flex items-center justify-center rounded-lg text-white font-bold text-lg shadow-md shadow-blue-500/20">
+            <div className="bg-blue-600 w-9 h-9 flex items-center justify-center rounded-lg text-white font-bold text-lg shadow-md shadow-blue-500/20">
               R
             </div>
-            {DATA.profile.name}
+            
           </div>
 
           <div className="hidden md:flex gap-8 items-center">
@@ -94,8 +94,11 @@ export default function App() {
         )}
       </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="pt-32 pb-20 px-4 text-center max-w-7xl mx-auto">
+    {/* Hero Section */}
+      <section 
+        id="home" 
+        className="min-h-screen flex flex-col justify-center items-center px-4 text-center max-w-7xl mx-auto"
+      >
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium mb-6">
           <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
           Available 
@@ -104,15 +107,12 @@ export default function App() {
         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-10">{DATA.profile.tagline}</p>
         <div className="flex justify-center gap-4">
           <button onClick={() => scrollToSection('projects')} className="px-8 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-500/20">View My Work</button>
-          <button onClick={() => setIsChatOpen(true)} className="px-8 py-3 rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 font-semibold hover:bg-gray-50 dark:hover:bg-slate-700 flex items-center gap-2">
-            <Sparkles size={18} className="text-purple-500 dark:text-purple-400" /> AI Assistant
-          </button>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white dark:bg-slate-900 px-4">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
+      <section id="about" className="min-h-screen flex flex-col justify-center py-20 bg-white dark:bg-slate-900 px-4">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 w-full">
           <div>
             <h2 className="text-3xl font-bold mb-6 flex items-center gap-2"><User className="text-blue-600"/> About Me</h2>
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">{DATA.profile.about}</p>
@@ -146,7 +146,14 @@ export default function App() {
           <h2 className="text-3xl font-bold mb-12 text-center">Technical Skills</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {Object.entries(DATA.skills).map(([category, skills]) => (
-              <div key={category} className="card">
+              <div 
+                key={category} 
+                className="card p-6 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 
+                transition-all duration-300 
+                hover:-translate-y-2 
+                hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.6)] 
+                hover:border-blue-500"
+              >
                 <h3 className="text-xl font-bold mb-4 capitalize text-gray-900 dark:text-slate-100">{category}</h3>
                 <div className="flex flex-wrap gap-2">
                   {skills.map(skill => (
@@ -159,17 +166,27 @@ export default function App() {
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-20 bg-white dark:bg-slate-900 px-4">
-        <div className="max-w-7xl mx-auto">
+    {/* Projects Section */}
+      <section 
+        id="projects" 
+        className="min-h-screen flex flex-col justify-center py-20 bg-white dark:bg-slate-900 px-4"
+      >
+        <div className="max-w-7xl mx-auto w-full">
           <h2 className="text-3xl font-bold mb-12 text-center">Featured Projects</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {DATA.projects.map(project => (
-              <div key={project.id} className="group border border-gray-200 dark:border-slate-800 rounded-xl overflow-hidden hover:shadow-xl transition-all">
+              <div 
+                key={project.id} 
+                className="group border border-gray-200 dark:border-slate-800 rounded-xl overflow-hidden 
+                transition-all duration-300 
+                hover:-translate-y-2 
+                hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.6)] 
+                hover:border-blue-500"
+              >
                 <div className="h-48 bg-gray-200 dark:bg-slate-800 overflow-hidden">
                   <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
                 </div>
-                <div className="card">
+                <div className="card p-5">
                   <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{project.title}</h3>
                   <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{project.description}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -185,7 +202,7 @@ export default function App() {
           </div>
         </div>
       </section>
-
+      
       {/* Contact Section (Now imported from component) */}
       <Contact />
 
@@ -197,7 +214,13 @@ export default function App() {
       {/* Chat Widget */}
       <div className="fixed bottom-6 right-6 z-50">
         {!isChatOpen ? (
-          <button onClick={() => setIsChatOpen(true)} className="p-4 bg-blue-600 text-white rounded-full shadow-lg hover:scale-110 transition-transform"><MessageSquare size={24}/></button>
+          <button 
+            onClick={() => setIsChatOpen(true)} 
+            className="p-4 bg-blue-600 text-white rounded-full shadow-lg hover:scale-110 transition-transform"
+          >
+    
+            <Bot size={24}/> 
+          </button>
         ) : (
           <div className="bg-white dark:bg-slate-900 w-80 sm:w-96 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 flex flex-col overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-300">
             <div className="bg-blue-600 p-4 text-white flex justify-between items-center">

@@ -33,9 +33,18 @@ export const DATA = {
       title: "E-commerce Website",
       description: "An online platform for buying and selling products.",
       tech: ["React", "CSS","JavaScript", "HTML", "Vite" ],
-      image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800",
+      image: "/images/e-commerce.jpg",
       demo: "https://shopvibe41.vercel.app/",
       github: "https://github.com/rehanjamil41/shopvibe"
+    },
+    {
+      id: 3,
+      title: "The Ultimate Cricket Encyclopedia & AI Suite",
+      description: "A comprehensive platform for cricket enthusiasts with AI-powered features.",
+      tech: ["Next.js", "Tailwind CSS", "Firebase"],
+      image: "/images/cricket.jpg",
+      demo: "https://criclegends41.vercel.app/",
+      github: "https://github.com/rehanjamil41/cric-legends"
     }
   ],
   experience: [

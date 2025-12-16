@@ -36,12 +36,14 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-white/10 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
         
-        {/* Logo */}
-        <div className="cursor-pointer group" onClick={() => scrollToSection('home')}>
-          <span className="font-extrabold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-500 dark:from-violet-400 dark:to-purple-300 transition-all duration-300 group-hover:scale-110 inline-block">
-            R
-          </span>
-        </div>
+      {/* Logo Section - Image */}
+<div className="cursor-pointer group" onClick={() => scrollToSection('home')}>
+  <img 
+    src="/images/logo.png" 
+    alt="RJ Logo" 
+    className="w-12 h-12 rounded-full object-cover border-2 border-transparent group-hover:border-blue-500/50 transition-all duration-300 group-hover:scale-110 shadow-lg"
+  />
+</div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 items-center">

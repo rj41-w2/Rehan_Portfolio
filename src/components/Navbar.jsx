@@ -93,7 +93,7 @@ const Navbar = () => {
           onClick={() => scrollToSection('home')}
         >
           <img 
-            src="/logo.png" 
+            src="/images/logo.png" 
             alt="RJ Logo" 
             className="w-12 h-12 rounded-full object-cover border-2 border-transparent group-hover:border-blue-500/50 transition-all duration-300 group-hover:scale-110 shadow-lg"
           />

@@ -39,7 +39,7 @@ const Hero = () => {
         </p>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt- animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
           <button 
             onClick={scrollToProjects}
             // Light: Dark Button, Dark: White Button
@@ -60,11 +60,11 @@ const Hero = () => {
       </div>
 
       {/* 3. Tech Stack Strip (Bottom) */}
-      <div className="absolute bottom-10 left-0 right-0 w-full animate-in fade-in duration-1000 delay-500">
-        <div className="max-w-5xl mx-auto px-6">
+      <div className="absolute bottom-1 left-0 right-0 w-full animate-in fade-in duration-1000 delay-500">
+        <div className="max-w-5xl mx-auto px-4">
           <p className="text-center text-gray-400 dark:text-slate-500 text-xs uppercase tracking-widest mb-6">Powering applications with modern tech</p>
           
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-8 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
              
              {/* Tech Icons (Decorative with Theme Support) */}
              <div className="flex flex-col items-center gap-2 group">

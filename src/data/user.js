@@ -24,7 +24,7 @@ export const DATA = {
       title: "Task Manager",
       description: "A productivity app to manage daily tasks efficiently.",
       tech: ["React", "Tailwind", "Vite"],
-      image: "/images/task-master.jpeg",
+      image: "/images/task-master.png",
       demo: "https://taskmaster41.vercel.app/",
       github: "https://github.com/rehanjamil41/TASK-MASTER"
     },
@@ -42,7 +42,7 @@ export const DATA = {
       title: "The Ultimate Cricket Encyclopedia & AI Suite",
       description: "A comprehensive platform for cricket enthusiasts with AI-powered features.",
       tech: ["Next.js", "Tailwind CSS", "Firebase"],
-      image: "/images/cricket.jpeg",
+      image: "/images/cricket.png",
       demo: "https://criclegends41.vercel.app/",
       github: "https://github.com/rehanjamil41/cric-legends"
     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon, Book } from 'lucide-react'; // Book icon import kiya
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -10,30 +10,23 @@ const Navbar = () => {
   // --- Track Active Section ---
   const [activeSection, setActiveSection] = useState('home');
 
-  // URL change hone par active section set karein
   useEffect(() => {
     if (location.pathname === '/guestbook') {
       setActiveSection('guestbook');
     } else if (location.pathname === '/') {
-      // Home page par default 'home' rakhein agar scroll detect nahi hua
       setActiveSection('home');
     }
   }, [location.pathname]);
 
-  // --- NEW: Scroll Spy (Jab scroll karein to active button change ho) ---
+  // --- Scroll Spy ---
   useEffect(() => {
-    // Scroll spy sirf Home page par chalna chahiye
     if (location.pathname !== '/') return;
-
     const handleScroll = () => {
       const sections = ['home', 'about', 'skills', 'projects', 'contact'];
-      
-      // Loop through sections to find which one is currently in view
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // Agar section screen ke beech mein hai ya top par hai
           if (rect.top >= -100 && rect.top <= 300) {
             setActiveSection(section);
             break;
@@ -41,12 +34,11 @@ const Navbar = () => {
         }
       }
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
 
-  // --- THEME LOGIC ---
+  // --- Theme Logic ---
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
 
   useEffect(() => {
@@ -63,7 +55,7 @@ const Navbar = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  // --- SCROLL LOGIC ---
+  // --- Scroll Function ---
   const scrollToSection = (id) => {
     setIsMenuOpen(false);
     setActiveSection(id);
@@ -86,7 +78,7 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-white/10 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
         
-        {/* Logo Section */}
+        {/* Logo */}
         <Link 
           to="/" 
           className="cursor-pointer group" 
@@ -99,7 +91,7 @@ const Navbar = () => {
           />
         </Link>
 
-        {/* Desktop Menu */}
+        {/* --- DESKTOP MENU --- */}
         <div className="hidden md:flex gap-8 items-center">
           {navLinks.map(item => (
             <button 
@@ -112,14 +104,13 @@ const Navbar = () => {
               }`}
             >
               {item}
-              {/* Conditional Line: Agar active hai to w-full, warna hover par aayegi */}
               <span className={`absolute -bottom-1 left-0 h-0.5 bg-violet-600 dark:bg-violet-500 transition-all duration-300 ${
                 activeSection === item ? "w-full" : "w-0 group-hover:w-full"
               }`}></span>
             </button>
           ))}
 
-          {/* Guestbook Link */}
+          {/* Guestbook Desktop Link */}
           <Link 
             to="/guestbook" 
             onClick={() => setActiveSection('guestbook')}
@@ -144,19 +135,35 @@ const Navbar = () => {
           </button>
         </div>
         
-        {/* Mobile Menu Controls */}
+        {/* --- MOBILE CONTROLS --- */}
          <div className="md:hidden flex gap-4 items-center">
+           
+           {/* 1. New: Guestbook ICON (Header mein dikhega) */}
+           <Link 
+             to="/guestbook"
+             onClick={() => setActiveSection('guestbook')}
+             className={`p-1 transition-colors ${
+               activeSection === 'guestbook' 
+                 ? "text-violet-600 dark:text-violet-400" 
+                 : "text-gray-700 dark:text-slate-300"
+             }`}
+           >
+             <Book size={20} />
+           </Link>
+
+           {/* 2. Theme Button */}
            <button onClick={toggleTheme} className="text-gray-800 dark:text-yellow-400">
              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
            </button>
 
+           {/* 3. Hamburger Menu */}
            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 dark:text-slate-300">
              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
            </button>
          </div>
       </div>
       
-      {/* Mobile Menu Dropdown */}
+      {/* --- MOBILE DROPDOWN MENU --- */}
       {isMenuOpen && (
         <div className="md:hidden bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 p-4 space-y-4">
           <button 
@@ -175,7 +182,8 @@ const Navbar = () => {
               {item}
             </button>
           ))}
-
+          
+          {/* 4. Old: Guestbook TEXT Button (Menu list mein dikhega) */}
           <Link 
             to="/guestbook" 
             onClick={() => { setIsMenuOpen(false); setActiveSection('guestbook'); }}

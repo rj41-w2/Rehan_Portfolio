@@ -97,7 +97,7 @@ const About = () => {
              
             <Award className="w-8 h-8 text-yellow-500 dark:text-yellow-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-4xl font-bold text-slate-900 dark:text-white mb-1">
-              <AnimatedCounter end={DATA.projects?.length || 5} />+
+              <AnimatedCounter end={6} />+
             </h3>
             <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Projects</p>
           </div>
@@ -139,7 +139,7 @@ const About = () => {
                   <h4 className="text-lg font-bold text-slate-900 dark:text-white">{DATA.profile.university}</h4>
                   <p className="text-slate-600 dark:text-slate-400 text-sm mb-1">{DATA.profile.degree}</p>
                   <span className="inline-block px-2 py-1 bg-slate-100 text-blue-700 border border-slate-200 dark:bg-slate-800 dark:text-blue-300 dark:border-slate-700 text-xs rounded">2024 - 2028</span>
-                  <span className="ml-2 text-xs text-slate-500 dark:text-slate-500">GPA: {DATA.profile.gpa}</span>
+                  <span className="ml-2 text-xs text-slate-500 dark:text-slate-500"> {DATA.profile.gpa}</span>
                 </div>
                 
                 {/* College */}

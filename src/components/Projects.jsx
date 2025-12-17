@@ -1,6 +1,7 @@
 import React from 'react';
 import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
 import { DATA } from '../data/user';
+import LikeButton from './LikeButton'; // <-- Import LikeButton
 
 const Projects = () => {
   return (
@@ -10,12 +11,10 @@ const Projects = () => {
         
         {/* Section Header */}
         <div className="mb-20">
-          {/* Title: Light = Slate-900, Dark = White */}
           <h2 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6">
             Featured <span className="text-blue-600 dark:text-blue-500">Work</span>
           </h2>
           <div className="h-1 w-32 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 rounded-full"></div>
-          {/* Subtext: Light = Slate-600, Dark = Slate-400 */}
           <p className="text-slate-600 dark:text-slate-400 mt-6 max-w-xl text-lg">
             A selection of projects that showcase my passion for building clean, robust, and scalable applications.
           </p>
@@ -102,8 +101,8 @@ const Projects = () => {
                   </div>
                 </div>
 
-                {/* Links */}
-                <div className="flex items-center gap-6 pt-4">
+                {/* Links & Like Button Row */}
+                <div className="flex flex-wrap items-center gap-6 pt-4">
                   <a 
                     href={project.github} 
                     className="flex items-center gap-2 border-b transition-colors pb-1
@@ -120,6 +119,12 @@ const Projects = () => {
                   >
                     Live Demo <ArrowUpRight size={20} />
                   </a>
+
+                  {/* --- NEW LIKE BUTTON HERE --- */}
+                  <div className="ml-auto">
+                    <LikeButton projectId={project.id} />
+                  </div>
+
                 </div>
 
               </div>

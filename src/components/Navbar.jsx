@@ -79,8 +79,9 @@ const Navbar = () => {
       
       <div className="px-6 h-14 md:h-16 flex justify-between items-center relative">
         
-        {/* 1. LEFT SIDE: Theme Toggle */}
-        <div className="flex items-center z-20">
+        {/* 1. LEFT SIDE (Desktop): Theme Toggle */}
+        {/* CHANGE: Added 'hidden md:flex' so it hides on mobile */}
+        <div className="hidden md:flex items-center z-20">
           <button 
               onClick={toggleTheme} 
               className="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-yellow-400 hover:scale-110 transition-transform"
@@ -89,8 +90,9 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* 2. CENTER (Mobile): Logo */}
-        <div className="md:hidden absolute left-1/2 -translate-x-1/2 z-10">
+        {/* 2. LEFT SIDE (Mobile): Logo */}
+        {/* CHANGE: Removed 'absolute left-1/2' and put it in normal flow so it sits on Left */}
+        <div className="md:hidden flex items-center z-10">
             <Link 
             to="/" 
             className="cursor-pointer group" 
@@ -117,7 +119,6 @@ const Navbar = () => {
                     : "text-gray-700 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400"
                 }`}
                 >
-                {/* CHANGE: Display Name Logic */}
                 {item === 'skills' ? 'Tech Arsenal' : item === 'projects' ? 'Works' : item}
                 
                 <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 dark:bg-blue-500 transition-all duration-300 ${
@@ -136,7 +137,7 @@ const Navbar = () => {
                 className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
                 activeSection === 'guestbook' 
                     ? "bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.6)]" 
-                    : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:bg-blue-600 hover:text-white hover:shadow-[0_0_20px_rgba(37,99,235,0.6)]"
+                    : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:bg-slate-800 hover:text-white hover:shadow-[0_0_20px_rgba(37,99,235,0.6)]"
                 }`}
             >
                 Guestbook
@@ -144,7 +145,18 @@ const Navbar = () => {
         </div>
 
         {/* 5. RIGHT SIDE (Mobile): Mobile Controls */}
-         <div className="md:hidden flex gap-4 items-center ml-auto z-20">
+        {/* CHANGE: Added Theme Toggle here */}
+         <div className="md:hidden flex gap-3 items-center ml-auto z-20">
+           
+           {/* Mobile Theme Toggle */}
+           <button 
+              onClick={toggleTheme} 
+              className="text-gray-800 dark:text-yellow-400 p-1"
+           >
+              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+           </button>
+
+           {/* Mobile Guestbook Icon */}
            <Link 
              to="/guestbook"
              onClick={() => setActiveSection('guestbook')}
@@ -157,6 +169,7 @@ const Navbar = () => {
              <Book size={20} />
            </Link>
 
+           {/* Mobile Menu Toggle */}
            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 dark:text-slate-300">
              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
            </button>
@@ -172,7 +185,6 @@ const Navbar = () => {
               onClick={() => scrollToSection(item)} 
               className={`block w-full text-left capitalize font-medium ${activeSection === item ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-slate-300'}`}
             >
-              {/* CHANGE: Mobile Menu Logic */}
               {item === 'skills' ? 'Tech Arsenal' : item === 'projects' ? 'Works' : item}
             </button>
           ))}

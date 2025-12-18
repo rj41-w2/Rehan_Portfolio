@@ -36,7 +36,7 @@ const Home = () => {
         bg-slate-50 border-slate-200 text-slate-600
         dark:bg-slate-900/80 dark:border-slate-800 dark:text-slate-500">
         <p>
-          © {new Date().getFullYear()} <span className="font-semibold text-slate-900 dark:text-slate-200">Rehan</span>. All rights reserved.
+          © {new Date().getFullYear()} <span className="font-semibold text-slate-900 dark:text-slate-200">Rehan Jamil</span>. All rights reserved.
         </p>
       </footer>
     </>

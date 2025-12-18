@@ -56,7 +56,7 @@ export default function Contact() {
       const data = await response.json();
 
       if (data.success) {
-        setResult("Message Sent Successfully! ✅");
+        setResult("Message Sent Successfully! ✅ I will get back to you soon.");
         setContactMessage("");
         e.target.reset();
       } else {
@@ -137,8 +137,8 @@ export default function Contact() {
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="flex-1 p-4 rounded-xl flex justify-center items-center gap-2 transition-all group border
-                      bg-white border-slate-200 text-slate-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 shadow-sm
-                      dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-blue-600 dark:hover:text-white dark:hover:border-blue-500 dark:shadow-none"
+                      bg-white border-slate-200 text-slate-600 hover:bg-slate-800 hover:text-white hover:border-slate-800 shadow-sm
+                      dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-gray-700 dark:hover:text-white dark:hover:border-gray-500 dark:shadow-none"
                   >
                     <Linkedin size={20} className="group-hover:scale-110 transition-transform"/>
                     <span className="font-medium">LinkedIn</span>

@@ -58,8 +58,9 @@ const About = () => {
           <div className="h-1 w-20 bg-blue-600 dark:bg-blue-500 mx-auto rounded-full"></div>
         </div>
 
-        {/* 2. Quick Stats Row (Professional Stats) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        {/* 2. Quick Stats Row (UPDATED LAYOUT) */}
+        {/* Mobile: grid-cols-2 (2 per row), Desktop: grid-cols-3 */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-16">
           
           {/* Card 1: Experience Years */}
           <div className="p-6 rounded-2xl text-center transition-colors group
@@ -68,10 +69,10 @@ const About = () => {
               hover:bg-slate-100 dark:hover:bg-slate-800">
              
             <Clock className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-4xl font-bold text-slate-900 dark:text-white mb-1">
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-1">
               <AnimatedCounter end={2} />+
             </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Years in Uni</p>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Years </p>
           </div>
 
           {/* Card 2: Projects Done */}
@@ -81,14 +82,15 @@ const About = () => {
               hover:bg-slate-100 dark:hover:bg-slate-800">
              
             <Award className="w-8 h-8 text-purple-600 dark:text-purple-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-4xl font-bold text-slate-900 dark:text-white mb-1">
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-1">
               <AnimatedCounter end={12} />+
             </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Projects Built</p>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Projects Built</p>
           </div>
 
-          {/* Card 3: Availability */}
-          <div className="p-6 rounded-2xl text-center transition-colors group
+          {/* Card 3: Availability (FULL WIDTH ON MOBILE) */}
+          {/* Added 'col-span-2 md:col-span-1' to span full width on mobile */}
+          <div className="col-span-2 md:col-span-1 p-6 rounded-2xl text-center transition-colors group
               bg-white border border-slate-200 
               dark:bg-slate-800/50 dark:border-slate-700 
               hover:bg-slate-100 dark:hover:bg-slate-800 relative overflow-hidden">
@@ -154,7 +156,7 @@ const About = () => {
           </div>
 
 
-          {/* RIGHT: Development Process (REPLACED WORK HISTORY) */}
+          {/* RIGHT: Development Process (UPDATED LAYOUT) */}
           <div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
               <span className="w-8 h-8 rounded-lg bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400 flex items-center justify-center">
@@ -163,7 +165,8 @@ const About = () => {
               My Workflow
             </h3>
 
-            <div className="space-y-6">
+            {/* Layout Change: Mobile (2 cols), Desktop (1 col - vertical list) */}
+            <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-6">
               
               {/* Step 1: Design & Plan */}
               <div className="group relative p-6 rounded-2xl transition-all duration-300
@@ -180,11 +183,13 @@ const About = () => {
                   <div className="p-3 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">
                     <Layout size={20} />
                   </div>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">Planning & Design</h4>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white hidden md:block">Planning & Design</h4>
+                  {/* Mobile Only Short Title */}
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white md:hidden">Planning</h4>
                 </div>
                 
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                  I start by understanding requirements, designing the UI/UX in Figma, and planning the database structure (Schema Design) to ensure scalability.
+                <p className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  I start by understanding requirements, designing the UI/UX in Figma, and planning the DB schema.
                 </p>
               </div>
 
@@ -203,16 +208,18 @@ const About = () => {
                   <div className="p-3 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
                     <Code2 size={20} />
                   </div>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">Development</h4>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white hidden md:block">Development</h4>
+                  {/* Mobile Only Short Title */}
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white md:hidden">Coding</h4>
                 </div>
                 
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                  I write clean, modular, and reusable code using React & Node.js. I focus on state management and API integration with best practices.
+                <p className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  I write clean, modular, and reusable code using React & Node.js with best practices.
                 </p>
               </div>
 
-              {/* Step 3: Deployment */}
-              <div className="group relative p-6 rounded-2xl transition-all duration-300
+              {/* Step 3: Deployment (FULL WIDTH ON MOBILE) */}
+              <div className="col-span-2 md:col-span-1 group relative p-6 rounded-2xl transition-all duration-300
                 bg-white border border-slate-200 hover:bg-slate-50 hover:border-blue-400
                 dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"
               >
@@ -229,8 +236,8 @@ const About = () => {
                   <h4 className="text-lg font-bold text-slate-900 dark:text-white">Testing & Launch</h4>
                 </div>
                 
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                  After thorough testing and bug fixing, I deploy the application on platforms like Vercel or Netlify, optimizing for speed and SEO.
+                <p className="text-xs md:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  After thorough testing and bug fixing, I deploy the application on platforms like Vercel or Netlify.
                 </p>
               </div>
 

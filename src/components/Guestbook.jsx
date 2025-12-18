@@ -114,7 +114,7 @@ const Guestbook = () => {
             <PenTool size={32} className="text-slate-900 dark:text-white" />
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
-            Sign my <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Guestbook</span>
+            Sign my <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400">Guestbook</span>
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
             Leave your mark on the internet. Share a thought, a vibe, or just say you were here.
@@ -192,7 +192,7 @@ const Guestbook = () => {
                 <User size={32} className="text-slate-400" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Join the Wall of Fame</h3>
-              <p className="text-slate-500 mb-6">Login to leave your permanent mark.</p>
+              <p className="text-slate-500 mb-6">Login to leave your message </p>
               <button 
                 onClick={handleLogin}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-blue-500/30 transition-all hover:-translate-y-1 inline-flex items-center gap-3"

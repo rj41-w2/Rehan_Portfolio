@@ -1,11 +1,44 @@
 import React from 'react';
 import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
 import { DATA } from '../data/user';
-import LikeButton from './LikeButton'; // <-- Import LikeButton
+import LikeButton from './LikeButton';
+
+// --- HELPER: Website Links ---
+const TECH_LINKS = {
+  "javascript": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+  "typescript": "https://www.typescriptlang.org/",
+  "python": "https://www.python.org/",
+  "java": "https://www.java.com/",
+  "html": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+  "css": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+  "react": "https://react.dev/",
+  "next.js": "https://nextjs.org/",
+  "vue": "https://vuejs.org/",
+  "angular": "https://angular.io/",
+  "tailwind": "https://tailwindcss.com/",
+  "bootstrap": "https://getbootstrap.com/",
+  "node.js": "https://nodejs.org/",
+  "express": "https://expressjs.com/",
+  "django": "https://www.djangoproject.com/",
+  "mongodb": "https://www.mongodb.com/",
+  "firebase": "https://firebase.google.com/",
+  "postgresql": "https://www.postgresql.org/",
+  "mysql": "https://www.mysql.com/",
+  "git": "https://git-scm.com/",
+  "github": "https://github.com/",
+  "docker": "https://www.docker.com/",
+  "aws": "https://aws.amazon.com/",
+  "figma": "https://www.figma.com/"
+};
+
+// Helper Function to get Link
+const getTechLink = (techName) => {
+  const key = techName.toLowerCase().trim();
+  return TECH_LINKS[key] || `https://www.google.com/search?q=${encodeURIComponent(techName)}`;
+};
 
 const Projects = () => {
   return (
-    // CHANGE: Light = bg-slate-50, Dark = koi background nahi (Transparent)
     <section id="projects" className="min-h-screen py-24 px-4 relative bg-slate-50 dark:bg-transparent transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         
@@ -43,7 +76,6 @@ const Projects = () => {
                     <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                     <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                     <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                    {/* Mock URL Bar */}
                     <div className="ml-4 flex-1 h-4 rounded-full max-w-[200px]
                       bg-white border border-slate-200
                       dark:bg-slate-900/50 dark:border-transparent"></div>
@@ -51,7 +83,6 @@ const Projects = () => {
 
                   {/* Project Image */}
                   <div className="relative overflow-hidden aspect-video">
-                    {/* Overlay: Only in Dark Mode */}
                     <div className="absolute inset-0 z-10 transition-colors
                       bg-transparent
                       dark:bg-blue-900/20 dark:group-hover:bg-transparent"></div>
@@ -87,16 +118,23 @@ const Projects = () => {
                   </p>
                 </div>
 
-                {/* Tech Stack */}
+                {/* Tech Stack - NOW WITH HOVER LIFT ANIMATION */}
                 <div>
                    <h4 className="text-sm font-semibold mb-3 uppercase tracking-wider text-slate-500 dark:text-slate-500">Technologies</h4>
                    <div className="flex flex-wrap gap-2">
                     {project.tech.map(t => (
-                      <span key={t} className="px-3 py-1 text-sm rounded-full border
-                        bg-blue-50 text-blue-700 border-blue-200
-                        dark:bg-blue-500/10 dark:text-blue-300 dark:border-blue-500/20">
+                      <a 
+                        key={t} 
+                        href={getTechLink(t)} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        // Change is HERE: added hover:-translate-y-1 and hover:shadow-md
+                        className="px-3 py-1 text-sm rounded-full border transition-all duration-300 cursor-pointer transform hover:-translate-y-1 hover:shadow-md
+                          bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 hover:border-blue-300
+                          dark:bg-blue-500/10 dark:text-blue-300 dark:border-blue-500/20 dark:hover:bg-blue-500/20 dark:hover:border-blue-500/40"
+                      >
                         {t}
-                      </span>
+                      </a>
                     ))}
                   </div>
                 </div>
@@ -120,7 +158,7 @@ const Projects = () => {
                     Live Demo <ArrowUpRight size={20} />
                   </a>
 
-                  {/* --- NEW LIKE BUTTON HERE --- */}
+                  {/* LIKE BUTTON */}
                   <div className="ml-auto">
                     <LikeButton projectId={project.id} />
                   </div>

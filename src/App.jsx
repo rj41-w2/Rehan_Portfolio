@@ -11,9 +11,10 @@ import Projects from './components/Projects';
 import Guestbook from './components/Guestbook';
 import Contact from './components/Contact';
 import ChatWidget from './components/ChatWidget';
+import LiveSignatures from './components/LiveSignatures';
 
 // --- HOME PAGE COMPONENT ---
-// (Isme Guestbook nahi hai, kyunke wo ab alag page par hai)
+
 const Home = () => {
   return (
     <>
@@ -22,6 +23,7 @@ const Home = () => {
       <About />
       <Skills />
       <Projects />
+      <LiveSignatures />
       
       {/* Contact Section with Overlay */}
       <div className="relative">

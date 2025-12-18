@@ -2,66 +2,97 @@ import React from 'react';
 import { Code2, Database, Terminal, Cpu, Globe, Wrench, Layout, ExternalLink } from 'lucide-react';
 import { DATA } from '../data/user';
 
-// --- HELPER: Popular Tech Websites Mapping ---
-// Aap yahan apni marzi se aur links add kar sakte hain
+
+// --- HELPER 1: Website Links ---
 const SKILL_LINKS = {
-  // Languages
   "javascript": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
   "typescript": "https://www.typescriptlang.org/",
   "python": "https://www.python.org/",
   "java": "https://www.java.com/",
   "c++": "https://isocpp.org/",
-  "c#": "https://learn.microsoft.com/en-us/dotnet/csharp/",
-  "php": "https://www.php.net/",
   "html": "https://developer.mozilla.org/en-US/docs/Web/HTML",
   "css": "https://developer.mozilla.org/en-US/docs/Web/CSS",
-  "sql": "https://www.w3schools.com/sql/",
-
-  // Frontend
   "react": "https://react.dev/",
-  "react js": "https://react.dev/",
   "next.js": "https://nextjs.org/",
   "vue": "https://vuejs.org/",
   "angular": "https://angular.io/",
   "tailwind": "https://tailwindcss.com/",
-  "tailwind css": "https://tailwindcss.com/",
   "bootstrap": "https://getbootstrap.com/",
-  "sass": "https://sass-lang.com/",
-  "redux": "https://redux.js.org/",
-  "material ui": "https://mui.com/",
-
-  // Backend & DB
   "node.js": "https://nodejs.org/",
-  "node": "https://nodejs.org/",
   "express": "https://expressjs.com/",
-  "express.js": "https://expressjs.com/",
   "django": "https://www.djangoproject.com/",
-  "flask": "https://flask.palletsprojects.com/",
   "mongodb": "https://www.mongodb.com/",
   "firebase": "https://firebase.google.com/",
   "postgresql": "https://www.postgresql.org/",
   "mysql": "https://www.mysql.com/",
-  "redis": "https://redis.io/",
-
-  // Tools & DevOps
   "git": "https://git-scm.com/",
   "github": "https://github.com/",
   "docker": "https://www.docker.com/",
-  "kubernetes": "https://kubernetes.io/",
   "aws": "https://aws.amazon.com/",
-  "azure": "https://azure.microsoft.com/",
   "figma": "https://www.figma.com/",
   "postman": "https://www.postman.com/",
   "vs code": "https://code.visualstudio.com/"
 };
 
-// Function to get link (Official or Google Search Fallback)
-const getSkillLink = (skillName) => {
-  const key = skillName.toLowerCase().trim();
-  return SKILL_LINKS[key] || `https://www.google.com/search?q=${encodeURIComponent(skillName + " official website")}`;
+// --- HELPER 2: Subtitles / Descriptions (NEW ADDITION) ---
+const SKILL_DESCRIPTIONS = {
+  // Languages
+  "javascript": "Language of the Web",
+  "typescript": "Typed JavaScript",
+  "python": "AI & Backend Logic",
+  "java": "Enterprise Software",
+  "c++": "System Programming",
+  "html": "Page Structure",
+  "css": "Styling & Layout",
+  "sql": "Database Querying",
+
+  // Frontend
+  "react": "UI Library",
+  "next.js": "React Framework",
+  "vue": "Progressive Framework",
+  "angular": "Platform by Google",
+  "tailwind": "Utility-first CSS",
+  "bootstrap": "Responsive UI Kit",
+  "sass": "CSS with Superpowers",
+  "redux": "State Management",
+  "material ui": "React Components",
+
+  // Backend
+  "node.js": "JS Runtime",
+  "express": "Node.js Framework",
+  "django": "Python Framework",
+  "flask": "Lightweight Python",
+  "mongodb": "NoSQL Database",
+  "firebase": "Backend-as-a-Service",
+  "postgresql": "Relational SQL DB",
+  "mysql": "Open Source SQL",
+  "redis": "In-memory Caching",
+
+  // Tools
+  "git": "Version Control",
+  "github": "Code Hosting",
+  "docker": "Containerization",
+  "kubernetes": "Container Orchestration",
+  "aws": "Cloud Computing",
+  "azure": "Cloud Services",
+  "figma": "UI/UX Design Tool",
+  "postman": "API Testing",
+  "vs code": "Code Editor"
 };
 
-// --- HELPER: Icon Mapping ---
+// Function to get link
+const getSkillLink = (skillName) => {
+  const key = skillName.toLowerCase().trim();
+  return SKILL_LINKS[key] || `https://www.google.com/search?q=${encodeURIComponent(skillName)}`;
+};
+
+// Function to get description (NEW)
+const getSkillDesc = (skillName) => {
+  const key = skillName.toLowerCase().trim();
+  return SKILL_DESCRIPTIONS[key] || "Core Technology"; // Fallback text
+};
+
+// Helper: Icon Mapping
 const getIcon = (category) => {
   const cat = category.toLowerCase();
   const commonClasses = "w-6 h-6 transition-colors";
@@ -124,27 +155,38 @@ const Skills = () => {
                 </h3>
               </div>
 
-              {/* Skills List - Now Clickable Links */}
-              <div className="flex flex-wrap gap-2">
+              {/* Skills List - Updated Design */}
+              <div className="flex flex-wrap gap-3">
                 {skills.map((skill, i) => (
                   <a 
                     key={skill}
-                    href={getSkillLink(skill)} // Link function call
+                    href={getSkillLink(skill)} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="relative overflow-hidden px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 cursor-pointer group/skill flex items-center
-                    bg-slate-50 border border-slate-200 text-slate-600 hover:bg-white hover:border-blue-400 hover:text-blue-600 hover:shadow-sm
-                    dark:bg-slate-800/50 dark:border-slate-700/50 dark:text-slate-300 dark:hover:text-white dark:hover:border-blue-500/50 dark:hover:bg-blue-500/10"
+                    className="relative flex items-center gap-3 pr-4 pl-3 py-2 rounded-xl text-sm transition-all duration-300 cursor-pointer group/skill w-full sm:w-auto
+                    bg-slate-50 border border-slate-200 hover:bg-white hover:border-blue-400 hover:shadow-sm
+                    dark:bg-slate-800/50 dark:border-slate-700/50 dark:hover:border-blue-500/50 dark:hover:bg-blue-500/10"
                   >
                     {/* Tiny dot decoration */}
-                    <span className="inline-block w-1.5 h-1.5 rounded-full mr-2 transition-colors
+                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors
                       bg-slate-400 group-hover/skill:bg-blue-500
                       dark:bg-slate-500 dark:group-hover/skill:bg-blue-400"></span>
                     
-                    {skill}
+                    {/* Text Container */}
+                    <div className="flex flex-col">
+                        {/* Title */}
+                        <span className="font-bold text-slate-700 dark:text-slate-200 group-hover/skill:text-blue-600 dark:group-hover/skill:text-blue-400 leading-tight">
+                            {skill}
+                        </span>
+                        
+                        {/* Subtitle (NEW) */}
+                        <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider group-hover/skill:text-slate-500 dark:group-hover/skill:text-slate-400">
+                            {getSkillDesc(skill)}
+                        </span>
+                    </div>
 
                     {/* Tiny Link Icon on Hover */}
-                    <ExternalLink size={10} className="ml-1 opacity-0 -translate-x-2 group-hover/skill:opacity-100 group-hover/skill:translate-x-0 transition-all duration-300" />
+                    <ExternalLink size={12} className="ml-auto opacity-0 -translate-x-2 group-hover/skill:opacity-100 group-hover/skill:translate-x-0 transition-all duration-300 text-blue-500" />
                   </a>
                 ))}
               </div>

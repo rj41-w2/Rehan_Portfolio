@@ -1,33 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { auth, googleProvider, db } from '../firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
-// CHANGE 1: 'deleteDoc' hata kar 'updateDoc' import kiya
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
-import { LogOut, Send, User, ArrowLeft, Trash2 } from 'lucide-react';
+import { LogOut, ArrowLeft, Send, PenTool, Trash2, Sparkles, Briefcase, Code, Heart, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Guestbook = () => {
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [selectedTag, setSelectedTag] = useState("visitor"); // Default tag
   const [loading, setLoading] = useState(false);
 
-  // 1. Check Login Status
+  // --- TAGS CONFIGURATION ---
+  // User select karega ke wo kis "Role" se sign kar raha hai
+  const tags = [
+    { id: 'visitor', label: 'Just Visiting', icon: <User size={14} />, color: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300' },
+    { id: 'hiring', label: 'Hiring', icon: <Briefcase size={14} />, color: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' },
+    { id: 'dev', label: 'Developer', icon: <Code size={14} />, color: 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400' },
+    { id: 'fan', label: 'Supporter', icon: <Heart size={14} />, color: 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' },
+  ];
+
+  // 1. Check Login
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => setUser(u));
     return () => unsubscribe();
   }, []);
 
-  // 2. Fetch Messages Real-time
+  // 2. Fetch Signatures Real-time
   useEffect(() => {
-    const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
+    const q = query(collection(db, "guestbook_signatures"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setMessages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     });
     return () => unsubscribe();
   }, []);
 
-  // 3. Handle Login
+  // 3. Login Handle
   const handleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
@@ -36,158 +45,219 @@ const Guestbook = () => {
     }
   };
 
-  // 4. Send Message (Create)
-  const sendMessage = async (e) => {
+  // 4. Sign the Guestbook (Submit)
+  const handleSign = async (e) => {
     e.preventDefault();
-    if (!message.trim()) return;
-    setLoading(true);
+    if (!newMessage.trim()) return;
+    if (!user) { handleLogin(); return; }
 
+    setLoading(true);
     try {
-      await addDoc(collection(db, "guestbook"), {
-        text: message,
+      await addDoc(collection(db, "guestbook_signatures"), {
+        text: newMessage,
+        tag: selectedTag, // Save the badge
         name: user.displayName,
         photo: user.photoURL,
         uid: user.uid,
         createdAt: serverTimestamp(),
-        // CHANGE 2: Naya message banate waqt flag set kiya
-        isDeleted: false 
+        isDeleted: false
       });
-      setMessage("");
+      setNewMessage("");
+      setSelectedTag("visitor"); // Reset
     } catch (error) {
-      console.error("Error sending message", error);
+      console.error("Error signing", error);
     }
     setLoading(false);
   };
 
-  // 5. Handle Soft Delete
+  // 5. Delete Signature (Soft Delete)
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this message?")) {
-      try {
-        // CHANGE 3: Permanent delete ki bajaye sirf flag update kar rahe hain
-        const msgRef = doc(db, "guestbook", id);
-        await updateDoc(msgRef, {
-          isDeleted: true
-        });
-      } catch (error) {
-        console.error("Error deleting message", error);
-      }
+    if (window.confirm("Delete your signature?")) {
+      const docRef = doc(db, "guestbook_signatures", id);
+      await updateDoc(docRef, { isDeleted: true });
     }
   };
 
+  // Helper to get Tag details by ID
+  const getTagStyle = (tagId) => tags.find(t => t.id === tagId) || tags[0];
+
   return (
-    <section id="guestbook" className="min-h-screen py-12 px-4 relative bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+    <section className="min-h-screen py-20 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative overflow-hidden font-sans">
       
-      {/* Back to Home Button */}
-      <div className="max-w-4xl mx-auto mb-8">
-        <Link to="/" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-          <ArrowLeft size={20} /> Back to Home
+      {/* --- BACKGROUND DECORATION --- */}
+      <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-10 pointer-events-none"></div>
+      <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
+      <div className="absolute bottom-20 right-20 w-72 h-72 bg-purple-500/10 rounded-full blur-[100px] -z-10"></div>
+
+      {/* --- NAVBAR / BACK BUTTON --- */}
+      <div className="max-w-4xl mx-auto mb-10 flex justify-between items-center relative z-10">
+        <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">
+          <ArrowLeft size={18} /> Back to Portfolio
         </Link>
+        
+        {/* Simple Login Status */}
+        {user && (
+           <div className="flex items-center gap-3 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700">
+             <img src={user.photoURL} alt="Me" className="w-5 h-5 rounded-full" />
+             <button onClick={() => signOut(auth)} className="text-xs font-bold text-slate-500 hover:text-red-500">
+               Sign Out
+             </button>
+           </div>
+        )}
       </div>
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-3xl mx-auto relative z-10">
         
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            Guest<span className="text-blue-600 dark:text-blue-500">book</span>
-          </h2>
-          <p className="text-slate-600 dark:text-slate-400">
-            Drop a message, feedback, or just say hello!
+        {/* --- HEADER --- */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center p-4 bg-white dark:bg-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none rounded-2xl mb-6 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+            <PenTool size={32} className="text-slate-900 dark:text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
+            Sign my <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Guestbook</span>
+          </h1>
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
+            Leave your mark on the internet. Share a thought, a vibe, or just say you were here.
           </p>
         </div>
 
-        {/* Input Area */}
-        <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-12 shadow-sm dark:shadow-none transition-colors">
+        {/* --- SIGNING AREA (The Form) --- */}
+        <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-3xl p-6 md:p-8 mb-16 relative overflow-hidden group">
+          
+          {/* Top Gradient Border */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+
           {user ? (
-            <form onSubmit={sendMessage} className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                 <div className="flex items-center gap-3">
-                   <img src={user.photoURL} alt={user.displayName} className="w-10 h-10 rounded-full border border-slate-300 dark:border-slate-600" />
-                   <div>
-                     <p className="text-sm font-semibold text-slate-900 dark:text-white">{user.displayName}</p>
-                     <button type="button" onClick={() => signOut(auth)} className="text-xs text-red-500 hover:underline flex items-center gap-1">
-                       <LogOut size={10} /> Sign out
-                     </button>
-                   </div>
-                 </div>
-              </div>
+            <form onSubmit={handleSign} className="space-y-6">
               
-              <div className="flex gap-2">
-                <input 
-                  type="text" 
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Write something cool..."
-                  className="flex-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white placeholder:text-slate-500"
-                />
-                <button 
-                  type="submit" 
-                  disabled={loading || !message.trim()}
-                  className="bg-blue-600 hover:bg-blue-500 text-white p-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? "..." : <Send size={20} />}
-                </button>
+              {/* 1. Header: Who are you? */}
+              <div className="flex items-center gap-4 mb-2">
+                <img src={user.photoURL} className="w-12 h-12 rounded-full border-2 border-slate-100 dark:border-slate-700" alt="Avatar"/>
+                <div>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Signing as</p>
+                  <p className="font-bold text-slate-900 dark:text-white">{user.displayName}</p>
+                </div>
               </div>
+
+              {/* 2. Badge Selection (The Vibe) */}
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 block">Choose your Badge</label>
+                <div className="flex flex-wrap gap-3">
+                  {tags.map((tag) => (
+                    <button
+                      key={tag.id}
+                      type="button"
+                      onClick={() => setSelectedTag(tag.id)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all border
+                        ${selectedTag === tag.id 
+                          ? 'border-blue-500 ring-1 ring-blue-500 ' + tag.color
+                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
+                        }`}
+                    >
+                      {tag.icon} {tag.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 3. Text Input */}
+              <div className="relative">
+                <textarea
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Write something memorable..."
+                  rows="3"
+                  className="w-full bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none"
+                />
+                <div className="absolute bottom-3 right-3 text-xs text-slate-400 font-mono">
+                  {newMessage.length} chars
+                </div>
+              </div>
+
+              {/* 4. Submit Button */}
+              <button 
+                type="submit" 
+                disabled={loading || !newMessage.trim()}
+                className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-lg hover:opacity-90 transition-all shadow-lg hover:shadow-xl active:scale-[0.99] flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? <Sparkles className="animate-spin" /> : <PenTool size={20} />}
+                Sign the Guestbook
+              </button>
+
             </form>
           ) : (
-            <div className="text-center py-6">
-              <p className="text-slate-600 dark:text-slate-400 mb-4">Login with Google to leave a message.</p>
+            // LOGIN PROMPT
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <User size={32} className="text-slate-400" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Join the Wall of Fame</h3>
+              <p className="text-slate-500 mb-6">Login to leave your permanent mark.</p>
               <button 
                 onClick={handleLogin}
-                className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-white px-6 py-3 rounded-full font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-blue-500/30 transition-all hover:-translate-y-1 inline-flex items-center gap-3"
               >
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
-                Sign in with Google
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="G" />
+                Continue with Google
               </button>
             </div>
           )}
         </div>
 
-        {/* Messages List */}
-        <div className="grid gap-4">
-          {messages
-            // CHANGE 4: Filter lagaya taake sirf wo dikhein jo delete nahi huye
-            .filter(msg => msg.isDeleted !== true)
-            .map((msg) => (
-            <div key={msg.id} className="relative group bg-white dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700/50 p-4 rounded-xl flex gap-4 transition-all hover:border-blue-400 dark:hover:border-blue-500/30">
-              
-              {msg.photo ? (
-                <img src={msg.photo} alt={msg.name} className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600" />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-                  <User size={20} className="text-slate-500 dark:text-slate-400" />
-                </div>
-              )}
-              
-              <div className="flex-1">
-                <div className="flex justify-between items-start">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    {msg.name}
-                    <span className="text-xs font-normal text-slate-500 dark:text-slate-500">
-                      {msg.createdAt?.seconds ? new Date(msg.createdAt.seconds * 1000).toLocaleDateString() : "Just now"}
-                    </span>
-                  </h4>
+        {/* --- SIGNATURES LIST (The Wall) --- */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-2 mb-4 px-2">
+            <Sparkles size={16} className="text-yellow-500" />
+            <span className="text-sm font-bold text-slate-500 uppercase tracking-widest">Recent Signatures</span>
+          </div>
 
-                  {/* Delete Button (Only for Author) */}
+          {messages.filter(m => !m.isDeleted).map((msg) => {
+            const tagStyle = getTagStyle(msg.tag);
+            return (
+              <div key={msg.id} className="group relative bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
+                
+                <div className="flex items-start gap-4">
+                  {/* Avatar */}
+                  <img src={msg.photo} alt={msg.name} className="w-12 h-12 rounded-full border border-slate-200 dark:border-slate-600" />
+                  
+                  <div className="flex-1">
+                    {/* Header: Name + Badge */}
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <h4 className="font-bold text-slate-900 dark:text-white text-lg">{msg.name}</h4>
+                      <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${tagStyle.color}`}>
+                        {tagStyle.icon} {tagStyle.label}
+                      </span>
+                    </div>
+
+                    {/* Timestamp */}
+                    <p className="text-xs text-slate-400 mb-3 font-mono">
+                      {msg.createdAt?.seconds ? new Date(msg.createdAt.seconds * 1000).toLocaleDateString(undefined, {  month: 'short', day: 'numeric', year: 'numeric' }) : "Just now"}
+                    </p>
+
+                    {/* The Message */}
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                      "{msg.text}"
+                    </p>
+                  </div>
+
+                  {/* Delete Button (If Owner) */}
                   {user && user.uid === msg.uid && (
                     <button 
                       onClick={() => handleDelete(msg.id)}
-                      className="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-500/10"
-                      title="Delete your message"
+                      className="opacity-0 group-hover:opacity-100 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all"
+                      title="Delete Signature"
                     >
                       <Trash2 size={16} />
                     </button>
                   )}
                 </div>
-
-                <p className="text-slate-700 dark:text-slate-300 mt-1 break-words">{msg.text}</p>
               </div>
-            </div>
-          ))}
-          
-          {messages.filter(msg => msg.isDeleted !== true).length === 0 && (
-            <div className="text-center text-slate-500 dark:text-slate-400 py-10 italic">
-              No messages yet. Be the first one! 🚀
+            );
+          })}
+
+          {messages.filter(m => !m.isDeleted).length === 0 && (
+            <div className="text-center py-20 opacity-50">
+              <p>No signatures yet. Be the first!</p>
             </div>
           )}
         </div>

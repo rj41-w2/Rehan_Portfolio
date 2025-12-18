@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { User, GraduationCap, Briefcase, Calendar, Code, Award } from 'lucide-react';
+import { User, Cpu, Award, Zap, Clock, Code2, Globe, Layout, GitBranch, Rocket } from 'lucide-react';
 import { DATA } from '../data/user';
 
 // --- HELPER COMPONENT: Animated Counter ---
@@ -44,11 +44,9 @@ const AnimatedCounter = ({ end, duration = 2000 }) => {
   return <span ref={ref}>{count}</span>;
 };
 
-
 // --- MAIN COMPONENT ---
 const About = () => {
   return (
-    // Background Class Removed (As per original code). Text color handles theme.
     <section id="about" className="min-h-screen flex flex-col justify-center py-20 px-4 relative">
       <div className="max-w-6xl mx-auto w-full">
         
@@ -60,46 +58,48 @@ const About = () => {
           <div className="h-1 w-20 bg-blue-600 dark:bg-blue-500 mx-auto rounded-full"></div>
         </div>
 
-        {/* 2. Quick Stats Row */}
+        {/* 2. Quick Stats Row (Professional Stats) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           
-          {/* Card 1: Semester */}
+          {/* Card 1: Experience Years */}
           <div className="p-6 rounded-2xl text-center transition-colors group
-             bg-white border border-slate-200 
-             dark:bg-slate-800/50 dark:border-slate-700 
-             hover:bg-slate-100 dark:hover:bg-slate-800">
+              bg-white border border-slate-200 
+              dark:bg-slate-800/50 dark:border-slate-700 
+              hover:bg-slate-100 dark:hover:bg-slate-800">
              
-            <Code className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+            <Clock className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-4xl font-bold text-slate-900 dark:text-white mb-1">
-              <AnimatedCounter end={4} />th
+              <AnimatedCounter end={2} />+
             </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Semester</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Years in Uni</p>
           </div>
 
-          {/* Card 2: Companies/Experience */}
+          {/* Card 2: Projects Done */}
           <div className="p-6 rounded-2xl text-center transition-colors group
-             bg-white border border-slate-200 
-             dark:bg-slate-800/50 dark:border-slate-700 
-             hover:bg-slate-100 dark:hover:bg-slate-800">
+              bg-white border border-slate-200 
+              dark:bg-slate-800/50 dark:border-slate-700 
+              hover:bg-slate-100 dark:hover:bg-slate-800">
              
-            <Briefcase className="w-8 h-8 text-purple-600 dark:text-purple-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+            <Award className="w-8 h-8 text-purple-600 dark:text-purple-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-4xl font-bold text-slate-900 dark:text-white mb-1">
-              <AnimatedCounter end={DATA.experience?.length || 2} />+
+              <AnimatedCounter end={12} />+
             </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Companies</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Projects Built</p>
           </div>
 
-          {/* Card 3: Projects */}
+          {/* Card 3: Availability */}
           <div className="p-6 rounded-2xl text-center transition-colors group
-             bg-white border border-slate-200 
-             dark:bg-slate-800/50 dark:border-slate-700 
-             hover:bg-slate-100 dark:hover:bg-slate-800">
+              bg-white border border-slate-200 
+              dark:bg-slate-800/50 dark:border-slate-700 
+              hover:bg-slate-100 dark:hover:bg-slate-800 relative overflow-hidden">
              
-            <Award className="w-8 h-8 text-yellow-500 dark:text-yellow-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-4xl font-bold text-slate-900 dark:text-white mb-1">
-              <AnimatedCounter end={6} />+
+            <span className="absolute top-4 right-4 w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></span>
+
+            <Zap className="w-8 h-8 text-yellow-500 dark:text-yellow-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 mt-2">
+              Available
             </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Projects</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium"> 24/7 </p>
           </div>
 
         </div>
@@ -107,7 +107,7 @@ const About = () => {
         {/* 3. Main Content Split */}
         <div className="grid md:grid-cols-2 gap-12">
           
-          {/* LEFT: Biography & Education */}
+          {/* LEFT: Biography & Tech Stack */}
           <div className="space-y-12">
             
             {/* Bio */}
@@ -118,36 +118,35 @@ const About = () => {
                 </span>
                 Biography
               </h3>
-              <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg border-l-2 border-blue-200 dark:border-blue-500/30 pl-4">
-                {DATA.profile.about}
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg border-l-2 border-blue-200 dark:border-blue-500/30 pl-4 text-justify">
+                {DATA.profile.about || "I am a passionate Full Stack Developer dedicated to building scalable and efficient web applications. I love solving complex problems and learning new technologies to stay ahead in the tech world."}
               </p>
             </div>
 
-            {/* Education Timeline */}
+            {/* Technical Arsenal */}
             <div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
                 <span className="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 dark:bg-pink-500/20 dark:text-pink-400 flex items-center justify-center">
-                  <GraduationCap size={18}/>
+                  <Cpu size={18}/>
                 </span>
-                Education
+                Technical Arsenal
               </h3>
               
-              <div className="relative space-y-8 pl-6 border-l border-slate-300 dark:border-slate-700">
-                {/* University */}
-                <div className="relative">
-                  <span className="absolute -left-[29px] top-1 h-3 w-3 rounded-full bg-blue-600 ring-4 ring-slate-100 dark:ring-slate-900"></span>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">{DATA.profile.university}</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-1">{DATA.profile.degree}</p>
-                  <span className="inline-block px-2 py-1 bg-slate-100 text-blue-700 border border-slate-200 dark:bg-slate-800 dark:text-blue-300 dark:border-slate-700 text-xs rounded">2024 - 2028</span>
-                  <span className="ml-2 text-xs text-slate-500 dark:text-slate-500"> {DATA.profile.gpa}</span>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Frontend */}
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700">
+                  <div className="flex items-center gap-2 mb-2 text-blue-600 dark:text-blue-400 font-bold">
+                    <Globe size={16} /> Frontend
+                  </div>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">React, Tailwind, Next.js, Framer Motion</p>
                 </div>
-                
-                {/* College */}
-                <div className="relative">
-                  <span className="absolute -left-[29px] top-1 h-3 w-3 rounded-full bg-slate-400 dark:bg-slate-600 ring-4 ring-slate-100 dark:ring-slate-900"></span>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">{DATA.profile.College}</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-1">{DATA.profile.Degree}</p>
-                  <span className="inline-block px-2 py-1 bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700 text-xs rounded">2022 - 2024</span>
+
+                {/* Backend */}
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700">
+                  <div className="flex items-center gap-2 mb-2 text-green-600 dark:text-green-400 font-bold">
+                    <Code2 size={16} /> Backend
+                  </div>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Node.js, Express, Firebase, MongoDB</p>
                 </div>
               </div>
             </div>
@@ -155,50 +154,86 @@ const About = () => {
           </div>
 
 
-          {/* RIGHT: Experience Timeline */}
+          {/* RIGHT: Development Process (REPLACED WORK HISTORY) */}
           <div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
               <span className="w-8 h-8 rounded-lg bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400 flex items-center justify-center">
-                <Briefcase size={18}/>
+                <GitBranch size={18}/>
               </span>
-              Working History
+              My Workflow
             </h3>
 
             <div className="space-y-6">
-              {DATA.experience.map((job, index) => (
-                <div 
-                  key={job.id} 
-                  className="group relative p-6 rounded-2xl transition-all duration-300
-                  bg-white border border-slate-200 hover:bg-slate-50 hover:border-blue-400
-                  dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"
-                >
-                  {/* Number Badge */}
-                  <div className="absolute -right-2 -top-2 w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-colors
-                    bg-slate-100 text-slate-500 border-slate-200 group-hover:text-blue-600 group-hover:border-blue-500
-                    dark:bg-slate-900 dark:text-slate-500 dark:border-slate-700 dark:group-hover:text-blue-400">
-                    0{index + 1}
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-2">
-                    <div>
-                      <h4 className="text-lg font-bold transition-colors text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">{job.role}</h4>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm">{job.company}</p>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full border
-                      bg-slate-100 text-slate-600 border-slate-200
-                      dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-600">
-                      <Calendar size={12} />
-                      {job.period}
-                    </div>
-                  </div>
-                  
-                  <p className="text-sm leading-relaxed border-l-2 pl-4 transition-colors
-                    text-slate-600 border-slate-200 group-hover:border-blue-400
-                    dark:text-slate-400 dark:border-slate-700 dark:group-hover:border-blue-500/50">
-                    {job.description}
-                  </p>
+              
+              {/* Step 1: Design & Plan */}
+              <div className="group relative p-6 rounded-2xl transition-all duration-300
+                bg-white border border-slate-200 hover:bg-slate-50 hover:border-blue-400
+                dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"
+              >
+                <div className="absolute -right-2 -top-2 w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-colors
+                  bg-slate-100 text-slate-500 border-slate-200 group-hover:text-blue-600 group-hover:border-blue-500
+                  dark:bg-slate-900 dark:text-slate-500 dark:border-slate-700 dark:group-hover:text-blue-400">
+                  01
                 </div>
-              ))}
+
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="p-3 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">
+                    <Layout size={20} />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">Planning & Design</h4>
+                </div>
+                
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  I start by understanding requirements, designing the UI/UX in Figma, and planning the database structure (Schema Design) to ensure scalability.
+                </p>
+              </div>
+
+              {/* Step 2: Development */}
+              <div className="group relative p-6 rounded-2xl transition-all duration-300
+                bg-white border border-slate-200 hover:bg-slate-50 hover:border-blue-400
+                dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"
+              >
+                <div className="absolute -right-2 -top-2 w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-colors
+                  bg-slate-100 text-slate-500 border-slate-200 group-hover:text-blue-600 group-hover:border-blue-500
+                  dark:bg-slate-900 dark:text-slate-500 dark:border-slate-700 dark:group-hover:text-blue-400">
+                  02
+                </div>
+
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="p-3 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+                    <Code2 size={20} />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">Development</h4>
+                </div>
+                
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  I write clean, modular, and reusable code using React & Node.js. I focus on state management and API integration with best practices.
+                </p>
+              </div>
+
+              {/* Step 3: Deployment */}
+              <div className="group relative p-6 rounded-2xl transition-all duration-300
+                bg-white border border-slate-200 hover:bg-slate-50 hover:border-blue-400
+                dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"
+              >
+                <div className="absolute -right-2 -top-2 w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-colors
+                  bg-slate-100 text-slate-500 border-slate-200 group-hover:text-blue-600 group-hover:border-blue-500
+                  dark:bg-slate-900 dark:text-slate-500 dark:border-slate-700 dark:group-hover:text-blue-400">
+                  03
+                </div>
+
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400">
+                    <Rocket size={20} />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">Testing & Launch</h4>
+                </div>
+                
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  After thorough testing and bug fixing, I deploy the application on platforms like Vercel or Netlify, optimizing for speed and SEO.
+                </p>
+              </div>
+
             </div>
           </div>
 

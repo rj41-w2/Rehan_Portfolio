@@ -2,23 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { auth, googleProvider, db } from '../firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
-import { LogOut, ArrowLeft, Send, PenTool, Trash2, Sparkles, Briefcase, Code, Heart, User } from 'lucide-react';
+import { LogOut, ArrowLeft, Send, PenTool, Trash2, Sparkles, Briefcase, Code, Heart, User, Wand2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Guestbook = () => {
   const [user, setUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [selectedTag, setSelectedTag] = useState("visitor"); // Default tag
+  const [selectedTag, setSelectedTag] = useState("visitor"); 
   const [loading, setLoading] = useState(false);
 
   // --- TAGS CONFIGURATION ---
-  // User select karega ke wo kis "Role" se sign kar raha hai
   const tags = [
     { id: 'visitor', label: 'Just Visiting', icon: <User size={14} />, color: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300' },
     { id: 'hiring', label: 'Hiring', icon: <Briefcase size={14} />, color: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' },
     { id: 'dev', label: 'Developer', icon: <Code size={14} />, color: 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400' },
     { id: 'fan', label: 'Supporter', icon: <Heart size={14} />, color: 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' },
+  ];
+
+  // --- AI SUGGESTIONS LIST (Simulated AI) ---
+  const aiSuggestions = [
+    "Just explored your portfolio, amazing work! 🚀",
+    "Love the design and attention to detail. Keep it up! ✨",
+    "Hi from the other side of the world! 🌍",
+    "Impressive tech stack. Let's connect on LinkedIn.",
+    "Found this via your resume. Great projects!",
+    "The UI/UX is buttery smooth. Good job!",
+    "Dropping by to say hello! 👋",
+    "Inspiring work, really like the creativity here.",
+    "Clean code and great visuals. 10/10!",
+    "Wishing you the best for your future endeavors! 🌟"
   ];
 
   // 1. Check Login
@@ -27,8 +40,9 @@ const Guestbook = () => {
     return () => unsubscribe();
   }, []);
 
-  // 2. Fetch Signatures Real-time
+  // 2. Fetch Signatures
   useEffect(() => {
+    // FIX: Collection name matched with your previous request
     const q = query(collection(db, "guestbook_signatures"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setMessages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -45,7 +59,13 @@ const Guestbook = () => {
     }
   };
 
-  // 4. Sign the Guestbook (Submit)
+  // --- AI GENERATOR FUNCTION ---
+  const generateAIComment = () => {
+    const randomMsg = aiSuggestions[Math.floor(Math.random() * aiSuggestions.length)];
+    setNewMessage(randomMsg);
+  };
+
+  // 4. Sign the Guestbook
   const handleSign = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
@@ -55,7 +75,7 @@ const Guestbook = () => {
     try {
       await addDoc(collection(db, "guestbook_signatures"), {
         text: newMessage,
-        tag: selectedTag, // Save the badge
+        tag: selectedTag, 
         name: user.displayName,
         photo: user.photoURL,
         uid: user.uid,
@@ -63,14 +83,14 @@ const Guestbook = () => {
         isDeleted: false
       });
       setNewMessage("");
-      setSelectedTag("visitor"); // Reset
+      setSelectedTag("visitor"); 
     } catch (error) {
       console.error("Error signing", error);
     }
     setLoading(false);
   };
 
-  // 5. Delete Signature (Soft Delete)
+  // 5. Delete Signature
   const handleDelete = async (id) => {
     if (window.confirm("Delete your signature?")) {
       const docRef = doc(db, "guestbook_signatures", id);
@@ -78,7 +98,6 @@ const Guestbook = () => {
     }
   };
 
-  // Helper to get Tag details by ID
   const getTagStyle = (tagId) => tags.find(t => t.id === tagId) || tags[0];
 
   return (
@@ -95,7 +114,6 @@ const Guestbook = () => {
           <ArrowLeft size={18} /> Back to Portfolio
         </Link>
         
-        {/* Simple Login Status */}
         {user && (
            <div className="flex items-center gap-3 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700">
              <img src={user.photoURL} alt="Me" className="w-5 h-5 rounded-full" />
@@ -124,7 +142,6 @@ const Guestbook = () => {
         {/* --- SIGNING AREA (The Form) --- */}
         <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-3xl p-6 md:p-8 mb-16 relative overflow-hidden group">
           
-          {/* Top Gradient Border */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
 
           {user ? (
@@ -139,7 +156,7 @@ const Guestbook = () => {
                 </div>
               </div>
 
-              {/* 2. Badge Selection (The Vibe) */}
+              {/* 2. Badge Selection */}
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 block">Choose your Badge</label>
                 <div className="flex flex-wrap gap-3">
@@ -160,15 +177,26 @@ const Guestbook = () => {
                 </div>
               </div>
 
-              {/* 3. Text Input */}
+              {/* 3. Text Input with AI Button */}
               <div className="relative">
                 <textarea
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Write something memorable..."
                   rows="3"
-                  className="w-full bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none"
+                  className="w-full bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-slate-700 rounded-xl p-4 pr-32 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none"
                 />
+                
+                {/* --- AI GENERATE BUTTON (NEW) --- */}
+                <button
+                  type="button"
+                  onClick={generateAIComment}
+                  className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 hover:bg-blue-200 dark:bg-blue-600/20 dark:hover:bg-blue-600/30 text-blue-600 dark:text-blue-400 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                  title="Generate random message"
+                >
+                  <Wand2 size={12} /> AI Suggest
+                </button>
+
                 <div className="absolute bottom-3 right-3 text-xs text-slate-400 font-mono">
                   {newMessage.length} chars
                 </div>
@@ -204,7 +232,7 @@ const Guestbook = () => {
           )}
         </div>
 
-        {/* --- SIGNATURES LIST (The Wall) --- */}
+        {/* --- SIGNATURES LIST --- */}
         <div className="space-y-6">
           <div className="flex items-center gap-2 mb-4 px-2">
             <Sparkles size={16} className="text-yellow-500" />

@@ -19,12 +19,12 @@ const LiveSignatures = () => {
   };
 
   useEffect(() => {
-    // Collection Name: guestbook
-    const q = query(collection(db, "guestbook"), orderBy("timestamp", "desc"), limit(20));
+    // Collection Name: guestbook_signatures
+    const q = query(collection(db, "guestbook_signatures"), orderBy("createdAt", "desc"), limit(20));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       let data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       
-      // Duplicate logic for smoother scroll if items are few
+      // Data fill logic for smooth animation
       if (data.length > 0 && data.length < 5) {
         const fills = [];
         while (data.length + fills.length < 5) {
@@ -76,11 +76,12 @@ const LiveSignatures = () => {
         </div>
 
         {/* --- MAIN CONTAINER --- */}
-        {/* Change: Mobile par height h-[500px] taake 2 cards + space nazar aaye */}
-        <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[500px] md:h-[400px]">
+        {/* FIX: Total Height 400px (200px Header + 200px Comments) */}
+        <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[400px]">
           
-          {/* --- LEFT SIDE: CTA (Mobile: Top, Desktop: Left) --- */}
-          <div className="md:w-1/3 p-6 md:p-8 flex flex-col justify-center items-start bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 z-10 shrink-0 h-[200px] md:h-auto">
+          {/* --- LEFT SIDE: CTA --- */}
+          {/* FIX: Mobile height fixed to 200px */}
+          <div className="md:w-1/3 p-6 flex flex-col justify-center items-start bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 z-10 shrink-0 h-[200px] md:h-auto">
             <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-2xl mb-3 text-blue-600 dark:text-blue-400">
               <Sparkles size={24} />
             </div>
@@ -95,14 +96,14 @@ const LiveSignatures = () => {
             </Link>
           </div>
 
-          {/* --- RIGHT SIDE: STEP SCROLLER (Mobile: Bottom, Desktop: Right) --- */}
-          <div className="md:w-2/3 relative bg-slate-50/50 dark:bg-black/20 overflow-hidden flex flex-col justify-center flex-1">
+          {/* --- RIGHT SIDE: STEP SCROLLER --- */}
+          {/* FIX: Mobile height fixed to 200px (Exactly fits 2 comments) */}
+          <div className="md:w-2/3 relative bg-slate-50/50 dark:bg-black/20 overflow-hidden flex flex-col justify-center h-[200px] md:h-auto">
             
             {/* Gradient Overlay Top */}
-            <div className="absolute top-0 left-0 w-full h-12 bg-gradient-to-b from-white dark:from-slate-900 to-transparent z-20 pointer-events-none"></div>
+            <div className="absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-white dark:from-slate-900 to-transparent z-20 pointer-events-none"></div>
 
             {/* Scrolling Area */}
-            {/* Height Adjusted to fill remaining space */}
             <div className="p-6 h-full overflow-hidden relative z-0 flex items-center">
               
               <div 
@@ -148,7 +149,7 @@ const LiveSignatures = () => {
             </div>
 
             {/* Gradient Overlay Bottom */}
-            <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white dark:from-slate-900 to-transparent z-20 pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white dark:from-slate-900 to-transparent z-20 pointer-events-none"></div>
 
           </div>
 

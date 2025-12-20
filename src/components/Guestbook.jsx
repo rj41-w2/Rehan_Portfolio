@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { auth, googleProvider, db } from '../firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
-import { LogOut, ArrowLeft, Send, PenTool, Trash2, Sparkles, Briefcase, Code, Heart, User, Wand2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowLeft, PenTool, Trash2, Sparkles, Briefcase, Code, Heart, User, Wand2 } from 'lucide-react';
+// 1. useNavigate import karein
+import { useNavigate } from 'react-router-dom';
 
 const Guestbook = () => {
   const [user, setUser] = useState(null);
@@ -11,6 +12,9 @@ const Guestbook = () => {
   const [newMessage, setNewMessage] = useState("");
   const [selectedTag, setSelectedTag] = useState("visitor"); 
   const [loading, setLoading] = useState(false);
+
+  // 2. Navigate hook initialize karein
+  const navigate = useNavigate();
 
   // --- TAGS CONFIGURATION ---
   const tags = [
@@ -20,7 +24,7 @@ const Guestbook = () => {
     { id: 'fan', label: 'Supporter', icon: <Heart size={14} />, color: 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' },
   ];
 
-  // --- AI SUGGESTIONS LIST (Simulated AI) ---
+  // --- AI SUGGESTIONS ---
   const aiSuggestions = [
     "Just explored your portfolio, amazing work! 🚀",
     "Love the design and attention to detail. Keep it up! ✨",
@@ -34,15 +38,14 @@ const Guestbook = () => {
     "Wishing you the best for your future endeavors! 🌟"
   ];
 
-  // 1. Check Login
+  // Auth Listener
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => setUser(u));
     return () => unsubscribe();
   }, []);
 
-  // 2. Fetch Signatures
+  // Fetch Signatures
   useEffect(() => {
-    // FIX: Collection name matched with your previous request
     const q = query(collection(db, "guestbook_signatures"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setMessages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -50,7 +53,7 @@ const Guestbook = () => {
     return () => unsubscribe();
   }, []);
 
-  // 3. Login Handle
+  // Login Handle
   const handleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
@@ -59,13 +62,13 @@ const Guestbook = () => {
     }
   };
 
-  // --- AI GENERATOR FUNCTION ---
+  // AI Generator
   const generateAIComment = () => {
     const randomMsg = aiSuggestions[Math.floor(Math.random() * aiSuggestions.length)];
     setNewMessage(randomMsg);
   };
 
-  // 4. Sign the Guestbook
+  // Handle Sign
   const handleSign = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
@@ -90,7 +93,7 @@ const Guestbook = () => {
     setLoading(false);
   };
 
-  // 5. Delete Signature
+  // Delete Handle
   const handleDelete = async (id) => {
     if (window.confirm("Delete your signature?")) {
       const docRef = doc(db, "guestbook_signatures", id);
@@ -103,16 +106,21 @@ const Guestbook = () => {
   return (
     <section className="min-h-screen py-20 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative overflow-hidden font-sans">
       
-      {/* --- BACKGROUND DECORATION --- */}
+      {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-10 pointer-events-none"></div>
       <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
       <div className="absolute bottom-20 right-20 w-72 h-72 bg-purple-500/10 rounded-full blur-[100px] -z-10"></div>
 
-      {/* --- NAVBAR / BACK BUTTON --- */}
+      {/* --- NAVBAR / BACK BUTTON (UPDATED) --- */}
       <div className="max-w-4xl mx-auto mb-10 flex justify-between items-center relative z-10">
-        <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">
+        
+        {/* YAHAN CHANGE KIYA HAI: Link hata kar Button lagaya hai */}
+        <button 
+          onClick={() => navigate(-1)} 
+          className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-medium bg-transparent border-none cursor-pointer"
+        >
           <ArrowLeft size={18} /> Back to Portfolio
-        </Link>
+        </button>
         
         {user && (
            <div className="flex items-center gap-3 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700">
@@ -126,7 +134,7 @@ const Guestbook = () => {
 
       <div className="max-w-3xl mx-auto relative z-10">
         
-        {/* --- HEADER --- */}
+        {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center p-4 bg-white dark:bg-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none rounded-2xl mb-6 transform rotate-3 hover:rotate-0 transition-transform duration-300">
             <PenTool size={32} className="text-slate-900 dark:text-white" />
@@ -139,7 +147,7 @@ const Guestbook = () => {
           </p>
         </div>
 
-        {/* --- SIGNING AREA (The Form) --- */}
+        {/* Signing Form */}
         <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-3xl p-6 md:p-8 mb-16 relative overflow-hidden group">
           
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
@@ -147,7 +155,6 @@ const Guestbook = () => {
           {user ? (
             <form onSubmit={handleSign} className="space-y-6">
               
-              {/* 1. Header: Who are you? */}
               <div className="flex items-center gap-4 mb-2">
                 <img src={user.photoURL} className="w-12 h-12 rounded-full border-2 border-slate-100 dark:border-slate-700" alt="Avatar"/>
                 <div>
@@ -156,7 +163,6 @@ const Guestbook = () => {
                 </div>
               </div>
 
-              {/* 2. Badge Selection */}
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 block">Choose your Badge</label>
                 <div className="flex flex-wrap gap-3">
@@ -177,7 +183,6 @@ const Guestbook = () => {
                 </div>
               </div>
 
-              {/* 3. Text Input with AI Button */}
               <div className="relative">
                 <textarea
                   value={newMessage}
@@ -187,7 +192,6 @@ const Guestbook = () => {
                   className="w-full bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-slate-700 rounded-xl p-4 pr-32 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none"
                 />
                 
-                {/* --- AI GENERATE BUTTON (NEW) --- */}
                 <button
                   type="button"
                   onClick={generateAIComment}
@@ -202,7 +206,6 @@ const Guestbook = () => {
                 </div>
               </div>
 
-              {/* 4. Submit Button */}
               <button 
                 type="submit" 
                 disabled={loading || !newMessage.trim()}
@@ -214,7 +217,6 @@ const Guestbook = () => {
 
             </form>
           ) : (
-            // LOGIN PROMPT
             <div className="text-center py-8">
               <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
                 <User size={32} className="text-slate-400" />
@@ -232,7 +234,7 @@ const Guestbook = () => {
           )}
         </div>
 
-        {/* --- SIGNATURES LIST --- */}
+        {/* Signatures List */}
         <div className="space-y-6">
           <div className="flex items-center gap-2 mb-4 px-2">
             <Sparkles size={16} className="text-yellow-500" />
@@ -245,11 +247,9 @@ const Guestbook = () => {
               <div key={msg.id} className="group relative bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
                 
                 <div className="flex items-start gap-4">
-                  {/* Avatar */}
                   <img src={msg.photo} alt={msg.name} className="w-12 h-12 rounded-full border border-slate-200 dark:border-slate-600" />
                   
                   <div className="flex-1">
-                    {/* Header: Name + Badge */}
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <h4 className="font-bold text-slate-900 dark:text-white text-lg">{msg.name}</h4>
                       <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${tagStyle.color}`}>
@@ -257,18 +257,15 @@ const Guestbook = () => {
                       </span>
                     </div>
 
-                    {/* Timestamp */}
                     <p className="text-xs text-slate-400 mb-3 font-mono">
                       {msg.createdAt?.seconds ? new Date(msg.createdAt.seconds * 1000).toLocaleDateString(undefined, {  month: 'short', day: 'numeric', year: 'numeric' }) : "Just now"}
                     </p>
 
-                    {/* The Message */}
                     <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                       "{msg.text}"
                     </p>
                   </div>
 
-                  {/* Delete Button (If Owner) */}
                   {user && user.uid === msg.uid && (
                     <button 
                       onClick={() => handleDelete(msg.id)}

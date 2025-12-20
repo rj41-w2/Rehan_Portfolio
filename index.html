@@ -5,7 +5,27 @@
     <link rel="icon" type="image/svg+xml" href="/images/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rehan's Portfolio</title>
-  </head>
+
+    <script>
+      (function() {
+        try {
+          // LocalStorage check karo
+          var localTheme = localStorage.getItem('theme');
+          // System preference check karo
+          var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+          // Agar user ne Dark set kiya hai YA system dark hai aur user ne kuch set nahi kiya
+          if (localTheme === 'dark' || (!localTheme && supportDarkMode)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {
+          console.error("Theme script error:", e);
+        }
+      })();
+    </script>
+    </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

@@ -8,8 +8,8 @@ export const DATA = {
     degree: "BS Computer Science",
     College: "Aspire Group of Colleges",
     Degree: "Intermediate Computer Science",
-    email: "rehanjamil41@outlook.com",
-    github: "https://github.com/rehanjamil41",
+    email: "rehanjamilwattoo@gmail.com",
+    github: "https://github.com/rehanjamilw2",
     linkedin: "https://www.linkedin.com/in/rehanjamil41/",
     resumeLink: "#"
   },
@@ -26,7 +26,7 @@ export const DATA = {
       tech: ["React", "Tailwind", "Vite"],
       image: "/images/task-master.png",
       demo: "https://taskmaster41.vercel.app/",
-      github: "https://github.com/rehanjamil41/TASK-MASTER"
+      github: "https://github.com/rehanjamilwattoo/TASK-MASTER"
     },
     {
       id: 2,
@@ -34,8 +34,8 @@ export const DATA = {
       description: "An online platform for buying and selling products.",
       tech: ["React", "CSS","JavaScript", "HTML", "Vite" ],
       image: "/images/e-commerce.jpeg",
-      demo: "https://shopvibe41.vercel.app/",
-      github: "https://github.com/rehanjamil41/shopvibe"
+      demo: "https://rehanjamil41.vercel.app/",
+      github: "https://github.com/rehanjamilw2"
     },
     {
       id: 3,
@@ -43,8 +43,8 @@ export const DATA = {
       description: "A comprehensive platform for cricket enthusiasts with AI-powered features.",
       tech: ["Next.js", "Tailwind CSS", "Firebase"],
       image: "/images/cricket.png",
-      demo: "https://criclegends41.vercel.app/",
-      github: "https://github.com/rehanjamil41/cric-legends"
+      demo: "https://rehanjamil41.vercel.app/",
+      github: "https://github.com/rehanjamilw2"
     }
   ],
   experience: [

@@ -39,7 +39,7 @@ export const DATA = {
     },
     {
       id: 3,
-      title: "The Ultimate Cricket Encyclopedia & AI Suite",
+      title: "The Ultimate Cricket Encyclopedia",
       description: "A comprehensive platform for cricket enthusiasts with AI-powered features.",
       tech: ["Next.js", "Tailwind CSS", "Firebase"],
       image: "/images/cricket.png",

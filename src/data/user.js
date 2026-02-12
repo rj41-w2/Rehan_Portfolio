@@ -26,16 +26,16 @@ export const DATA = {
       tech: ["React", "Tailwind", "Vite"],
       image: "/images/task-master.png",
       demo: "https://taskmaster41.vercel.app/",
-      github: "https://github.com/rehanjamilwattoo/TASK-MASTER"
+      github: "https://github.com/rj41-w2"
     },
     {
       id: 2,
-      title: "E-commerce Website",
-      description: "An online platform for buying and selling products.",
-      tech: ["React", "CSS","JavaScript", "HTML", "Vite" ],
-      image: "/images/e-commerce.jpeg",
-      demo: "https://rehanjamil41.vercel.app/",
-      github: "https://github.com/rehanjamilw2"
+      title: "Desktop Window Application",
+      description: "A cross-platform desktop application built for enhanced productivity.",
+      tech: ["Python", "CustomTkinter", "Node.js"],
+      image: "/images/desktop-app.png",
+      demo: "https://auto-manager-website.vercel.app/",
+      github: "https://github.com/rj41-w2"
     },
     {
       id: 3,
@@ -43,8 +43,8 @@ export const DATA = {
       description: "A comprehensive platform for cricket enthusiasts with AI-powered features.",
       tech: ["Next.js", "Tailwind CSS", "Firebase"],
       image: "/images/cricket.png",
-      demo: "https://rehanjamil41.vercel.app/",
-      github: "https://github.com/rehanjamilw2"
+      demo: "https://criclegends41.vercel.app/",
+      github: "https://github.com/rj41-w2"
     }
   ],
   experience: [

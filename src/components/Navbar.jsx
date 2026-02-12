@@ -72,7 +72,7 @@ const Navbar = () => {
     }
   };
 
-  const navLinks = ['home', 'about', 'skills', 'projects', 'contact'];
+  const navLinks = ['home', 'about', 'projects', 'contact'];
 
   return (
     <nav className="fixed top-2 left-0 right-0 z-50 mx-4 md:mx-auto max-w-8xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border border-gray-200 dark:border-white/10 shadow-lg rounded-full transition-all duration-300">

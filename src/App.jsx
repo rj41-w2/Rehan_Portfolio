@@ -23,7 +23,7 @@ const Home = () => {
       <About />
       <Skills />
       <Projects />
-      <LiveSignatures />
+
       
       {/* Contact Section with Overlay */}
       <div className="relative">

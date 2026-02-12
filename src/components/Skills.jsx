@@ -98,7 +98,7 @@ const getIcon = (category) => {
 
 const Skills = () => {
   return (
-    <section id="skills" className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-transparent transition-colors duration-300">
+    <section id="skills" className="hidden md:block py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-transparent transition-colors duration-300">
       
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 dark:bg-blue-600/10 rounded-full blur-[100px] -z-10"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/5 dark:bg-purple-600/10 rounded-full blur-[100px] -z-10"></div>
@@ -158,7 +158,7 @@ const Skills = () => {
                       href={getSkillLink(skill)} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="relative flex items-center gap-2 md:gap-3 pr-3 md:pr-4 pl-2 md:pl-3 py-1.5 md:py-2 rounded-xl text-xs md:text-sm transition-all duration-300 cursor-pointer group/skill w-full sm:w-auto
+                      className="relative flex items-center gap-1 md:gap-3 px-2 py-1 md:px-3 md:py-2 rounded-xl text-xs md:text-sm transition-all duration-300 cursor-pointer group/skill w-full sm:w-auto
                       bg-slate-50 border border-slate-100 hover:bg-white hover:border-blue-400 hover:shadow-sm
                       dark:bg-slate-900/50 dark:border-slate-700 dark:hover:border-blue-500/50 dark:hover:bg-blue-500/10"
                     >

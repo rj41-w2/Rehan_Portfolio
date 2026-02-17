@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Loader2, X, Send } from 'lucide-react';
 import { DATA } from '../data/user';
 import { callGemini } from '../utils/gemini'; 
+import ChatMessage from './ChatMessage'; 
 
 const ChatWidget = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -70,13 +71,13 @@ const ChatWidget = () => {
             <div className="space-y-4">
                 {chatMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm
+                    <div className={`prose prose-slate dark:prose-invert max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm
                     ${msg.role === 'user' 
-                        ? 'bg-blue-600 text-white rounded-br-none' 
+                        ? 'bg-blue-600 text-white rounded-br-none prose-p:text-white prose-strong:text-white' 
                         : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-bl-none'
                     }`}
                     >
-                    {msg.text}
+                      <ChatMessage text={msg.text} />
                     </div>
                 </div>
                 ))}

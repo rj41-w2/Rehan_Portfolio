@@ -1,7 +1,7 @@
 // AB HUM KEY .ENV FILE SE LE RAHAY HAIN
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
 
-export const callGemini = async (prompt, systemInstruction = "") => {
+export const callGemini = async (prompt, systemInstruction = "", history = []) => {
   if (!apiKey) {
     console.error("API Key missing in .env");
     return "Error: API Key is missing in .env file.";
@@ -26,6 +26,8 @@ export const callGemini = async (prompt, systemInstruction = "") => {
     if (!activeModel) {
        activeModel = "models/gemini-pro";
     }
+    
+    const contents = [...history, { role: 'user', parts: [{ text: prompt }] }];
 
     // STEP 3: Call Model
     const response = await fetch(
@@ -34,9 +36,10 @@ export const callGemini = async (prompt, systemInstruction = "") => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: [{ 
-            parts: [{ text: `System: ${systemInstruction}\n\nUser: ${prompt}` }] 
-          }]
+          system_instruction: {
+            parts: [{ text: systemInstruction }]
+          },
+          contents: contents
         }),
       }
     );

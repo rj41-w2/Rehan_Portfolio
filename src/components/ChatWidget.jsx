@@ -21,13 +21,28 @@ const ChatWidget = () => {
   const handleChatSubmit = async (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
-    const userMessage = chatInput;
-    setChatMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+    const userMessage = { role: 'user', text: chatInput };
+    setChatMessages(prev => [...prev, userMessage]);
     setChatInput("");
     setIsChatLoading(true);
 
-    const systemPrompt = `You are a helpful AI assistant for ${DATA.profile.name}. Only answer based on this data: ${JSON.stringify(DATA)}.`;
-    const response = await callGemini(userMessage, systemPrompt);
+    const systemPrompt = `You are an AI assistant for ${DATA.profile.name}. Your task is to provide helpful and accurate information based ONLY on the provided data: ${JSON.stringify(DATA)}.
+
+**Primary Rules:**
+1.  **Language Mirroring:** You MUST detect the user's language and respond in the same language.
+    *   If the user types in **English**, you reply in **English**.
+    *   If the user types in **Urdu (Arabic script)**, you reply in **Urdu (Arabic script)**.
+    *   If the user types in **Roman Urdu** (e.g., "kya haal hai"), you MUST reply in **Roman Urdu**.
+2.  **Data-Bound:** Do not invent information. If the answer is not in the provided data, say so politely in the user's language.
+3.  **Explicit Override:** If the user explicitly asks to change the language (e.g., "Ab mujhse Urdu mein baat karo"), you must comply immediately.
+`;
+
+    const history = chatMessages.map(msg => ({
+      role: msg.role,
+      parts: [{ text: msg.text }]
+    }));
+    
+    const response = await callGemini(chatInput, systemPrompt, history);
     
     setChatMessages(prev => [...prev, { role: 'model', text: response }]);
     setIsChatLoading(false);
@@ -71,7 +86,7 @@ const ChatWidget = () => {
             <div className="space-y-4">
                 {chatMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`prose prose-slate dark:prose-invert max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm
+                    <div className={`prose prose-slate dark:prose-invert max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm prose-p:my-2 prose-ul:list-disc prose-ul:ml-4 prose-strong:font-semibold
                     ${msg.role === 'user' 
                         ? 'bg-blue-600 text-white rounded-br-none prose-p:text-white prose-strong:text-white' 
                         : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-bl-none'

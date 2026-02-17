@@ -3,6 +3,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        urdu: ['"Jameel Noori Nastaleeq"', 'serif'],
+      },
       animation: {
         blob: "blob 7s infinite",
         float: "float 6s ease-in-out infinite",

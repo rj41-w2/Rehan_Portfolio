@@ -3,14 +3,13 @@ import { auth, googleProvider, db } from '../firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
 import { ArrowLeft, PenTool, Trash2, Sparkles, Briefcase, Code, Heart, User, Wand2 } from 'lucide-react';
-// 1. useNavigate import karein
 import { useNavigate } from 'react-router-dom';
 
-const Guestbook = () => {
+const Guestbook = ({ theme, toggleTheme, showUI, setShowUI }) => {
   const [user, setUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [selectedTag, setSelectedTag] = useState("visitor"); 
+  const [selectedTag, setSelectedTag] = useState("visitor");
   const [loading, setLoading] = useState(false);
 
   // 2. Navigate hook initialize karein
@@ -78,7 +77,7 @@ const Guestbook = () => {
     try {
       await addDoc(collection(db, "guestbook_signatures"), {
         text: newMessage,
-        tag: selectedTag, 
+        tag: selectedTag,
         name: user.displayName,
         photo: user.photoURL,
         uid: user.uid,
@@ -86,7 +85,7 @@ const Guestbook = () => {
         isDeleted: false
       });
       setNewMessage("");
-      setSelectedTag("visitor"); 
+      setSelectedTag("visitor");
     } catch (error) {
       console.error("Error signing", error);
     }
@@ -105,7 +104,7 @@ const Guestbook = () => {
 
   return (
     <section className="min-h-screen py-20 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative overflow-hidden font-sans">
-      
+
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-10 pointer-events-none"></div>
       <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
@@ -113,27 +112,26 @@ const Guestbook = () => {
 
       {/* --- NAVBAR / BACK BUTTON (UPDATED) --- */}
       <div className="max-w-4xl mx-auto mb-10 flex justify-between items-center relative z-10">
-        
-        {/* YAHAN CHANGE KIYA HAI: Link hata kar Button lagaya hai */}
-        <button 
-          onClick={() => navigate(-1)} 
+
+        <button
+          onClick={() => navigate(-1)}
           className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-medium bg-transparent border-none cursor-pointer"
         >
-          <ArrowLeft size={18} /> Back to Portfolio
+          <ArrowLeft size={20} /> Back to Home
         </button>
-        
+
         {user && (
-           <div className="flex items-center gap-3 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700">
-             <img src={user.photoURL} alt="Me" className="w-5 h-5 rounded-full" />
-             <button onClick={() => signOut(auth)} className="text-xs font-bold text-slate-500 hover:text-red-500">
-               Sign Out
-             </button>
-           </div>
+          <div className="flex items-center gap-3 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700">
+            <img src={user.photoURL} alt="Me" className="w-5 h-5 rounded-full" />
+            <button onClick={() => signOut(auth)} className="text-xs font-bold text-slate-500 hover:text-red-500">
+              Sign Out
+            </button>
+          </div>
         )}
       </div>
 
       <div className="max-w-3xl mx-auto relative z-10">
-        
+
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center p-4 bg-white dark:bg-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none rounded-2xl mb-6 transform rotate-3 hover:rotate-0 transition-transform duration-300">
@@ -149,14 +147,14 @@ const Guestbook = () => {
 
         {/* Signing Form */}
         <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-3xl p-6 md:p-8 mb-16 relative overflow-hidden group">
-          
+
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
 
           {user ? (
             <form onSubmit={handleSign} className="space-y-6">
-              
+
               <div className="flex items-center gap-4 mb-2">
-                <img src={user.photoURL} className="w-12 h-12 rounded-full border-2 border-slate-100 dark:border-slate-700" alt="Avatar"/>
+                <img src={user.photoURL} className="w-12 h-12 rounded-full border-2 border-slate-100 dark:border-slate-700" alt="Avatar" />
                 <div>
                   <p className="text-sm text-slate-500 dark:text-slate-400">Signing as</p>
                   <p className="font-bold text-slate-900 dark:text-white">{user.displayName}</p>
@@ -172,7 +170,7 @@ const Guestbook = () => {
                       type="button"
                       onClick={() => setSelectedTag(tag.id)}
                       className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all border
-                        ${selectedTag === tag.id 
+                        ${selectedTag === tag.id
                           ? 'border-blue-500 ring-1 ring-blue-500 ' + tag.color
                           : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
                         }`}
@@ -191,7 +189,7 @@ const Guestbook = () => {
                   rows="3"
                   className="w-full bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-slate-700 rounded-xl p-4 pr-32 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none"
                 />
-                
+
                 <button
                   type="button"
                   onClick={generateAIComment}
@@ -206,8 +204,8 @@ const Guestbook = () => {
                 </div>
               </div>
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={loading || !newMessage.trim()}
                 className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-lg hover:opacity-90 transition-all shadow-lg hover:shadow-xl active:scale-[0.99] flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -223,7 +221,7 @@ const Guestbook = () => {
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Join the Wall of Fame</h3>
               <p className="text-slate-500 mb-6">Login to leave your message </p>
-              <button 
+              <button
                 onClick={handleLogin}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-blue-500/30 transition-all hover:-translate-y-1 inline-flex items-center gap-3"
               >
@@ -245,10 +243,10 @@ const Guestbook = () => {
             const tagStyle = getTagStyle(msg.tag);
             return (
               <div key={msg.id} className="group relative bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
-                
+
                 <div className="flex items-start gap-4">
                   <img src={msg.photo} alt={msg.name} className="w-12 h-12 rounded-full border border-slate-200 dark:border-slate-600" />
-                  
+
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <h4 className="font-bold text-slate-900 dark:text-white text-lg">{msg.name}</h4>
@@ -258,7 +256,7 @@ const Guestbook = () => {
                     </div>
 
                     <p className="text-xs text-slate-400 mb-3 font-mono">
-                      {msg.createdAt?.seconds ? new Date(msg.createdAt.seconds * 1000).toLocaleDateString(undefined, {  month: 'short', day: 'numeric', year: 'numeric' }) : "Just now"}
+                      {msg.createdAt?.seconds ? new Date(msg.createdAt.seconds * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : "Just now"}
                     </p>
 
                     <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
@@ -267,7 +265,7 @@ const Guestbook = () => {
                   </div>
 
                   {user && user.uid === msg.uid && (
-                    <button 
+                    <button
                       onClick={() => handleDelete(msg.id)}
                       className="opacity-0 group-hover:opacity-100 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all"
                       title="Delete Signature"

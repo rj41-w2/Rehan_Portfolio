@@ -41,14 +41,14 @@ const Projects = () => {
   return (
     <section id="projects" className="min-h-screen py-24 px-4 relative bg-slate-50 dark:bg-transparent transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Section Header */}
         <div className="mb-20">
           <h2 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6">
             Featured <span className="text-blue-600 dark:text-blue-500">Work</span>
           </h2>
           <div className="h-1 w-32 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 rounded-full"></div>
-          <p className="text-slate-600 dark:text-slate-400 mt-6 max-w-xl text-lg">
+          <p className="text-slate-700 dark:text-slate-400 mt-6 max-w-xl text-lg">
             A selection of projects that showcase my passion for building clean, robust, and scalable applications.
           </p>
         </div>
@@ -56,19 +56,18 @@ const Projects = () => {
         {/* Projects List */}
         <div className="space-y-32">
           {DATA.projects.map((project, index) => (
-            <div 
-              key={project.id} 
-              className={`flex flex-col lg:flex-row gap-12 items-center ${
-                index % 2 === 1 ? 'lg:flex-row-reverse' : ''
-              }`}
+            <div
+              key={project.id}
+              className={`flex flex-col lg:flex-row gap-12 items-center ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''
+                }`}
             >
-              
+
               {/* 1. Project Visual (Browser Window) */}
               <div className="w-full lg:w-3/5 group perspective-1000">
                 <div className="relative rounded-xl overflow-hidden transition-all duration-500 
-                  bg-white border border-slate-200 shadow-xl hover:shadow-2xl hover:-translate-y-2
+                  bg-slate-100 border border-slate-200 shadow-xl hover:shadow-2xl hover:-translate-y-2
                   dark:bg-slate-900 dark:border-slate-700 dark:shadow-2xl dark:group-hover:shadow-blue-500/20 dark:group-hover:border-slate-600">
-                  
+
                   {/* Browser Header Bar */}
                   <div className="h-8 border-b flex items-center px-4 gap-2
                     bg-slate-100 border-slate-200
@@ -77,7 +76,7 @@ const Projects = () => {
                     <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                     <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
                     <div className="ml-4 flex-1 h-4 rounded-full max-w-[200px]
-                      bg-white border border-slate-200
+                      bg-slate-200 border border-slate-200
                       dark:bg-slate-900/50 dark:border-transparent"></div>
                   </div>
 
@@ -86,9 +85,9 @@ const Projects = () => {
                     <div className="absolute inset-0 z-10 transition-colors
                       bg-transparent
                       dark:bg-blue-900/20 dark:group-hover:bg-transparent"></div>
-                    <img 
-                      src={project.image} 
-                      alt={project.title} 
+                    <img
+                      src={project.image}
+                      alt={project.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
@@ -98,7 +97,7 @@ const Projects = () => {
 
               {/* 2. Project Details */}
               <div className="w-full lg:w-2/5 space-y-6">
-                
+
                 {/* Number */}
                 <span className="font-mono text-xl text-blue-600 dark:text-blue-500">0{index + 1}.</span>
 
@@ -111,22 +110,22 @@ const Projects = () => {
 
                 {/* Description Card */}
                 <div className="p-6 rounded-xl relative transition-colors
-                  bg-white border border-slate-200 shadow-sm
+                  bg-slate-100 border border-slate-200 shadow-sm
                   dark:bg-slate-800/50 dark:backdrop-blur-sm dark:border-slate-700 dark:shadow-none dark:hover:bg-slate-800">
-                   <p className="leading-relaxed text-slate-600 dark:text-slate-300">
+                  <p className="leading-relaxed text-slate-700 dark:text-slate-300">
                     {project.description}
                   </p>
                 </div>
 
                 {/* Tech Stack - NOW WITH HOVER LIFT ANIMATION */}
                 <div>
-                   <h4 className="text-sm font-semibold mb-3 uppercase tracking-wider text-slate-500 dark:text-slate-500">Technologies</h4>
-                   <div className="flex flex-wrap gap-2">
+                  <h4 className="text-sm font-semibold mb-3 uppercase tracking-wider text-slate-500 dark:text-slate-500">Technologies</h4>
+                  <div className="flex flex-wrap gap-2">
                     {project.tech.map(t => (
-                      <a 
-                        key={t} 
-                        href={getTechLink(t)} 
-                        target="_blank" 
+                      <a
+                        key={t}
+                        href={getTechLink(t)}
+                        target="_blank"
                         rel="noopener noreferrer"
                         // Change is HERE: added hover:-translate-y-1 and hover:shadow-md
                         className="px-3 py-1 text-sm rounded-full border transition-all duration-300 cursor-pointer transform hover:-translate-y-1 hover:shadow-md
@@ -141,16 +140,18 @@ const Projects = () => {
 
                 {/* Links & Like Button Row */}
                 <div className="flex flex-wrap items-center gap-6 pt-4">
-                  <a 
-                    href={project.github} 
+
+                  <a
+                    href={project.github}
                     className="flex items-center gap-2 border-b transition-colors pb-1
-                      text-slate-600 border-transparent hover:text-slate-900 hover:border-slate-900
+                      text-slate-700 border-transparent hover:text-slate-900 hover:border-slate-900
                       dark:text-slate-300 dark:hover:text-white dark:hover:border-white"
                   >
-                    <Github size={20} /> View Code
+                    <ExternalLink size={20} /> Case Study
                   </a>
-                  <a 
-                    href={project.demo} 
+
+                  <a
+                    href={project.demo}
                     className="flex items-center gap-2 font-semibold transition-colors
                       text-blue-600 hover:text-blue-700
                       dark:text-blue-400 dark:hover:text-blue-300"

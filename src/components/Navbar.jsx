@@ -1,204 +1,137 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon, Book } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Menu, X, Home, User, Briefcase, Mail, Book, Sun, Moon, MoreVertical, Cpu } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  // --- Track Active Section ---
-  const [activeSection, setActiveSection] = useState('home');
+  // --- MOBILE NAVBAR ---
+  const MobileNavbar = () => {
+    const mobileNavLinks = [
+      { id: 'home', icon: <Home size={20} />, text: 'Home' },
+      { id: 'about', icon: <User size={20} />, text: 'About' },
+      { id: 'skills', icon: <Cpu size={20} />, text: 'Skills' },
+      { id: 'projects', icon: <Briefcase size={20} />, text: 'Projects' },
+      { id: 'contact', icon: <Mail size={20} />, text: 'Contact' },
+      { id: 'guestbook', icon: <Book size={20} />, text: 'Guestbook' }
+    ];
 
-  useEffect(() => {
-    if (location.pathname === '/guestbook') {
-      setActiveSection('guestbook');
-    } else if (location.pathname === '/') {
-      setActiveSection('home');
-    }
-  }, [location.pathname]);
+    const renderMobileNavLink = (item) => {
+      const isRoutable = item.id === 'guestbook' || item.id === 'contact';
+      const className = `flex items-center gap-4 w-full text-left capitalize font-medium py-3 px-4 rounded-lg ${
+        activeSection === item.id 
+        ? "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400" 
+        : "text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800"
+      }`;
 
-  // --- Scroll Spy ---
-  useEffect(() => {
-    if (location.pathname !== '/') return;
-    const handleScroll = () => {
-      const sections = ['home', 'about', 'skills', 'projects', 'contact'];
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top >= -100 && rect.top <= 300) {
-            setActiveSection(section);
-            break;
-          }
-        }
+      const content = (
+        <>
+          {React.cloneElement(item.icon, {
+            className: `transition-colors duration-300 ${activeSection === item.id ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-slate-400'}`
+          })}
+          <span>{item.text}</span>
+        </>
+      );
+
+      if (isRoutable) {
+        return (
+          <Link key={item.id} to={`/${item.id}`} onClick={() => { scrollToSection(item.id); setIsMenuOpen(false); }} className={className}>
+            {content}
+          </Link>
+        );
       }
+      return (
+        <button key={item.id} onClick={() => { scrollToSection(item.id); setIsMenuOpen(false); }} className={className}>
+          {content}
+        </button>
+      );
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
 
-  // --- Theme Logic ---
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    return (
+      <div className="md:hidden">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent">
+          <div className="px-4 h-14 flex justify-between items-center max-w-7xl mx-auto">
+            <Link to="/" onClick={() => scrollToSection('home')} className="flex items-center gap-2">
+              <img src="/images/logo.png" alt="Logo" className="h-8 w-auto" />
+            </Link>
+            <div className="flex items-center gap-2">
+              <button onClick={() => toggleTheme()} className="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-yellow-400">
+                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-gray-800 dark:text-slate-300">
+                {isMenuOpen ? <X size={24} /> : <MoreVertical size={24} />}
+              </button>
+            </div>
+          </div>
+        </nav>
+        {isMenuOpen && (
+          <div className="fixed top-14 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-lg p-4 space-y-2 border-t border-gray-200 dark:border-slate-800">
+            {mobileNavLinks.map(renderMobileNavLink)}
+          </div>
+        )}
+      </div>
+    );
   };
 
-  // --- Scroll Function ---
-  const scrollToSection = (id) => {
-    setIsMenuOpen(false);
-    setActiveSection(id);
-    
-    if (location.pathname !== '/') {
-      navigate('/');
-      setTimeout(() => {
-        const element = document.getElementById(id);
-        if (element) element.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    } else {
-      const element = document.getElementById(id);
-      if (element) element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  // --- DESKTOP NAVBAR ---
+  const DesktopNavbar = () => {
+    const desktopNavLinks = [
+      { id: 'home', icon: <Home size={20} />, text: 'Home' },
+      { id: 'about', icon: <User size={20} />, text: 'About' },
+      { id: 'skills', icon: <Cpu size={20} />, text: 'Skills' },
+      { id: 'projects', icon: <Briefcase size={20} />, text: 'Projects' },
+      { id: 'contact', icon: <Mail size={20} />, text: 'Contact' }
+    ];
 
-  const navLinks = ['home', 'about', 'projects', 'contact'];
+    const renderDesktopNavLink = (item) => {
+      const isRoutable = item.id === 'contact';
+      const className = `flex items-center gap-2 px-3 py-2 rounded-full font-medium text-sm transition-all duration-300 group ${
+        activeSection === item.id
+          ? "text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-500/10"
+          : "text-gray-700 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-slate-800"
+      }`;
+
+      const content = (
+        <>
+          {React.cloneElement(item.icon, {
+            className: `transition-colors duration-300 ${activeSection === item.id ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`
+          })}
+          <span className="hidden group-hover:inline transition-all duration-300">{item.text}</span>
+        </>
+      );
+
+      if (isRoutable) {
+        return (
+          <Link key={item.id} to={`/${item.id}`} onClick={() => scrollToSection(item.id)} className={className}>
+            {content}
+          </Link>
+        );
+      }
+      return (
+        <button key={item.id} onClick={() => scrollToSection(item.id)} className={className}>
+          {content}
+        </button>
+      );
+    };
+
+    return (
+      <div className="hidden md:block">
+        <nav className="fixed top-2 left-1/2 -translate-x-1/2 z-50 mx-auto max-w-fit bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border border-gray-200 dark:border-white/10 shadow-lg rounded-full transition-all duration-300">
+          <div className="px-4 h-14 flex justify-center items-center relative">
+            <div className="flex gap-2 items-center w-full justify-center">
+              {desktopNavLinks.map(renderDesktopNavLink)}
+            </div>
+          </div>
+        </nav>
+      </div>
+    );
+  };
 
   return (
-    <nav className="fixed top-2 left-0 right-0 z-50 mx-4 md:mx-auto max-w-8xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border border-gray-200 dark:border-white/10 shadow-lg rounded-full transition-all duration-300">
-      
-      <div className="px-6 h-14 md:h-16 flex justify-between items-center relative">
-        
-        {/* 1. LEFT SIDE (Desktop): Theme Toggle */}
-        {/* CHANGE: Added 'hidden md:flex' so it hides on mobile */}
-        <div className="hidden md:flex items-center z-20">
-          <button 
-              onClick={toggleTheme} 
-              className="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-yellow-400 hover:scale-110 transition-transform"
-          >
-              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-        </div>
-
-        {/* 2. LEFT SIDE (Mobile): Logo */}
-        {/* CHANGE: Removed 'absolute left-1/2' and put it in normal flow so it sits on Left */}
-        <div className="md:hidden flex items-center z-10">
-            <Link 
-            to="/" 
-            className="cursor-pointer group" 
-            onClick={() => scrollToSection('home')}
-            >
-            <img 
-                src="/images/logo.png" 
-                alt="RJ Logo" 
-                className="w-10 h-10 rounded-full object-cover border-2 border-transparent group-hover:border-blue-500/50 transition-all duration-300 group-hover:scale-110 shadow-lg"
-            />
-            </Link>
-        </div>
-
-        {/* 3. CENTER (Desktop): Menu Links */}
-        <div className="hidden md:flex gap-8 items-center w-full justify-center absolute left-0 right-0 pointer-events-none">
-          <div className="pointer-events-auto flex gap-6">
-            {navLinks.map(item => (
-                <button 
-                key={item} 
-                onClick={() => scrollToSection(item)} 
-                className={`capitalize font-medium text-sm transition-all duration-300 relative group ${
-                    activeSection === item 
-                    ? "text-blue-600 dark:text-blue-400" 
-                    : "text-gray-700 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400"
-                }`}
-                >
-                {item === 'skills' ? 'Tech Arsenal' : item === 'projects' ? 'Works' : item}
-                
-                <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 dark:bg-blue-500 transition-all duration-300 ${
-                    activeSection === item ? "w-full" : "w-0 group-hover:w-full"
-                }`}></span>
-                </button>
-            ))}
-          </div>
-        </div>
-        
-        {/* 4. RIGHT SIDE (Desktop): Guestbook Button */}
-        <div className="hidden md:flex items-center z-20">
-            <Link 
-                to="/guestbook" 
-                onClick={() => setActiveSection('guestbook')}
-                className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
-                activeSection === 'guestbook' 
-                    ? "bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.6)]" 
-                    : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:bg-slate-800 hover:text-white hover:shadow-[0_0_20px_rgba(37,99,235,0.6)]"
-                }`}
-            >
-                Guestbook
-            </Link>
-        </div>
-
-        {/* 5. RIGHT SIDE (Mobile): Mobile Controls */}
-        {/* CHANGE: Added Theme Toggle here */}
-         <div className="md:hidden flex gap-3 items-center ml-auto z-20">
-           
-           {/* Mobile Theme Toggle */}
-           <button 
-              onClick={toggleTheme} 
-              className="text-gray-800 dark:text-yellow-400 p-1"
-           >
-              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-           </button>
-
-           {/* Mobile Guestbook Icon */}
-           <Link 
-             to="/guestbook"
-             onClick={() => setActiveSection('guestbook')}
-             className={`p-1 transition-colors ${
-               activeSection === 'guestbook' 
-                 ? "text-blue-600 dark:text-blue-400" 
-                 : "text-gray-700 dark:text-slate-300"
-             }`}
-           >
-             <Book size={20} />
-           </Link>
-
-           {/* Mobile Menu Toggle */}
-           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 dark:text-slate-300">
-             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-           </button>
-         </div>
-      </div>
-      
-      {/* --- MOBILE DROPDOWN MENU --- */}
-      {isMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 p-4 space-y-4 rounded-3xl shadow-xl mx-0">
-          {navLinks.map(item => (
-            <button 
-              key={item} 
-              onClick={() => scrollToSection(item)} 
-              className={`block w-full text-left capitalize font-medium ${activeSection === item ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-slate-300'}`}
-            >
-              {item === 'skills' ? 'Tech Arsenal' : item === 'projects' ? 'Works' : item}
-            </button>
-          ))}
-          
-          <Link 
-            to="/guestbook" 
-            onClick={() => { setIsMenuOpen(false); setActiveSection('guestbook'); }}
-            className={`block w-full text-left capitalize font-medium ${activeSection === 'guestbook' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-slate-300'}`}
-          >
-            Guestbook
-          </Link>
-        </div>
-      )}
-    </nav>
+    <>
+      <MobileNavbar />
+      <DesktopNavbar />
+    </>
   );
 };
 

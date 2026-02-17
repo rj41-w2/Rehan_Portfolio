@@ -36,8 +36,23 @@ const PremiumSkills = () => {
   ];
 
   return (
-    <div id="skills" className="min-h-screen relative overflow-hidden py-20 px-4">
-      <div className="relative z-10 max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+      {/* Background Gradient Orb */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-900/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-pink-900/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+      {/* Subtle Grid Pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                           linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
+        }}
+      ></div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-24">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -45,10 +60,10 @@ const PremiumSkills = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            Skills & <span className="text-blue-600 dark:text-blue-500">Expertise</span>
+          <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-4">
+            Skills & <span className="font-normal bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">Expertise</span>
           </h1>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto font-light">
             Building intelligent systems at the intersection of AI and modern web architecture
           </p>
         </motion.div>
@@ -65,9 +80,9 @@ const PremiumSkills = () => {
             >
               {/* Glass Card */}
               <div
-                className="relative h-full p-8 backdrop-blur-xl bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.08] rounded-2xl
+                className="relative h-full p-8 backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] rounded-2xl
                            transition-all duration-500 ease-out
-                           hover:border-slate-300 dark:hover:border-white/[0.15] hover:bg-slate-200 dark:hover:bg-white/[0.05]
+                           hover:border-white/[0.15] hover:bg-white/[0.05]
                            hover:shadow-2xl hover:shadow-purple-900/10"
               >
                 {/* Gradient Border Effect on Hover */}
@@ -85,7 +100,7 @@ const PremiumSkills = () => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-medium text-slate-900 dark:text-white mb-1 tracking-tight">
+                  <h3 className="text-xl font-medium text-white mb-1 tracking-tight">
                     {card.title}
                   </h3>
                   <p className="text-sm text-gray-500 mb-6 font-light">
@@ -97,10 +112,10 @@ const PremiumSkills = () => {
                     {card.skills.map((skill, skillIndex) => (
                       <span
                         key={skillIndex}
-                        className="px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-gray-300 
-                                   bg-slate-200 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.06] rounded-lg
-                                   hover:bg-slate-300 dark:hover:bg-white/[0.08] hover:border-slate-400 dark:hover:border-white/[0.12]
-                                   hover:text-slate-800 dark:hover:text-white transition-all duration-300
+                        className="px-3 py-1.5 text-xs font-medium text-gray-300 
+                                   bg-white/[0.04] border border-white/[0.06] rounded-lg
+                                   hover:bg-white/[0.08] hover:border-white/[0.12]
+                                   hover:text-white transition-all duration-300
                                    cursor-default"
                       >
                         {skill}
@@ -126,9 +141,9 @@ const PremiumSkills = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="mt-20 text-center"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06]">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            <span className="text-sm text-slate-600 dark:text-gray-400 font-bold">
+            <span className="text-sm text-gray-400 font-light">
               Currently expanding into Multi-Agent Systems & Advanced RAG Architectures
             </span>
           </div>
@@ -144,12 +159,12 @@ const PremiumSkills = () => {
           {[
             { value: '3+', label: 'Core Domains' },
             { value: '18+', label: 'Technologies' },
-            { value: '2', label: 'Years' },
+            { value: '2', label: 'Years Experience' },
             { value: '∞', label: 'Learning' },
           ].map((stat, index) => (
             <div key={index} className="text-center">
-              <p className="text-2xl md:text-3xl font-light text-slate-900 dark:text-white mb-1">{stat.value}</p>
-              <p className="text-xs text-slate-500 dark:text-gray-500 font-light tracking-wide uppercase">{stat.label}</p>
+              <p className="text-2xl md:text-3xl font-light text-white mb-1">{stat.value}</p>
+              <p className="text-xs text-gray-500 font-light tracking-wide uppercase">{stat.label}</p>
             </div>
           ))}
         </motion.div>

@@ -3,9 +3,10 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      // YEH CODE ADD KAREIN:
       animation: {
         blob: "blob 7s infinite",
+        float: "float 6s ease-in-out infinite",
+        blink: "blink 1s step-end infinite",
       },
       keyframes: {
         blob: {
@@ -14,9 +15,27 @@ module.exports = {
           "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
           "100%": { transform: "translate(0px, 0px) scale(1)" },
         },
+        float: {
+          "0%": { transform: "translate(0, 0)" },
+          "50%": { transform: "translate(10px, 10px)" },
+          "100%": { transform: "translate(0, 0)" },
+        },
+        blink: {
+          "50%": { opacity: 0 },
+        },
       },
-      // Yahan tak
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.terminal': {
+          backgroundColor: '#000',
+          color: '#fff',
+          fontFamily: 'monospace',
+          padding: '1rem',
+        },
+      });
+    },
+  ],
 };

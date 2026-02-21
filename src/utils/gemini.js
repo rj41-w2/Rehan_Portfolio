@@ -47,12 +47,16 @@ export const callGemini = async (prompt, systemInstruction = "", history = []) =
     const data = await response.json();
 
     if (!response.ok) {
-        return `Google Error (${data.error?.code}): ${data.error?.message}`;
+        // Check for 429 Rate Limit Error
+        if (response.status === 429) {
+            return "RATE_LIMIT_EXCEEDED: You have exceeded your daily quota. Please try again after 24 hours.";
+        }
+        return `API_ERROR: Google Error (${data.error?.code}): ${data.error?.message}`;
     }
-    
+
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
 
   } catch (error) {
-    return `Network Error: ${error.message}`;
+    return `NETWORK_ERROR: Network Error: ${error.message}`;
   }
 };

@@ -49,7 +49,7 @@ const Terminal = ({ scrollToSection, toggleTheme, showUI, setShowUI }) => {
           scrollToSection('hero');
           return 'scrolled to home';
         }
-        const validSections = ['about', 'projects', 'skills', 'contact'];
+        const validSections = ['about', 'projects', 'skills', 'contact', 'guestbook'];
         if (validSections.includes(section)) {
           scrollToSection(section);
           return `scrolled to ${section}...`;

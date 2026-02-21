@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { ChevronUp } from 'lucide-react';
 
 // Components Import
 import Background from './components/Background';
@@ -95,8 +96,12 @@ export default function Layout() {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const scrollToSection = (id) => {
-    const validIds = ['home', 'about', 'skills', 'projects', 'contact'];
+    const validIds = ['home', 'about', 'skills', 'projects', 'contact', 'guestbook'];
     if (!validIds.includes(id) && id !== 'hero') {
       console.error(`Invalid section id: ${id}`);
       return;
@@ -105,6 +110,21 @@ export default function Layout() {
     const sectionId = id === 'hero' ? 'home' : id;
 
     setActiveSection(sectionId);
+
+    // Contact and Guestbook are separate pages, navigate to them
+    if (sectionId === 'contact') {
+      if (location.pathname !== '/contact') {
+        navigate('/contact');
+      }
+      return;
+    }
+
+    if (sectionId === 'guestbook') {
+      if (location.pathname !== '/guestbook') {
+        navigate('/guestbook');
+      }
+      return;
+    }
 
     if (location.pathname !== '/') {
       navigate('/');
@@ -149,20 +169,28 @@ export default function Layout() {
       {/* Footer */}
       {showUI && (
         <footer className="py-4 px-6 border-t backdrop-blur-md transition-colors duration-300
-          bg-slate-50 border-slate-200 
-          dark:bg-slate-900/80 dark:border-slate-800 
+          bg-slate-50 border-slate-200
+          dark:bg-slate-900/80 dark:border-slate-800
           flex flex-col md:flex-row justify-center md:justify-between items-center gap-4">
-          
+
           <Link
             to="/contact"
             className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium order-1"
           >
             Get in Touch
           </Link>
-          
+
           <p className="text-xs text-slate-500 dark:text-slate-400 order-2 text-center md:text-right w-full md:w-auto">
             © {new Date().getFullYear()} <span className="font-semibold text-slate-900 dark:text-slate-200">Rehan Jamil</span>. All rights reserved.
           </p>
+
+          <button
+            onClick={scrollToTop}
+            className="order-3 md:order-4 p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-full shadow-lg shadow-blue-600/40 transition-all hover:scale-110 mt-4 md:mt-0"
+            aria-label="Scroll to top"
+          >
+            <ChevronUp size={20} />
+          </button>
         </footer>
       )}
     </div>

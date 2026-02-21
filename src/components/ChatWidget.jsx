@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Loader2, X, Send } from 'lucide-react';
+import { Bot, Loader2, X, Send, Mail, Linkedin } from 'lucide-react';
 import { DATA } from '../data/user';
-import { callGemini } from '../utils/gemini'; 
-import ChatMessage from './ChatMessage'; 
+import { callGemini } from '../utils/gemini';
+import ChatMessage from './ChatMessage';
 
 const ChatWidget = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  
+  const [showRateLimitMessage, setShowRateLimitMessage] = useState(false);
+
   const [chatMessages, setChatMessages] = useState([
     { role: 'model', text: `Hi! I'm ${DATA.profile.name.split(" ")[0]}'s AI assistant. Ask me anything!` }
   ]);
@@ -16,7 +17,12 @@ const ChatWidget = () => {
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessages, isChatOpen]);
+  }, [chatMessages, isChatOpen, showRateLimitMessage]);
+
+  const handleChatOpen = () => {
+    setShowRateLimitMessage(false);
+    setIsChatOpen(true);
+  };
 
   const handleChatSubmit = async (e) => {
     e.preventDefault();
@@ -41,10 +47,29 @@ const ChatWidget = () => {
       role: msg.role,
       parts: [{ text: msg.text }]
     }));
-    
+
     const response = await callGemini(chatInput, systemPrompt, history);
-    
-    setChatMessages(prev => [...prev, { role: 'model', text: response }]);
+
+    // Check for any error (rate limit, network, or API errors)
+    if (response.includes("RATE_LIMIT_EXCEEDED") || response.includes("NETWORK_ERROR") || response.includes("API_ERROR")) {
+      setShowRateLimitMessage(true);
+      
+      let errorMessage = "";
+      if (response.includes("RATE_LIMIT_EXCEEDED")) {
+        errorMessage = "⚠️ **Limit Khatam Ho Gayi Hai!**\n\nAap ne apni daily quota puri kar li hai. Barah-e-karam **24 ghantay baad** dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
+      } else if (response.includes("NETWORK_ERROR")) {
+        errorMessage = "⚠️ **Network Error!**\n\nInternet connection check karein ya baad mein dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
+      } else if (response.includes("API_ERROR")) {
+        errorMessage = "⚠️ **API Error!**\n\nKoi masla aa gaya hai. Baad mein dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
+      }
+      
+      setChatMessages(prev => [...prev, { 
+        role: 'model', 
+        text: errorMessage
+      }]);
+    } else {
+      setChatMessages(prev => [...prev, { role: 'model', text: response }]);
+    }
     setIsChatLoading(false);
   };
 
@@ -53,11 +78,11 @@ const ChatWidget = () => {
       
       {!isChatOpen ? (
         // Floating Toggle Button
-        <button 
-          onClick={() => setIsChatOpen(true)} 
+        <button
+          onClick={handleChatOpen}
           className="p-4 bg-blue-600 text-white rounded-full shadow-lg shadow-blue-600/40 hover:scale-110 transition-transform hover:bg-blue-500"
         >
-          <Bot size={24}/> 
+          <Bot size={24}/>
         </button>
       ) : (
         // Chat Container (Fixed Size Widget)
@@ -87,8 +112,8 @@ const ChatWidget = () => {
                 {chatMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`prose prose-slate dark:prose-invert max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm prose-p:my-2 prose-ul:list-disc prose-ul:ml-4 prose-strong:font-semibold
-                    ${msg.role === 'user' 
-                        ? 'bg-blue-600 text-white rounded-br-none prose-p:text-white prose-strong:text-white' 
+                    ${msg.role === 'user'
+                        ? 'bg-blue-600 text-white rounded-br-none prose-p:text-white prose-strong:text-white'
                         : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-bl-none'
                     }`}
                     >
@@ -96,15 +121,45 @@ const ChatWidget = () => {
                     </div>
                 </div>
                 ))}
-                
+
                 {isChatLoading && (
                     <div className="flex justify-start">
                         <div className="p-3 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none flex items-center gap-2 text-sm shadow-sm">
-                            <Loader2 className="animate-spin" size={16}/> 
+                            <Loader2 className="animate-spin" size={16}/>
                             <span>Thinking...</span>
                         </div>
                     </div>
                 )}
+
+                {/* Contact Buttons for Errors */}
+                {showRateLimitMessage && (
+                    <div className="flex justify-start">
+                        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 max-w-[90%] shadow-sm">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Need more info? Contact Rehan directly:</p>
+                            <div className="flex flex-col gap-2">
+                                <a
+                                    href={`mailto:${DATA.profile.email}`}
+                                    className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-all hover:scale-105"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Mail size={16} />
+                                    <span>Email Me</span>
+                                </a>
+                                <a
+                                    href={DATA.profile.linkedin}
+                                    className="flex items-center gap-2 px-4 py-2.5 bg-[#0077b5] hover:bg-[#006097] text-white rounded-xl text-sm font-medium transition-all hover:scale-105"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Linkedin size={16} />
+                                    <span>Connect on LinkedIn</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <div ref={chatEndRef}/>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Loader2, X, Send, Mail, Linkedin } from 'lucide-react';
+import { Bot, Loader2, X, Send, Mail, Linkedin, Sparkles } from 'lucide-react';
 import { DATA } from '../data/user';
 import { callGemini } from '../utils/gemini';
 import ChatMessage from './ChatMessage';
@@ -87,7 +87,7 @@ const ChatWidget = () => {
       ) : (
         // Chat Container (Fixed Size Widget)
         <div className="w-[350px] h-[500px] flex flex-col overflow-hidden shadow-2xl transition-all duration-300 ease-in-out border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl animate-in slide-in-from-bottom-5 fade-in">
-          
+
           {/* --- HEADER --- */}
           <div className="flex justify-between items-center shrink-0 p-4 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/50 transition-colors">
             <div className="flex items-center gap-3 font-medium text-slate-800 dark:text-white">

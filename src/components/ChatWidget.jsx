@@ -35,12 +35,10 @@ const ChatWidget = () => {
     const systemPrompt = `You are an AI assistant for ${DATA.profile.name}. Your task is to provide helpful and accurate information based ONLY on the provided data: ${JSON.stringify(DATA)}.
 
 **Primary Rules:**
-1.  **Language Mirroring:** You MUST detect the user's language and respond in the same language.
-    *   If the user types in **English**, you reply in **English**.
-    *   If the user types in **Urdu (Arabic script)**, you reply in **Urdu (Arabic script)**.
-    *   If the user types in **Roman Urdu** (e.g., "kya haal hai"), you MUST reply in **Roman Urdu**.
-2.  **Data-Bound:** Do not invent information. If the answer is not in the provided data, say so politely in the user's language.
-3.  **Explicit Override:** If the user explicitly asks to change the language (e.g., "Ab mujhse Urdu mein baat karo"), you must comply immediately.
+1.  **Language Mirroring:** Respond in the same language as the user (English, Urdu, or Roman Urdu).
+2.  **Data-Bound:** Do not invent information.
+3.  **LINKEDIN ONLY:** If asked for social media or contact info, ONLY provide the LinkedIn profile (${DATA.profile.linkedin}).
+4.  **NO GITHUB:** You are EXPLICITLY FORBIDDEN from mentioning or providing the GitHub link. If asked for GitHub, offer the LinkedIn profile instead.
 `;
 
     const history = chatMessages.map(msg => ({
@@ -60,7 +58,7 @@ const ChatWidget = () => {
       } else if (response.includes("NETWORK_ERROR")) {
         errorMessage = "⚠️ **Network Error!**\n\nInternet connection check karein ya baad mein dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
       } else if (response.includes("API_ERROR")) {
-        errorMessage = "⚠️ **API Error!**\n\nAPI se koi masla aa gaya hai. Baad mein dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
+        errorMessage = "⚠️ **API Error!**\n\nGroq API se koi masla aa gaya hai. Baad mein dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
       }
 
       setChatMessages(prev => [...prev, {
@@ -97,13 +95,15 @@ const ChatWidget = () => {
               <span className="text-base tracking-wide">AI Assistant</span>
             </div>
 
-            {/* Close Button Only */}
-            <button
-              onClick={() => setIsChatOpen(false)}
-              className="text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors"
-            >
-              <X size={18} />
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Close Button Only */}
+              <button
+                onClick={() => setIsChatOpen(false)}
+                className="text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors"
+              >
+                <X size={18} />
+              </button>
+            </div>
           </div>
 
           {/* --- MESSAGES AREA --- */}

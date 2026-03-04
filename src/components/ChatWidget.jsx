@@ -107,7 +107,7 @@ const ChatWidget = () => {
           </div>
 
           {/* --- MESSAGES AREA --- */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-slate-50 dark:bg-slate-900 transition-colors">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar bg-slate-50 dark:bg-slate-900 transition-colors">
             <div className="space-y-4">
               {chatMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>

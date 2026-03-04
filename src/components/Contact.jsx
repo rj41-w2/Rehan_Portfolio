@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, Send, Mail, Linkedin, Github, MapPin, Sparkles, Copy, Check, ArrowLeft } from 'lucide-react';
 import { DATA } from '../data/user';
-import { callGroq } from '../utils/groq';
+import { callGemini } from '../utils/gemini';
 
 export default function Contact() {
   const [result, setResult] = useState("");
@@ -23,7 +23,7 @@ export default function Contact() {
         ? `Write a short professional message to ${DATA.profile?.name || "the developer"} about a job opportunity.`
         : `Write a short friendly message to ${DATA.profile?.name || "the developer"} for a coffee chat.`;
 
-      const response = await callGroq(prompt, "You are a writing assistant. Keep it short and professional.");
+      const response = await callGemini(prompt, "You are a writing assistant. Keep it short and professional.");
       setContactMessage(response.replace(/^"|"$/g, ''));
     } catch (error) {
       console.error("Drafting error:", error);

@@ -2,6 +2,26 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    
+    // Guestbook signatures collection
+    match /signatures/{signatureId} {
+      // Anyone can read signatures
+      allow read: if true;
+      // Only authenticated users can create/update their own signatures
+      allow create: if request.auth != null 
+                    && request.resource.data.keys().hasAll(['name', 'message', 'timestamp', 'userId'])
+                    && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false; // Prevent modification after signing
+    }
+    
+    // Likes collection (for projects or guestbook)
+    match /likes/{likeId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // Default: deny all other collections
     match /{document=**} {
       allow read, write: if false;
     }

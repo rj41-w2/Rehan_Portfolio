@@ -5,22 +5,34 @@ import { signInWithPopup } from 'firebase/auth';
 import { doc, onSnapshot, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 const LikeButton = ({ projectId }) => {
-  const [likes, setLikes] = useState([]); // List of User IDs
+  const [likes, setLikes] = useState([]);
   const [user, setUser] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [animate, setAnimate] = useState(false);
+  const [firebaseAvailable, setFirebaseAvailable] = useState(true);
 
-  // 1. Check User Auth Status
+  // Check Firebase availability
   useEffect(() => {
+    if (!db || !auth) {
+      setFirebaseAvailable(false);
+      // Use local state only for demo
+      setLikes([1, 2, 3]); // Mock likes for demo
+    }
+  }, []);
+
+  // Check User Auth Status
+  useEffect(() => {
+    if (!auth) return;
     const unsubscribe = auth.onAuthStateChanged((u) => {
       setUser(u);
     });
     return () => unsubscribe();
   }, []);
 
-  // 2. Real-time Listeners for Likes (Firestore)
+  // Real-time Listeners for Likes (Firestore)
   useEffect(() => {
-    // "projectLikes" collection mein har project ki ID se document banega
+    if (!db || !firebaseAvailable) return;
+    
     const likesRef = doc(db, "projectLikes", String(projectId));
 
     const unsubscribe = onSnapshot(likesRef, (docSnap) => {
@@ -33,9 +45,9 @@ const LikeButton = ({ projectId }) => {
     });
 
     return () => unsubscribe();
-  }, [projectId]);
+  }, [projectId, firebaseAvailable]);
 
-  // 3. Check if current user has already liked
+  // Check if current user has already liked
   useEffect(() => {
     if (user) {
       setIsLiked(likes.includes(user.uid));
@@ -44,8 +56,20 @@ const LikeButton = ({ projectId }) => {
     }
   }, [user, likes]);
 
-  // 4. Handle Click
+  // Handle Click
   const handleLike = async () => {
+    if (!firebaseAvailable) {
+      // Demo mode - just toggle locally
+      setAnimate(true);
+      setTimeout(() => setAnimate(false), 300);
+      if (isLiked) {
+        setLikes(likes.slice(0, -1));
+      } else {
+        setLikes([...likes, 'demo-user']);
+      }
+      return;
+    }
+
     // Agar user login nahi hai, to pehle login karwao
     if (!user) {
       try {
@@ -69,7 +93,7 @@ const LikeButton = ({ projectId }) => {
           userIds: arrayRemove(user.uid)
         });
       } else {
-        // LIKE: ID add karo (setDoc with merge isliye taake agar doc na ho to ban jaye)
+        // LIKE: ID add karo
         await setDoc(likesRef, {
           userIds: arrayUnion(user.uid)
         }, { merge: true });
@@ -80,17 +104,17 @@ const LikeButton = ({ projectId }) => {
   };
 
   return (
-    <button 
+    <button
       onClick={handleLike}
       className={`group flex items-center gap-2 px-4 py-2 rounded-full transition-all border
-        ${isLiked 
-          ? "bg-red-500/10 border-red-500/50 text-red-500" 
+        ${isLiked
+          ? "bg-red-500/10 border-red-500/50 text-red-500"
           : "bg-slate-100 border-slate-200 text-slate-500 hover:border-red-400 hover:text-red-400 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:text-red-400"
         }
       `}
     >
-      <Heart 
-        size={20} 
+      <Heart
+        size={20}
         className={`transition-all duration-300 ${isLiked ? "fill-current" : ""} ${animate ? "scale-125" : "scale-100"}`}
       />
       <span className="font-semibold text-sm">

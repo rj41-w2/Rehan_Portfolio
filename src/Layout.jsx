@@ -13,7 +13,7 @@ import Guestbook from './components/Guestbook';
 import Contact from './components/Contact';
 import ChatWidget from './components/ChatWidget';
 import LiveSignatures from './components/LiveSignatures';
-import Documents from './components/Documents'; // Import the new Documents component
+import Documents from './components/Documents';
 
 // --- HOME PAGE COMPONENT ---
 
@@ -142,6 +142,14 @@ export default function Layout() {
   return (
     <div className="min-h-screen relative bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
 
+      {/* Skip to Content Link for Accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg transition-all"
+      >
+        Skip to main content
+      </a>
+
       {showUI && (location.pathname !== '/guestbook' && location.pathname !== '/documents' && location.pathname !== '/contact' && location.pathname !== '/skills') && (
         <Link to="/" className="fixed top-4 left-4 z-50 hidden md:block">
           <img src="/images/logo.png" alt="Logo" className="h-12 w-auto" />
@@ -154,14 +162,22 @@ export default function Layout() {
       {showUI && <Navbar activeSection={activeSection} scrollToSection={scrollToSection} theme={theme} toggleTheme={toggleTheme} />}
 
       {/* 2. Page Content (Routes) */}
-      <div className="relative z-10">
+      <main id="main-content" className="relative z-10" role="main" aria-label="Main content">
         <Routes>
-          <Route path="/" element={<Home theme={theme} toggleTheme={toggleTheme} activeSection={activeSection} setActiveSection={setActiveSection} showUI={showUI} setShowUI={setShowUI} scrollToSection={scrollToSection} />} />
-          <Route path="/guestbook" element={<Guestbook theme={theme} toggleTheme={toggleTheme} showUI={showUI} setShowUI={setShowUI} />} />
-          <Route path="/documents" element={<Documents showUI={showUI} setShowUI={setShowUI} />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/" element={
+            <Home theme={theme} toggleTheme={toggleTheme} activeSection={activeSection} setActiveSection={setActiveSection} showUI={showUI} setShowUI={setShowUI} scrollToSection={scrollToSection} />
+          } />
+          <Route path="/guestbook" element={
+            <Guestbook theme={theme} toggleTheme={toggleTheme} showUI={showUI} setShowUI={setShowUI} />
+          } />
+          <Route path="/documents" element={
+            <Documents showUI={showUI} setShowUI={setShowUI} />
+          } />
+          <Route path="/contact" element={
+            <Contact />
+          } />
         </Routes>
-      </div>
+      </main>
 
       {/* 3. Global Chat Widget */}
       {showUI && <ChatWidget />}

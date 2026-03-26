@@ -75,12 +75,16 @@ export default function Contact() {
 
   return (
     <section id="contact" className="min-h-screen py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-transparent transition-colors duration-300">
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-8 left-8 flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-medium bg-transparent border-none cursor-pointer"
-      >
-        <ArrowLeft size={20} /> Back to Home
-      </button>
+
+      {/* Back Button */}
+      <div className="max-w-6xl mx-auto mb-10 flex justify-between items-center relative z-10">
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-medium bg-transparent border-none cursor-pointer"
+        >
+          <ArrowLeft size={20} /> Back to Home
+        </button>
+      </div>
 
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-10"></div>

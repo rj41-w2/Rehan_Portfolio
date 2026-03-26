@@ -1,6 +1,6 @@
 import React from 'react';
 import { TypeAnimation } from 'react-type-animation';
-import { ArrowRight, Code2, Database, Layout, Smartphone, Sun, Moon, Book } from 'lucide-react';
+import { ArrowRight, Book } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DATA } from '../data/user';
 import Terminal from './Terminal';
@@ -13,8 +13,8 @@ const Hero = ({ theme, toggleTheme, activeSection, setActiveSection, scrollToSec
   return (
     <section id="home" className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden pt-32 pb-20 px-4">
 
-      {/* Theme Toggle and Guestbook for Desktop */}
-      <div className="hidden md:flex absolute top-4 right-4 z-20 items-center gap-2">
+      {/* Guestbook Link for Desktop */}
+      <div className="hidden md:flex absolute top-4 right-4 z-20">
           <Link
             to="/guestbook"
             onClick={() => setActiveSection('guestbook')}
@@ -26,12 +26,6 @@ const Hero = ({ theme, toggleTheme, activeSection, setActiveSection, scrollToSec
             <Book size={18} />
             <span className="hidden sm:inline">Guestbook</span>
           </Link>
-          <button
-            onClick={() => toggleTheme()}
-            className="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-yellow-400 hover:scale-110 transition-transform"
-          >
-            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
         </div>
 
       {/* 1. Background Effects (Spotlight & Grid) */}

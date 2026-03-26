@@ -41,16 +41,22 @@ const Home = ({ theme, toggleTheme, activeSection, setActiveSection, showUI, set
 export default function Layout() {
   const [activeSection, setActiveSection] = useState('home');
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
-  const [showUI, setShowUI] = useState(true); // New state for UI visibility
+  const [showUI, setShowUI] = useState(true);
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   const [pendingScrollId, setPendingScrollId] = useState(null);
 
-  // --- Scroll Spy ---
+  // --- Scroll Spy & Scroll Button Visibility ---
   useEffect(() => {
-    if (location.pathname !== '/') return;
     const handleScroll = () => {
+      // Show scroll button after scrolling down 400px (on all pages)
+      setShowScrollButton(window.scrollY > 400);
+      
+      // Scroll spy only for home page
+      if (location.pathname !== '/') return;
+      
       const sections = ['home', 'about', 'skills', 'projects', 'contact'];
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -187,27 +193,32 @@ export default function Layout() {
         <footer className="py-4 px-6 border-t backdrop-blur-md transition-colors duration-300
           bg-slate-50 border-slate-200
           dark:bg-slate-900/80 dark:border-slate-800
-          flex flex-col md:flex-row justify-center md:justify-between items-center gap-4">
+          flex flex-col md:flex-row justify-between items-center gap-2">
 
-          <Link
-            to="/contact"
-            className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium order-1"
-          >
-            Get in Touch
-          </Link>
+          {location.pathname !== '/contact' && (
+            <Link
+              to="/contact"
+              className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
+            >
+              Get in Touch
+            </Link>
+          )}
 
-          <p className="text-xs text-slate-500 dark:text-slate-400 order-2 text-center md:text-right w-full md:w-auto">
+          <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
             © {new Date().getFullYear()} <span className="font-semibold text-slate-900 dark:text-slate-200">Rehan Jamil</span>. All rights reserved.
           </p>
-
-          <button
-            onClick={scrollToTop}
-            className="order-3 md:order-4 p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-full shadow-lg shadow-blue-600/40 transition-all hover:scale-110 mt-4 md:mt-0"
-            aria-label="Scroll to top"
-          >
-            <ChevronUp size={20} />
-          </button>
         </footer>
+      )}
+
+      {/* Floating Scroll to Top Button */}
+      {showScrollButton && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-28 right-6 z-[45] p-3 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-full transition-all hover:scale-110 animate-in fade-in slide-in-from-bottom-4"
+          aria-label="Scroll to top"
+        >
+          <ChevronUp size={28} strokeWidth={3} />
+        </button>
       )}
     </div>
   );

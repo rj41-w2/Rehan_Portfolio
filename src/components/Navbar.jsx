@@ -129,18 +129,28 @@ const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
 
     return (
       <div className="hidden md:block">
-        <nav 
+        <nav
           className="fixed top-2 left-1/2 -translate-x-1/2 z-50 mx-auto max-w-fit bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border border-gray-200 dark:border-white/10 shadow-lg rounded-full transition-all duration-300"
           aria-label="Main navigation"
         >
-          <div className="px-4 h-14 flex justify-center items-center relative">
-            <div 
-              className="flex gap-2 items-center w-full justify-center"
+          <div className="px-4 h-14 flex justify-center items-center relative gap-2">
+            <div
+              className="flex gap-2 items-center"
               role="menubar"
               aria-label="Navigation menu"
             >
               {desktopNavLinks.map(renderDesktopNavLink)}
             </div>
+            
+            {/* Theme Toggle Button */}
+            <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
+            <button
+              onClick={() => toggleTheme()}
+              className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-yellow-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
           </div>
         </nav>
       </div>

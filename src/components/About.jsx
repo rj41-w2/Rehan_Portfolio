@@ -1,48 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { User, Cpu, Award, Zap, Clock, Code2, Globe, Layout, GitBranch, Rocket } from 'lucide-react';
 import { DATA } from '../data/user';
-
-// --- HELPER COMPONENT: Animated Counter ---
-const AnimatedCounter = ({ end, duration = 2000 }) => {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          let start = 0;
-          const totalSteps = 60;
-          const stepTime = duration / totalSteps;
-          const increment = end / totalSteps;
-
-          const timer = setInterval(() => {
-            start += increment;
-            if (start >= end) {
-              setCount(end);
-              clearInterval(timer);
-            } else {
-              setCount(Math.ceil(start));
-            }
-          }, stepTime);
-
-          return () => clearInterval(timer);
-        } else {
-          setCount(0);
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [end, duration]);
-
-  return <span ref={ref}>{count}</span>;
-};
 
 // --- MAIN COMPONENT ---
 const About = () => {
@@ -58,41 +16,39 @@ const About = () => {
           <div className="h-1 w-20 bg-blue-600 dark:bg-blue-500 mx-auto rounded-full"></div>
         </div>
 
-        {/* 2. Quick Stats Row (UPDATED LAYOUT) */}
-        {/* Mobile: grid-cols-2 (2 per row), Desktop: grid-cols-3 */}
+        {/* 2. Quick Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-16">
 
           {/* Card 1: Experience Years */}
           <div className="p-6 rounded-2xl text-center transition-colors group
-              bg-slate-100 border border-slate-200 
-              dark:bg-slate-800/50 dark:border-slate-700 
+              bg-slate-100 border border-slate-200
+              dark:bg-slate-800/50 dark:border-slate-700
               hover:bg-slate-200 dark:hover:bg-slate-800">
 
             <Clock className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-1">
-              <AnimatedCounter end={2} />+
+              2+
             </h3>
             <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Years </p>
           </div>
 
           {/* Card 2: Projects Done */}
           <div className="p-6 rounded-2xl text-center transition-colors group
-              bg-slate-100 border border-slate-200 
-              dark:bg-slate-800/50 dark:border-slate-700 
+              bg-slate-100 border border-slate-200
+              dark:bg-slate-800/50 dark:border-slate-700
               hover:bg-slate-200 dark:hover:bg-slate-800">
 
             <Award className="w-8 h-8 text-purple-600 dark:text-purple-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-1">
-              <AnimatedCounter end={12} />+
+              12+
             </h3>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Projects Built</p>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Projects</p>
           </div>
 
-          {/* Card 3: Availability (FULL WIDTH ON MOBILE) */}
-          {/* Added 'col-span-2 md:col-span-1' to span full width on mobile */}
+          {/* Card 3: Availability */}
           <div className="col-span-2 md:col-span-1 p-6 rounded-2xl text-center transition-colors group
-              bg-slate-100 border border-slate-200 
-              dark:bg-slate-800/50 dark:border-slate-700 
+              bg-slate-100 border border-slate-200
+              dark:bg-slate-800/50 dark:border-slate-700
               hover:bg-slate-200 dark:hover:bg-slate-800 relative overflow-hidden">
 
             <span className="absolute top-4 right-4 w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></span>
@@ -156,7 +112,7 @@ const About = () => {
           </div>
 
 
-          {/* RIGHT: Development Process (UPDATED LAYOUT) */}
+          {/* RIGHT: Development Process */}
           <div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
               <span className="w-8 h-8 rounded-lg bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400 flex items-center justify-center">
@@ -165,7 +121,6 @@ const About = () => {
               My Workflow
             </h3>
 
-            {/* Layout Change: Mobile (2 cols), Desktop (1 col - vertical list) */}
             <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-6">
 
               {/* Step 1: Design & Plan */}
@@ -184,7 +139,6 @@ const About = () => {
                     <Layout size={20} />
                   </div>
                   <h4 className="text-lg font-bold text-slate-900 dark:text-white hidden md:block">Planning & Design</h4>
-                  {/* Mobile Only Short Title */}
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white md:hidden">Planning</h4>
                 </div>
 
@@ -209,7 +163,6 @@ const About = () => {
                     <Code2 size={20} />
                   </div>
                   <h4 className="text-lg font-bold text-slate-900 dark:text-white hidden md:block">Development</h4>
-                  {/* Mobile Only Short Title */}
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white md:hidden">Coding</h4>
                 </div>
 
@@ -218,7 +171,7 @@ const About = () => {
                 </p>
               </div>
 
-              {/* Step 3: Deployment (FULL WIDTH ON MOBILE) */}
+              {/* Step 3: Deployment */}
               <div className="col-span-2 md:col-span-1 group relative p-6 rounded-2xl transition-all duration-300
                 bg-slate-100 border border-slate-200 hover:bg-slate-200 hover:border-blue-400
                 dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"

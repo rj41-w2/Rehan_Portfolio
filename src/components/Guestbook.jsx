@@ -140,12 +140,12 @@ const Guestbook = ({ theme, toggleTheme, showUI, setShowUI }) => {
 
   return (
     <ErrorBoundary fallbackMessage="Failed to load guestbook.">
-      <section className="min-h-screen py-20 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative overflow-hidden font-sans">
+      <section className="min-h-screen py-24 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative overflow-hidden font-sans">
 
         {/* Background Decor */}
         <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-10 pointer-events-none"></div>
         <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
-        <div className="absolute bottom-20 right-20 w-72 h-72 bg-purple-500/10 rounded-full blur-[100px] -z-10"></div>
+        <div className="absolute bottom-20 right-20 w-72 h-72 bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
 
         {/* Back Button */}
         <div className="max-w-4xl mx-auto mb-10 flex justify-between items-center relative z-10">
@@ -169,14 +169,14 @@ const Guestbook = ({ theme, toggleTheme, showUI, setShowUI }) => {
         <div className="max-w-3xl mx-auto relative z-10">
 
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <div className="inline-flex items-center justify-center p-4 bg-white dark:bg-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none rounded-2xl mb-6 transform rotate-3 hover:rotate-0 transition-transform duration-300">
               <PenTool size={32} className="text-slate-900 dark:text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
-              Sign my <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400">Guestbook</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
+              Sign my <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">Guestbook</span>
             </h1>
-            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
               Leave your mark on the internet. Share a thought, a vibe, or just say you were here.
             </p>
           </div>

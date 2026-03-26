@@ -36,19 +36,19 @@ const PremiumSkills = () => {
   ];
 
   return (
-    <div id="skills" className="min-h-screen relative overflow-hidden py-20 px-4">
+    <div id="skills" className="min-h-screen relative overflow-hidden py-24 px-4">
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            Skills & <span className="text-blue-600 dark:text-blue-500">Expertise</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+            Skills & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">Expertise</span>
           </h1>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">
+          <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto font-light">
             Building intelligent systems at the intersection of AI and modern web architecture
           </p>
         </motion.div>

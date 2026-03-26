@@ -5,15 +5,15 @@ import { DATA } from '../data/user';
 // --- MAIN COMPONENT ---
 const About = () => {
   return (
-    <section id="about" className="min-h-screen flex flex-col justify-center py-20 px-4 relative">
+    <section id="about" className="min-h-screen flex flex-col justify-center py-24 px-4 relative">
       <div className="max-w-6xl mx-auto w-full">
 
         {/* 1. Header & Title */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            About <span className="text-blue-600 dark:text-blue-500">Me</span>
+        <div className="text-center mb-20">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+            About <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">Me</span>
           </h2>
-          <div className="h-1 w-20 bg-blue-600 dark:bg-blue-500 mx-auto rounded-full"></div>
+          <div className="h-1 w-32 bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300 mx-auto rounded-full"></div>
         </div>
 
         {/* 2. Quick Stats Row */}
@@ -38,7 +38,7 @@ const About = () => {
               dark:bg-slate-800/50 dark:border-slate-700
               hover:bg-slate-200 dark:hover:bg-slate-800">
 
-            <Award className="w-8 h-8 text-purple-600 dark:text-purple-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+            <Award className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-1">
               12+
             </h3>
@@ -53,7 +53,7 @@ const About = () => {
 
             <span className="absolute top-4 right-4 w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></span>
 
-            <Zap className="w-8 h-8 text-yellow-500 dark:text-yellow-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+            <Zap className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 mt-2">
               Available
             </h3>
@@ -63,7 +63,7 @@ const About = () => {
         </div>
 
         {/* 3. Main Content Split */}
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-16">
 
           {/* LEFT: Biography & Tech Stack */}
           <div className="space-y-12">

@@ -54,18 +54,18 @@ const Projects = () => {
         <div className="max-w-7xl mx-auto">
 
           {/* Section Header */}
-          <div className="mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6">
-              Featured <span className="text-blue-600 dark:text-blue-500">Work</span>
+          <div className="mb-24">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+              Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">Work</span>
             </h2>
-            <div className="h-1 w-32 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 rounded-full"></div>
-            <p className="text-slate-700 dark:text-slate-400 mt-6 max-w-xl text-lg">
+            <div className="h-1 w-32 bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300 rounded-full"></div>
+            <p className="text-base sm:text-lg text-slate-700 dark:text-slate-400 mt-6 max-w-xl leading-relaxed">
               A selection of projects that showcase my passion for building clean, robust, and scalable applications.
             </p>
           </div>
 
           {/* Projects List */}
-          <div className="space-y-32">
+          <div className="space-y-40">
             {loading ? (
               // Show skeletons while loading
               [...Array(3)].map((_, index) => (

@@ -95,10 +95,10 @@ export default function Contact() {
         {/* --- LEFT SIDE: Info & Socials --- */}
         <div className="space-y-8">
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
-              Let's work <br /> <span className="text-blue-600 dark:text-blue-500">together.</span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
+              Let's work <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">together.</span>
             </h2>
-            <p className="text-slate-700 dark:text-slate-400 text-lg leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-700 dark:text-slate-400 leading-relaxed">
               I'm always open to discussing product design work or partnership opportunities.
             </p>
           </div>

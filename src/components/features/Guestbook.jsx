@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { auth, googleProvider, db } from '../firebase';
+import { auth, googleProvider, db } from '../../firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
 import { ArrowLeft, PenTool, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { GuestbookSkeleton } from './Skeletons';
-import ErrorBoundary from './ErrorBoundary';
+import { GuestbookSkeleton } from '../ui/Skeletons';
+import ErrorBoundary from '../ui/ErrorBoundary';
 
 const Guestbook = ({ theme, toggleTheme, showUI, setShowUI }) => {
   const [user, setUser] = useState(null);

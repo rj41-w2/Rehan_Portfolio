@@ -1,15 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Loader2, X, Send, Mail, Linkedin, Sparkles } from 'lucide-react';
-import { DATA } from '../data/user';
-import { callGroq } from '../utils/groq';
+import { DATA } from '../../data/portfolioData';
+import { callGroq } from '../../services/groq';
+import { callOllama } from '../../services/ollama';
 import ChatMessage from './ChatMessage';
 
 const ChatWidget = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showRateLimitMessage, setShowRateLimitMessage] = useState(false);
+  const isLocalMode = import.meta.env.VITE_USE_OLLAMA === "true";
 
   const [chatMessages, setChatMessages] = useState([
-    { role: 'assistant', text: `Hi! I'm ${DATA.profile.name.split(" ")[0]}'s AI assistant. Ask me anything!` }
+    { role: 'assistant', text: `Hi! I'm ${DATA.profile.name.split(" ")[0]}'s AI assistant. Ask me anything!${isLocalMode ? " (Local Mode Active)" : ""}` }
   ]);
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
@@ -46,14 +48,18 @@ const ChatWidget = () => {
       parts: [{ text: msg.text }]
     }));
 
-    const response = await callGroq(chatInput, systemPrompt, history);
+    const response = isLocalMode 
+      ? await callOllama(chatInput, systemPrompt, history)
+      : await callGroq(chatInput, systemPrompt, history);
 
     // Check for any error (rate limit, network, or API errors)
-    if (response.includes("RATE_LIMIT_EXCEEDED") || response.includes("NETWORK_ERROR") || response.includes("API_ERROR")) {
+    if (response.includes("RATE_LIMIT_EXCEEDED") || response.includes("NETWORK_ERROR") || response.includes("API_ERROR") || response.includes("CONNECTION_ERROR")) {
       setShowRateLimitMessage(true);
 
       let errorMessage = "";
-      if (response.includes("RATE_LIMIT_EXCEEDED")) {
+      if (response.includes("CONNECTION_ERROR")) {
+        errorMessage = "⚠️ **Ollama Connection Failed!**\n\nEnsure Ollama is running locally on http://localhost:11434 and you have pulled a model (e.g., `ollama pull llama3`).";
+      } else if (response.includes("RATE_LIMIT_EXCEEDED")) {
         errorMessage = "⚠️ **Limit Khatam Ho Gayi Hai!**\n\nAap ne apni daily quota puri kar li hai. Barah-e-karam **kuch dair baad** dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
       } else if (response.includes("NETWORK_ERROR")) {
         errorMessage = "⚠️ **Network Error!**\n\nInternet connection check karein ya baad mein dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";

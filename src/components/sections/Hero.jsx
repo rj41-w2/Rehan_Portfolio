@@ -2,8 +2,8 @@ import React from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import { ArrowRight, Book } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { DATA } from '../data/user';
-import Terminal from './Terminal';
+import { DATA } from '../../data/portfolioData';
+import Terminal from '../features/Terminal';
 
 const Hero = ({ theme, toggleTheme, activeSection, setActiveSection, scrollToSection, showUI, setShowUI }) => {
   const scrollToProjects = () => {

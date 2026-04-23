@@ -1,6 +1,6 @@
 import React from 'react';
 import { User, Cpu, Award, Zap, Clock, Code2, Globe, Layout, GitBranch, Rocket } from 'lucide-react';
-import { DATA } from '../data/user';
+import { DATA } from '../../data/portfolioData';
 
 // --- MAIN COMPONENT ---
 const About = () => {

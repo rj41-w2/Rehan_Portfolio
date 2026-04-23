@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import SEO from '../components/SEO';
+import SEO from '../components/ui/SEO';
 import { HelmetProvider } from 'react-helmet-async';
 
 const renderWithHelmet = (ui) => {

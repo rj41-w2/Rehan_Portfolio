@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
-import { auth, db, googleProvider } from '../firebase';
+import { auth, db, googleProvider } from '../../firebase';
 import { signInWithPopup } from 'firebase/auth';
 import { doc, onSnapshot, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 

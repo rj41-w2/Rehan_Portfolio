@@ -9,7 +9,7 @@ export const DATA = {
     College: "Aspire Group of Colleges",
     Degree: "Intermediate Computer Science",
     email: "rehanjamilwattoo@gmail.com",
-    github: "https://github.com/rehanjamilw2",
+    github: "https://github.com/rj41-w2",
     linkedin: "https://www.linkedin.com/in/rehanjamil41/",
     resumeLink: "#"
   },
@@ -65,39 +65,39 @@ export const DATA = {
   projects: [
     {
       id: 1,
+      title: "Personal AI Employee",
+      description: "An advanced AI-powered assistant designed to handle various tasks and improve productivity.",
+      tech: ["Python", "LangChain", "Gemini AI"],
+      image: "/images/AI-Employee.png",
+      demo: "#",
+      github: "https://github.com/rj41-w2/Personal-AI-Employee-Hackathon-0"
+    },
+    {
+      id: 2,
       title: "Task Manager",
       description: "A productivity app to manage daily tasks efficiently.",
       tech: ["React", "Tailwind", "Vite"],
       image: "/images/task-master.png",
       demo: "https://taskmaster41.vercel.app/",
-      github: "https://blog41.vercel.app/"
+      github: "https://github.com/rj41-w2/TASK-MASTER"
     },
     {
-      id: 2,
+      id: 3,
       title: "Desktop Window Application",
       description: "A cross-platform desktop application built for enhanced productivity.",
       tech: ["Python", "CustomTkinter", "Node.js"],
       image: "/images/desktop-app.png",
       demo: "https://auto-manager-website.vercel.app/",
-      github: "https://blog41.vercel.app/"
+      github: "https://github.com/rj41-w2/qwen-manager"
     },
     {
-      id: 3,
+      id: 4,
       title: "The Ultimate Cricket Encyclopedia",
       description: "A comprehensive platform for cricket enthusiasts with AI-powered features.",
       tech: ["Next.js", "Tailwind CSS", "Firebase"],
       image: "/images/cricket.png",
       demo: "https://criclegends41.vercel.app/",
-      github: "https://blog41.vercel.app/"
-    },
-    {
-      id: 4,
-      title: "Simple Blog Website",
-      description: "A simple blog website to share articles and posts.",
-      tech: ["HTML", "CSS", "JavaScript"],
-      image: "/images/blog-app.png",
-      demo: "https://blog41.vercel.app/",
-      github: "#"
+      github: "https://github.com/rj41-w2/cric-legends"
     }
   ],
   experience: [

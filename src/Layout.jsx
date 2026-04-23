@@ -3,17 +3,17 @@ import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 import { ChevronUp } from 'lucide-react';
 
 // Components Import
-import Background from './components/Background';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import Skills from './components/Skills';
-import Projects from './components/Projects';
-import Guestbook from './components/Guestbook';
-import Contact from './components/Contact';
-import ChatWidget from './components/ChatWidget';
-import LiveSignatures from './components/LiveSignatures';
-import Documents from './components/Documents';
+import Background from './components/ui/Background';
+import Navbar from './components/layout/Navbar';
+import Hero from './components/sections/Hero';
+import About from './components/sections/About';
+import Skills from './components/sections/Skills';
+import Projects from './components/sections/Projects';
+import Guestbook from './components/features/Guestbook';
+import Contact from './components/sections/Contact';
+import ChatWidget from './components/features/ChatWidget';
+import LiveSignatures from './components/features/LiveSignatures';
+import Documents from './components/sections/Documents';
 
 // --- HOME PAGE COMPONENT ---
 

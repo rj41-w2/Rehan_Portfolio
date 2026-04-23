@@ -2,51 +2,46 @@
 
 ## Project Overview
 
-This is a personal portfolio website built with React and Vite. It showcases the user's profile, skills, projects, and experience. The project uses Tailwind CSS for styling, Firebase for backend services (likely for the guestbook and live signatures), and a Gemini-powered chat widget for interactive user engagement.
+This is a professional personal portfolio website built with **React 19** and **Vite**. It features an interactive UI with 3D elements, AI integration, and a real-time guestbook.
+
+### Key Technologies
+- **Frontend Framework:** React 19 (Vite)
+- **Styling:** Tailwind CSS (Dark Mode support)
+- **Animations:** Framer Motion, Three.js
+- **Backend:** Firebase (Firestore, Auth, Cloud Functions)
+- **AI Integration:** Google Gemini & Groq APIs
+- **Routing:** React Router DOM v7
+
+### Architecture & Folder Structure
+- **`src/components/layout/`**: Global components like the Navbar.
+- **`src/components/sections/`**: Visual sections of the homepage (Hero, About, Skills, Projects).
+- **`src/components/features/`**: Complex interactive components (ChatWidget, Terminal, Guestbook).
+- **`src/components/ui/`**: Reusable atomic components (Buttons, Skeletons, SEO).
+- **`src/services/`**: External API logic (Gemini, Groq).
+- **`src/data/portfolioData.js`**: Central source of truth for all portfolio content.
 
 ## Building and Running
 
-### Prerequisites
+### Installation
+```bash
+npm install
+```
 
-- Node.js and npm
+### Environment Setup
+Create a `.env` file with:
+- `VITE_FIREBASE_API_KEY`
+- `VITE_GEMINI_API_KEY`
+- `VITE_WEB3FORMS_ACCESS_KEY`
 
 ### Key Commands
-
-- **Install Dependencies:**
-  ```bash
-  npm install
-  ```
-
-- **Run in Development Mode:**
-  ```bash
-  npm run dev
-  ```
-  This will start a local development server, typically at `http://localhost:5173`.
-
-- **Build for Production:**
-  ```bash
-  npm run build
-  ```
-  This command bundles the application for production in the `dist` directory.
-
-- **Linting:**
-  ```bash
-  npm run lint
-  ```
-  This will check the code for any linting errors.
-
-- **Preview Production Build:**
-  ```bash
-  npm run preview
-  ```
-  This command serves the production build locally for previewing.
+- `npm run dev`: Start development server.
+- `npm run build`: Build for production.
+- `npm run lint`: Check code quality.
+- `npm test`: Run unit tests.
 
 ## Development Conventions
 
-- **Component-Based Architecture:** The application is structured around reusable React components located in `src/components`.
-- **Styling:** Styling is done using Tailwind CSS.
-- **Data Management:** The portfolio content is centralized in the `src/data/user.js` file. This allows for easy updates to personal information, skills, and project details.
-- **State Management:** The application uses React's built-in state management.
-- **Routing:** Client-side routing is handled by `react-router-dom`.
-- **AI Integration:** The project includes a chat widget that uses the `@google/generative-ai` library, suggesting an integration with a Gemini model.
-- **Backend:** Firebase is used for backend features like the guestbook. Configuration can be found in `src/firebase.js`.
+1.  **Content Management:** Always update `src/data/portfolioData.js` for profile changes.
+2.  **Component Categorization:** Place new components in the appropriate subfolder within `src/components/`.
+3.  **Clean Code:** Follow the established pattern of using Tailwind for styling and Lucide for icons.
+4.  **Security:** Never commit API keys. Use environment variables.

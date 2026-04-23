@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
-import { DATA } from '../data/user';
-import LikeButton from './LikeButton';
-import { ProjectSkeleton } from './Skeletons';
-import ErrorBoundary from './ErrorBoundary';
+import { DATA } from '../../data/portfolioData';
+import LikeButton from '../ui/LikeButton';
+import { ProjectSkeleton } from '../ui/Skeletons';
+import ErrorBoundary from '../ui/ErrorBoundary';
 
 // --- HELPER: Website Links ---
 const TECH_LINKS = {
@@ -168,15 +168,19 @@ const Projects = () => {
 
                       <a
                         href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex items-center gap-2 border-b transition-colors pb-1
                           text-slate-700 border-transparent hover:text-slate-900 hover:border-slate-900
                           dark:text-slate-300 dark:hover:text-white dark:hover:border-white"
                       >
-                        <ExternalLink size={20} /> Case Study
+                        <Github size={20} /> GitHub Code
                       </a>
 
                       <a
                         href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex items-center gap-2 font-semibold transition-colors
                           text-blue-600 hover:text-blue-700
                           dark:text-blue-400 dark:hover:text-blue-300"

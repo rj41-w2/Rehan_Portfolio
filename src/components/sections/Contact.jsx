@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, Send, Mail, Linkedin, Github, MapPin, Sparkles, Copy, Check, ArrowLeft } from 'lucide-react';
-import { DATA } from '../data/user';
-import { callGemini } from '../utils/gemini';
+import { DATA } from '../../data/portfolioData';
+import { callGemini } from '../../services/gemini';
 
 export default function Contact() {
   const [result, setResult] = useState("");

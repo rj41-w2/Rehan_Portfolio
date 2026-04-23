@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import { collection, query, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { PenTool, User, Briefcase, Code, Heart, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';

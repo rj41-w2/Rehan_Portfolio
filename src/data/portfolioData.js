@@ -1,67 +1,89 @@
+/**
+ * PORTFOLIO DATA CONFIGURATION
+ * 
+ * This file is the "Single Source of Truth" for the entire portfolio.
+ * To customize the portfolio, simply update the values in this file.
+ */
+
 export const DATA = {
+  // 1. Profile Information
   profile: {
     name: "Rehan",
     role: "Student Developer",
     tagline: "Learning | Building | Sharing",
-    about: "I'm a passionate student developer eager to learn new technologies and build impactful projects.",
-    university: "University of the Lahore",
-    degree: "BS Computer Science",
-    College: "Aspire Group of Colleges",
-    Degree: "Intermediate Computer Science",
+    about: "I am a passionate student developer dedicated to building scalable and efficient web applications. I love solving complex problems and learning new technologies to stay ahead in the tech world.",
     email: "rehanjamilwattoo@gmail.com",
     github: "https://github.com/rj41-w2",
     linkedin: "https://www.linkedin.com/in/rehanjamil41/",
     resumeLink: "#"
   },
-  skills: [
-    {
-      layer: 3,
-      title: "The Vision (Future Architect)",
-      description: "Designing intelligent systems.",
-      style: {
-        background: "bg-purple-900/10",
-        borderColor: "border-purple-500/30",
-        textColor: "text-purple-300",
-        glow: true,
+
+  // 2. Hero Section
+  hero: {
+    title: "FUTURE ARCHITECT",
+    badge: "Hello, I'm Rehan",
+    cta: "See My Work",
+    contact: "Contact Me",
+    sequence: [
+      "Architecting the Future. Transforming Code into Agentic Solutions.",
+      2000,
+      "Student by Day. System Architect by Night.",
+      2000,
+    ]
+  },
+
+  // 3. Skills Section
+  skillsSection: {
+    title: "Skills & Expertise",
+    subtitle: "Building intelligent systems at the intersection of AI and modern web architecture",
+    footerNote: "Currently expanding into Multi-Agent Systems & Advanced RAG Architectures",
+    stats: [
+      { value: '3+', label: 'Core Domains' },
+      { value: '18+', label: 'Technologies' },
+      { value: '2+', label: 'Years' },
+      { value: '∞', label: 'Learning' },
+    ],
+    cards: [
+      {
+        id: "ai",
+        title: "Artificial Intelligence",
+        subtitle: "Agentic AI & Architecture",
+        status: "Learning", 
+        skills: ['LangChain', 'Python', 'RAG Pipelines', 'Vector DBs', 'Gemini API', 'LLMs'],
+        gradient: 'from-purple-500/20 to-pink-500/20',
+        borderGradient: 'from-purple-400 to-pink-400',
+        iconBg: 'bg-purple-500/20',
       },
-      skills: [
-        { name: "Agentic AI", tag: "LangChain, LangGraph", badge: "🌱 Learning" },
-        { name: "LLMs", tag: "Gemini API, OpenAI API", badge: "🚀 Exploring" },
-        { name: "Architecture", tag: "System Design, Microservices", badge: "🚀 Exploring" },
-      ],
-    },
-    {
-      layer: 2,
-      title: "The Structure (Current Stack)",
-      description: "Turning logic into reality.",
-      style: {
-        background: "bg-sky-900/10",
-        borderColor: "border-sky-500/30",
-        textColor: "text-sky-300",
+      {
+        id: "fullstack",
+        title: "System Engineering",
+        subtitle: "Full Stack Development",
+        status: "Exploring",
+        skills: ['Next.js 14', 'React', 'FastAPI', 'PostgreSQL', 'TypeScript', 'Node.js'],
+        gradient: 'from-blue-500/20 to-cyan-500/20',
+        borderGradient: 'from-blue-400 to-cyan-400',
+        iconBg: 'bg-blue-500/20',
       },
-      skills: [
-        { name: "Frontend", tag: "Next.js 14, React, Tailwind", badge: "🛠️ Proficient" },
-        { name: "Backend", tag: "Python, FastAPI, Node.js", badge: "🛠️ Proficient" },
-        { name: "Tools", tag: "Git, VS Code, Postman", badge: "🛠️ Proficient" },
-      ],
-    },
-    {
-      layer: 1,
-      title: "The Foundation (University & Core CS)",
-      description: "Strong roots create tall buildings.",
-      style: {
-        background: "bg-neutral-800/20",
-        borderColor: "border-neutral-700/30",
-        textColor: "text-neutral-400",
+      {
+        id: "core",
+        title: "Computer Science Core",
+        subtitle: "Foundations & Tools",
+        status: "Ongoing",
+        skills: ['DSA', 'OOP', 'Git/GitHub', 'Linux', 'Docker', 'Algorithms'],
+        gradient: 'from-amber-500/20 to-orange-500/20',
+        borderGradient: 'from-amber-400 to-orange-400',
+        iconBg: 'bg-amber-500/20',
       },
-      skills: [
-        { name: "Data Structures & Algorithms", tag: "Core Logic" },
-        { name: "Object Oriented Programming", tag: "Java/C++" },
-        { name: "Database Management (DBMS)", tag: "SQL Theory" },
-        { name: "Operating Systems", tag: "Linux/Windows" },
-      ],
-    },
-  ],
+    ]
+  },
+
+  // 4. Projects Section
+  projectsSection: {
+    title: "Featured Work",
+    subtitle: "A selection of projects that showcase my passion for building clean, robust, and scalable applications."
+  },
+
+  // 5. Featured Projects
   projects: [
     {
       id: 1,
@@ -92,6 +114,15 @@ export const DATA = {
     },
     {
       id: 4,
+      title: "Advanced AI Portfolio",
+      description: "A professional, high-performance portfolio featuring an AI chatbot with multi-provider failover and semantic caching.",
+      tech: ["React 19", "Vite", "Tailwind CSS", "Firebase", "Gemini AI"],
+      image: "/images/Portfolio-website.png",
+      demo: "https://rehanjamil41.vercel.app/",
+      github: "https://github.com/rj41-w2/Rehan_Portfolio"
+    },
+    {
+      id: 5,
       title: "The Ultimate Cricket Encyclopedia",
       description: "A comprehensive platform for cricket enthusiasts with AI-powered features.",
       tech: ["Next.js", "Tailwind CSS", "Firebase"],
@@ -100,13 +131,64 @@ export const DATA = {
       github: "https://github.com/rj41-w2/cric-legends"
     }
   ],
-  experience: [
+
+  // 6. About Section
+  aboutSection: {
+    stats: [
+      { label: "Years", value: "2+", icon: "clock" },
+      { label: "Projects", value: "12+", icon: "award" },
+      { label: "24/7", value: "Available", icon: "zap" },
+    ],
+    technicalArsenal: [
+      { category: "Frontend", skills: "React, Tailwind, Next.js, Framer Motion", icon: "globe" },
+      { category: "Backend", skills: "Node.js, Express, Firebase, MongoDB", icon: "code" },
+    ],
+    workflow: [
+      { 
+        id: "01", 
+        title: "Planning & Design", 
+        shortTitle: "Planning",
+        description: "I start by understanding requirements, designing the UI/UX in Figma, and planning the DB schema.",
+        icon: "layout"
+      },
+      { 
+        id: "02", 
+        title: "Development", 
+        shortTitle: "Coding",
+        description: "I write clean, modular, and reusable code using React & Node.js with best practices.",
+        icon: "code"
+      },
+      { 
+        id: "03", 
+        title: "Testing & Launch", 
+        description: "After thorough testing and bug fixing, I deploy the application on platforms like Vercel or Netlify.",
+        icon: "rocket"
+      }
+    ]
+  },
+
+  // 7. Academic Journey (Education)
+  education: [
     {
       id: 1,
-      role: "Frontend Intern",
-      company: "Tech Solutions",
-      period: "202...",
-      description: "Working as a frontend intern to gain practical experience in web development."
+      institution: "Presidential Initiative for Artificial Intelligence and Computing (PIAIC)",
+      degree: "Agentic AI and LLMs",
+      period: "2026 - Present",
+      status: "Learning"
+    },
+    {
+      id: 2,
+      institution: "University of the Lahore (UOL)",
+      degree: "BS Computer Science",
+      period: "2024 - 2028",
+      status: "Ongoing"
+    },
+    {
+      id: 3,
+      institution: "Aspire Group of Colleges",
+      degree: "Intermediate Computer Science",
+      period: "2021 - 2023",
+      status: "Completed"
     }
   ]
 };

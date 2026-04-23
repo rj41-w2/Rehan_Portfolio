@@ -1,65 +1,110 @@
-# 🚀 Personal Portfolio - Rehan Jamil
+# 🚀 Advanced AI Portfolio - Rehan Jamil
 
-A modern, interactive portfolio built with **React 19**, **Vite**, and **Firebase**. It features a 3D interface, an AI-powered chat assistant, and a live guestbook.
+A high-performance, industry-grade portfolio built with **React 19**, **Vite**, and **Tailwind CSS**. This project features a sophisticated **AI Chat Assistant** with multi-provider failover, semantic caching, and a fully responsive 3D-integrated UI.
 
-![Portfolio Preview](/public/images/logo.png)
+---
 
 ## ✨ Features
 
--   **🤖 AI Chat Assistant:** Integrated with Gemini/Groq for real-time interaction.
--   **📝 Live Guestbook:** Sign the guestbook and see your message appear instantly on the wall.
--   **💻 Interactive Terminal:** A fully functional terminal emulator for developer vibes.
--   **🎨 Dynamic UI:** Responsive design with Framer Motion animations and Dark Mode support.
--   **📊 Analytics:** Integrated Vercel Analytics to track engagement.
+### 🤖 Intelligent AI Chatbot (The "Brain")
+Built for maximum uptime and efficiency, the chatbot is more than just a text box:
+-   **Multi-LLM Failover Strategy:** Automatically switches between providers if one hits a rate limit:
+    1.  **Groq** (Primary - Ultra Fast)
+    2.  **Google Gemini** (Secondary)
+    3.  **OpenRouter** (Tertiary)
+-   **Semantic Caching:** Responses are saved in `localStorage`. If a user repeats a question, the answer is served instantly from the cache, saving your API tokens.
+-   **Local Development (Ollama):** Toggle `VITE_USE_OLLAMA=true` in your `.env` to run your chatbot using a local LLM.
+-   **Rich UI Rendering:** Detects LinkedIn and Email links to render interactive, styled buttons instead of raw URLs.
+-   **Strict Persona:** Acts as Rehan's professional virtual representative, speaking strictly in the third person.
+
+### 🎨 Premium UI/UX
+-   **Bento-style Sections:** Modular layout for Projects, Skills, and About.
+-   **Dynamic Status Badges:** Skill cards feature real-time learning status badges (e.g., "Started", "Exploring", "50% Complete").
+-   **Responsive Design:** Pixel-perfect optimization for Mobile, Tablet, and Desktop.
+-   **Modern Glassmorphism:** Clean, modern interface with smooth Framer Motion animations.
+
+### 📝 Live Guestbook
+-   A real-time signature wall powered by **Firebase Firestore**.
+-   Integrated Google Authentication.
+
+---
+
+## 📂 Project Structure
+
+```text
+rehan_portfolio/
+├── src/
+│   ├── components/
+│   │   ├── layout/      # Global layout elements (Navbar, Footer)
+│   │   ├── sections/    # Main page sections (Hero, About, Projects)
+│   │   ├── features/    # Complex widgets (Chatbot, Terminal, Guestbook)
+│   │   └── ui/          # Atomic reusable components (Buttons, Skeletons)
+│   ├── services/        # AI logic, Provider handlers, and Failover system
+│   ├── data/            # Site content (portfolioData.js) - THE SOURCE OF TRUTH
+│   ├── utils/           # Helper functions
+│   └── firebase.js      # Backend configuration
+├── public/              # Static assets (Images, Logos)
+├── functions/           # Firebase Cloud Functions (if used)
+└── .env.example         # Template for environment variables
+```
+
+---
 
 ## 🛠️ Tech Stack
 
 -   **Frontend:** React 19, Vite, Tailwind CSS
 -   **Animations:** Framer Motion, Three.js
--   **Backend:** Firebase (Auth, Firestore, Functions)
--   **AI:** Google Gemini API, Groq SDK
--   **Tools:** Lucide Icons, React Router DOM, Vitest
+-   **Backend:** Firebase (Firestore, Auth)
+-   **AI Engines:** Groq, Google Gemini, OpenRouter, Ollama
+-   **Icons:** Lucide React
 
-## 📂 Project Structure
-
-```text
-src/
-├── components/
-│   ├── layout/     # Navigation and Page Structure
-│   ├── sections/   # Main page sections (Hero, About, Projects, etc.)
-│   ├── features/   # Interactive widgets (Chat, Terminal, Guestbook)
-│   └── ui/         # Reusable UI components (Buttons, Skeletons, SEO)
-├── data/           # Site content configuration (portfolioData.js)
-├── services/       # AI and External API services
-└── firebase.js     # Firebase client configuration
-```
+---
 
 ## 🚀 Getting Started
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/rehanjamilw2/rehan_portfolio.git
-    ```
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-3.  **Setup Environment Variables:**
-    Create a `.env` file in the root and add your keys:
-    ```env
-    VITE_FIREBASE_API_KEY=...
-    VITE_GEMINI_API_KEY=...
-    VITE_WEB3FORMS_ACCESS_KEY=...
-    ```
-4.  **Run Development Server:**
-    ```bash
-    npm run dev
-    ```
+### 1. Cloning the Project
+First, clone the repository to your local machine:
+```bash
+git clone https://github.com/rj41-w2/Rehan_Portfolio.git
+cd Rehan_Portfolio
+```
 
-## 📝 Configuration
+### 2. Installation
+Install the necessary dependencies:
+```bash
+npm install
+```
 
-To update your personal details, projects, or skills, simply edit the file:
-`src/data/portfolioData.js`
+### 3. Environment Configuration
+Copy the `.env.example` to a new file named `.env`:
+```bash
+cp .env.example .env
+```
+Open the `.env` file and fill in your API keys and Firebase credentials.
+
+### 4. Running the Development Server
+```bash
+npm run dev
+```
+
+---
+
+## ⚙️ How to Modify & Customize
+
+This project is designed for easy customization. You don't need to dig through multiple files to change your personal details.
+
+### Updating Content (The "Source of Truth")
+All text, project details, skills, and links are managed in a single file:
+**`src/data/portfolioData.js`**
+
+Simply open this file to:
+-   Change your **Name, Role, and Tagline**.
+-   Update your **Social Media Links** (LinkedIn, GitHub).
+-   Add or remove **Projects** (Title, Description, Tech Stack, Image).
+-   Update **Skills** and their learning **Status**.
+
+### Changing Images
+Place your project screenshots or logos in the `public/images/` folder and reference them in `portfolioData.js`.
 
 ---
 

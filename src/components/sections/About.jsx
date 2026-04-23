@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Cpu, Award, Zap, Clock, Code2, Globe, Layout, GitBranch, Rocket } from 'lucide-react';
+import { User, Award, Zap, Clock, Code2, Layout, GitBranch, Rocket, GraduationCap } from 'lucide-react';
 import { DATA } from '../../data/portfolioData';
 
 // --- MAIN COMPONENT ---
@@ -18,54 +18,35 @@ const About = () => {
 
         {/* 2. Quick Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-16">
+          {DATA.aboutSection.stats.map((stat, idx) => (
+            <div key={idx} className={`p-6 rounded-2xl text-center transition-colors group
+                bg-slate-100 border border-slate-200
+                dark:bg-slate-800/50 dark:border-slate-700
+                hover:bg-slate-200 dark:hover:bg-slate-800 relative overflow-hidden
+                ${idx === 2 ? 'col-span-2 md:col-span-1' : ''}`}>
+              
+              {stat.icon === 'zap' && (
+                <span className="absolute top-4 right-4 w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></span>
+              )}
 
-          {/* Card 1: Experience Years */}
-          <div className="p-6 rounded-2xl text-center transition-colors group
-              bg-slate-100 border border-slate-200
-              dark:bg-slate-800/50 dark:border-slate-700
-              hover:bg-slate-200 dark:hover:bg-slate-800">
+              {stat.icon === 'clock' && <Clock className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />}
+              {stat.icon === 'award' && <Award className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />}
+              {stat.icon === 'zap' && <Zap className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />}
 
-            <Clock className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-1">
-              2+
-            </h3>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Years </p>
-          </div>
-
-          {/* Card 2: Projects Done */}
-          <div className="p-6 rounded-2xl text-center transition-colors group
-              bg-slate-100 border border-slate-200
-              dark:bg-slate-800/50 dark:border-slate-700
-              hover:bg-slate-200 dark:hover:bg-slate-800">
-
-            <Award className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-1">
-              12+
-            </h3>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">Projects</p>
-          </div>
-
-          {/* Card 3: Availability */}
-          <div className="col-span-2 md:col-span-1 p-6 rounded-2xl text-center transition-colors group
-              bg-slate-100 border border-slate-200
-              dark:bg-slate-800/50 dark:border-slate-700
-              hover:bg-slate-200 dark:hover:bg-slate-800 relative overflow-hidden">
-
-            <span className="absolute top-4 right-4 w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></span>
-
-            <Zap className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 mt-2">
-              Available
-            </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium"> 24/7 </p>
-          </div>
-
+              <h3 className={`font-bold text-slate-900 dark:text-white mb-1 ${stat.icon === 'zap' ? 'text-2xl mt-2' : 'text-3xl md:text-4xl'}`}>
+                {stat.value}
+              </h3>
+              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider font-medium">
+                {stat.label}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* 3. Main Content Split */}
         <div className="grid md:grid-cols-2 gap-16">
 
-          {/* LEFT: Biography & Tech Stack */}
+          {/* LEFT: Biography & Academic Journey */}
           <div className="space-y-12">
 
             {/* Bio */}
@@ -74,38 +55,35 @@ const About = () => {
                 <span className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400 flex items-center justify-center">
                   <User size={18} />
                 </span>
-
+                Biography
               </h3>
               <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-lg border-l-2 border-blue-200 dark:border-blue-500/30 pl-4 text-justify">
-                {DATA.profile.about || "I am a passionate Full Stack Developer dedicated to building scalable and efficient web applications. I love solving complex problems and learning new technologies to stay ahead in the tech world."}
+                {DATA.profile.about}
               </p>
             </div>
 
-            {/* Technical Arsenal */}
+            {/* Academic Journey */}
             <div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
-                <span className="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 dark:bg-pink-500/20 dark:text-pink-400 flex items-center justify-center">
-                  <Cpu size={18} />
+                <span className="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400 flex items-center justify-center">
+                  <GraduationCap size={18} />
                 </span>
-                Technical Arsenal
+                Academic Journey
               </h3>
 
-              <div className="grid grid-cols-2 gap-4">
-                {/* Frontend */}
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700">
-                  <div className="flex items-center gap-2 mb-2 text-blue-600 dark:text-blue-400 font-bold">
-                    <Globe size={16} /> Frontend
+              <div className="space-y-4">
+                {DATA.education?.map((edu) => (
+                  <div key={edu.id} className="p-5 rounded-2xl bg-slate-100 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700 transition-all hover:bg-slate-200 dark:hover:bg-slate-800/50">
+                    <div className="flex justify-between items-start mb-1">
+                      <h4 className="font-bold text-slate-900 dark:text-white text-base leading-tight">{edu.degree}</h4>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 uppercase tracking-tighter">
+                        {edu.period}
+                      </span>
+                    </div>
+                    <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-1">{edu.institution}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 italic">{edu.status}</p>
                   </div>
-                  <p className="text-sm text-slate-700 dark:text-slate-400">React, Tailwind, Next.js, Framer Motion</p>
-                </div>
-
-                {/* Backend */}
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700">
-                  <div className="flex items-center gap-2 mb-2 text-green-600 dark:text-green-400 font-bold">
-                    <Code2 size={16} /> Backend
-                  </div>
-                  <p className="text-sm text-slate-700 dark:text-slate-400">Node.js, Express, Firebase, MongoDB</p>
-                </div>
+                ))}
               </div>
             </div>
 
@@ -113,87 +91,48 @@ const About = () => {
 
 
           {/* RIGHT: Development Process */}
-          <div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
-              <span className="w-8 h-8 rounded-lg bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400 flex items-center justify-center">
-                <GitBranch size={18} />
-              </span>
-              My Workflow
-            </h3>
+          <div className="space-y-12">
+            {/* Workflow */}
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
+                <span className="w-8 h-8 rounded-lg bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400 flex items-center justify-center">
+                  <GitBranch size={18} />
+                </span>
+                My Workflow
+              </h3>
 
-            <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-6">
+                {DATA.aboutSection.workflow.map((step) => (
+                  <div key={step.id} className="group relative p-6 rounded-2xl transition-all duration-300
+                    bg-slate-100 border border-slate-200 hover:bg-slate-200 hover:border-blue-400
+                    dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"
+                  >
+                    <div className="absolute -right-2 -top-2 w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-colors
+                      bg-slate-200 text-slate-500 border-slate-200 group-hover:text-blue-600 group-hover:border-blue-500
+                      dark:bg-slate-900 dark:text-slate-500 dark:border-slate-700 dark:group-hover:text-blue-400">
+                      {step.id}
+                    </div>
 
-              {/* Step 1: Design & Plan */}
-              <div className="group relative p-6 rounded-2xl transition-all duration-300
-                bg-slate-100 border border-slate-200 hover:bg-slate-200 hover:border-blue-400
-                dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"
-              >
-                <div className="absolute -right-2 -top-2 w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-colors
-                  bg-slate-200 text-slate-500 border-slate-200 group-hover:text-blue-600 group-hover:border-blue-500
-                  dark:bg-slate-900 dark:text-slate-500 dark:border-slate-700 dark:group-hover:text-blue-400">
-                  01
-                </div>
+                    <div className="flex items-center gap-4 mb-3">
+                      <div className={`p-3 rounded-full 
+                        ${step.icon === 'layout' ? 'bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400' : ''}
+                        ${step.icon === 'code' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : ''}
+                        ${step.icon === 'rocket' ? 'bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400' : ''}
+                      `}>
+                        {step.icon === 'layout' && <Layout size={20} />}
+                        {step.icon === 'code' && <Code2 size={20} />}
+                        {step.icon === 'rocket' && <Rocket size={20} />}
+                      </div>
+                      <h4 className="text-lg font-bold text-slate-900 dark:text-white hidden md:block">{step.title}</h4>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white md:hidden">{step.shortTitle || step.title}</h4>
+                    </div>
 
-                <div className="flex items-center gap-4 mb-3">
-                  <div className="p-3 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">
-                    <Layout size={20} />
+                    <p className="text-xs md:text-sm leading-relaxed text-slate-700 dark:text-slate-400">
+                      {step.description}
+                    </p>
                   </div>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white hidden md:block">Planning & Design</h4>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white md:hidden">Planning</h4>
-                </div>
-
-                <p className="text-xs md:text-sm leading-relaxed text-slate-700 dark:text-slate-400">
-                  I start by understanding requirements, designing the UI/UX in Figma, and planning the DB schema.
-                </p>
+                ))}
               </div>
-
-              {/* Step 2: Development */}
-              <div className="group relative p-6 rounded-2xl transition-all duration-300
-                bg-slate-100 border border-slate-200 hover:bg-slate-200 hover:border-blue-400
-                dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"
-              >
-                <div className="absolute -right-2 -top-2 w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-colors
-                  bg-slate-200 text-slate-500 border-slate-200 group-hover:text-blue-600 group-hover:border-blue-500
-                  dark:bg-slate-900 dark:text-slate-500 dark:border-slate-700 dark:group-hover:text-blue-400">
-                  02
-                </div>
-
-                <div className="flex items-center gap-4 mb-3">
-                  <div className="p-3 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
-                    <Code2 size={20} />
-                  </div>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white hidden md:block">Development</h4>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white md:hidden">Coding</h4>
-                </div>
-
-                <p className="text-xs md:text-sm leading-relaxed text-slate-700 dark:text-slate-400">
-                  I write clean, modular, and reusable code using React & Node.js with best practices.
-                </p>
-              </div>
-
-              {/* Step 3: Deployment */}
-              <div className="col-span-2 md:col-span-1 group relative p-6 rounded-2xl transition-all duration-300
-                bg-slate-100 border border-slate-200 hover:bg-slate-200 hover:border-blue-400
-                dark:bg-slate-800/30 dark:border-white/5 dark:hover:border-blue-500/50 dark:hover:bg-slate-800/60"
-              >
-                <div className="absolute -right-2 -top-2 w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-colors
-                  bg-slate-200 text-slate-500 border-slate-200 group-hover:text-blue-600 group-hover:border-blue-500
-                  dark:bg-slate-900 dark:text-slate-500 dark:border-slate-700 dark:group-hover:text-blue-400">
-                  03
-                </div>
-
-                <div className="flex items-center gap-4 mb-3">
-                  <div className="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400">
-                    <Rocket size={20} />
-                  </div>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">Testing & Launch</h4>
-                </div>
-
-                <p className="text-xs md:text-sm leading-relaxed text-slate-700 dark:text-slate-400">
-                  After thorough testing and bug fixing, I deploy the application on platforms like Vercel or Netlify.
-                </p>
-              </div>
-
             </div>
           </div>
 

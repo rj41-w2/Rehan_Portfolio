@@ -37,22 +37,22 @@ const Hero = ({ theme, toggleTheme, activeSection, setActiveSection, scrollToSec
 
         {/* Left Side: Original Content */}
         <div className="max-w-xl text-center lg:text-left lg:pr-8 space-y-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 backdrop-blur-md text-slate-700 dark:text-slate-300 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100 shadow-sm text-xs md:text-sm">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            Hello, I'm {DATA.profile?.name || "Developer"}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 backdrop-blur-md text-slate-700 dark:text-slate-300 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100 shadow-sm text-[10px] md:text-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+            {DATA.hero?.badge || `Hello, I'm ${DATA.profile?.name}`}
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-            FUTURE <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">ARCHITECT</span> <br />
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100 uppercase">
+            {DATA.hero?.title?.split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">{DATA.hero?.title?.split(' ')[1]}</span> <br />
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-            {DATA.profile?.tagline || "I craft reliable and high-performing web applications."}
+          <div className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+            {DATA.profile?.tagline}
             <TypeAnimation
-              sequence={[
-                "Architecting the Future. Transforming Code into Agentic Solutions.",
+              sequence={DATA.hero?.sequence || [
+                "Architecting the Future.",
                 2000,
-                "Student by Day. System Architect by Night.",
+                "Building Solutions.",
                 2000,
               ]}
               wrapper="span"
@@ -60,21 +60,21 @@ const Hero = ({ theme, toggleTheme, activeSection, setActiveSection, scrollToSec
               repeat={Infinity}
               className="block mt-2 text-xs sm:text-sm text-gray-500 dark:text-slate-500"
             />
-          </p>
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center pt-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
             <button
               onClick={scrollToProjects}
               className="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white dark:bg-white dark:text-slate-900 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-blue-50 transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg dark:shadow-none"
             >
-              See My Work <ArrowRight size={18} />
+              {DATA.hero?.cta || "See My Work"} <ArrowRight size={18} />
             </button>
             <Link
               to="/contact"
               onClick={() => scrollToSection('contact')}
               className="w-full sm:w-auto px-8 py-4 bg-white/80 dark:bg-slate-800/50 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-700 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-slate-800 transition-all hover:border-gray-300 dark:hover:border-slate-500 backdrop-blur-sm"
             >
-              Contact Me
+              {DATA.hero?.contact || "Contact Me"}
             </Link>
           </div>
         </div>

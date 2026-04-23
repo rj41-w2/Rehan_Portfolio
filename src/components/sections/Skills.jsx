@@ -1,39 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { DATA } from '../../data/portfolioData';
 
 const PremiumSkills = () => {
-  const cards = [
-    {
-      id: 1,
-      icon: '🧠',
-      title: 'Artificial Intelligence',
-      subtitle: 'Agentic AI & Architecture',
-      skills: ['LangChain', 'Python', 'RAG Pipelines', 'Vector DBs', 'Gemini API', 'LLMs'],
-      gradient: 'from-purple-500/20 to-pink-500/20',
-      borderGradient: 'from-purple-400 to-pink-400',
-      iconBg: 'bg-purple-500/20',
-    },
-    {
-      id: 2,
-      icon: '⚡',
-      title: 'System Engineering',
-      subtitle: 'Full Stack Development',
-      skills: ['Next.js 14', 'React', 'FastAPI', 'PostgreSQL', 'TypeScript', 'Node.js'],
-      gradient: 'from-blue-500/20 to-cyan-500/20',
-      borderGradient: 'from-blue-400 to-cyan-400',
-      iconBg: 'bg-blue-500/20',
-    },
-    {
-      id: 3,
-      icon: '📚',
-      title: 'Computer Science Core',
-      subtitle: 'Foundations & Tools',
-      skills: ['DSA', 'OOP', 'Git/GitHub', 'Linux', 'Docker', 'Algorithms'],
-      gradient: 'from-amber-500/20 to-orange-500/20',
-      borderGradient: 'from-amber-400 to-orange-400',
-      iconBg: 'bg-amber-500/20',
-    },
-  ];
+  const { title, subtitle, footerNote, stats, cards } = DATA.skillsSection;
 
   return (
     <div id="skills" className="min-h-screen relative overflow-hidden py-24 px-4">
@@ -46,10 +16,10 @@ const PremiumSkills = () => {
           className="text-center mb-20"
         >
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            Skills & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">Expertise</span>
+            {title.split(' & ')[0]} & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">{title.split(' & ')[1]}</span>
           </h1>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto font-light">
-            Building intelligent systems at the intersection of AI and modern web architecture
+            {subtitle}
           </p>
         </motion.div>
 
@@ -79,9 +49,11 @@ const PremiumSkills = () => {
 
                 {/* Card Content */}
                 <div className="relative z-10">
-                  {/* Icon */}
-                  <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl ${card.iconBg} mb-6`}>
-                    <span className="text-2xl">{card.icon}</span>
+                  {/* Status Badge */}
+                  <div className={`inline-flex items-center justify-center px-2.5 py-1 rounded-lg ${card.iconBg} mb-6 border border-white/10 shadow-sm`}>
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-800 dark:text-white leading-tight text-center">
+                      {card.status}
+                    </span>
                   </div>
 
                   {/* Title */}
@@ -129,7 +101,7 @@ const PremiumSkills = () => {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06]">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
             <span className="text-sm text-slate-600 dark:text-gray-400 font-bold">
-              Currently expanding into Multi-Agent Systems & Advanced RAG Architectures
+              {footerNote}
             </span>
           </div>
         </motion.div>
@@ -141,12 +113,7 @@ const PremiumSkills = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"
         >
-          {[
-            { value: '3+', label: 'Core Domains' },
-            { value: '18+', label: 'Technologies' },
-            { value: '2', label: 'Years' },
-            { value: '∞', label: 'Learning' },
-          ].map((stat, index) => (
+          {stats.map((stat, index) => (
             <div key={index} className="text-center">
               <p className="text-2xl md:text-3xl font-light text-slate-900 dark:text-white mb-1">{stat.value}</p>
               <p className="text-xs text-slate-500 dark:text-gray-500 font-light tracking-wide uppercase">{stat.label}</p>

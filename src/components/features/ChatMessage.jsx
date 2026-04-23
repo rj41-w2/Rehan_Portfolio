@@ -12,38 +12,72 @@ const ChatMessage = ({ text }) => {
 
   const direction = isUrdu(text) ? 'rtl' : 'ltr';
 
-  const linkedinRegex = /https:\/\/www\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/?/g;
+  // Comprehensive regex for LinkedIn URLs
+  const linkedinRegex = /https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?/g;
 
   return (
-    <div dir={direction} className={`${direction === 'rtl' ? 'font-urdu' : ''} space-y-3`}>
+    <div 
+      dir={direction} 
+      className={`
+        ${direction === 'rtl' ? 'font-urdu' : ''} 
+        w-full break-words whitespace-pre-wrap overflow-hidden 
+        prose prose-slate dark:prose-invert max-w-none
+        prose-p:leading-relaxed prose-p:my-1
+        prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-800
+        prose-code:text-blue-600 dark:prose-code:text-blue-400
+        prose-a:no-underline
+      `}
+    >
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
+          // Rich Link Rendering: Detect LinkedIn and show a button
           a: ({ node, ...props }) => {
             const isLinkedIn = linkedinRegex.test(props.href);
             if (isLinkedIn) {
               return (
-                <a
-                  {...props}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 my-2 bg-[#0077b5] text-white rounded-xl text-sm font-semibold hover:bg-[#006097] transition-all no-underline shadow-sm hover:scale-105 active:scale-95"
-                >
-                  <Linkedin size={16} />
-                  <span>LinkedIn Profile</span>
-                </a>
+                <div className="my-3 flex">
+                  <a
+                    {...props}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0077b5] text-white rounded-xl text-sm font-bold hover:bg-[#006097] transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 border border-[#0077b5]"
+                  >
+                    <Linkedin size={18} fill="currentColor" strokeWidth={0} />
+                    <span>Connect on LinkedIn</span>
+                  </a>
+                </div>
               );
             }
-            return <a {...props} className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer" />;
+            return (
+              <a 
+                {...props} 
+                className="text-blue-600 dark:text-blue-400 font-semibold hover:underline decoration-2 underline-offset-4" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+              />
+            );
           },
+          // Code Block Styling
           code({ node, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
             return !inline && match ? (
-              <SyntaxHighlighter style={materialDark} language={match[1]} PreTag="div" {...props}>
-                {String(children).replace(/\n$/, '')}
-              </SyntaxHighlighter>
+              <div className="my-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="flex items-center justify-between px-4 py-1.5 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                  <span className="text-xs font-mono text-slate-500 uppercase">{match[1]}</span>
+                </div>
+                <SyntaxHighlighter 
+                  style={materialDark} 
+                  language={match[1]} 
+                  PreTag="div" 
+                  customStyle={{ margin: 0, borderRadius: 0, fontSize: '13px' }}
+                  {...props}
+                >
+                  {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
+              </div>
             ) : (
-              <code className={className} {...props}>
+              <code className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-blue-600 dark:text-blue-400 font-mono text-[13px]" {...props}>
                 {children}
               </code>
             );

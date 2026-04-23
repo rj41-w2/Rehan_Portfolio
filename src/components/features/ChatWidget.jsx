@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Loader2, X, Send, Mail, Linkedin, Sparkles } from 'lucide-react';
+import { Bot, Loader2, X, Send, Mail, Linkedin, User, Sparkles } from 'lucide-react';
 import { DATA } from '../../data/portfolioData';
-import { callGroq } from '../../services/groq';
 import { callOllama } from '../../services/ollama';
+import { getAIResponse } from '../../services/aiService';
 import ChatMessage from './ChatMessage';
 
 const ChatWidget = () => {
@@ -11,15 +11,17 @@ const ChatWidget = () => {
   const isLocalMode = import.meta.env.VITE_USE_OLLAMA === "true";
 
   const [chatMessages, setChatMessages] = useState([
-    { role: 'assistant', text: `Hi! I'm ${DATA.profile.name.split(" ")[0]}'s AI assistant. Ask me anything!${isLocalMode ? " (Local Mode Active)" : ""}` }
+    { role: 'assistant', text: `Hi! I'm Rehan's AI assistant. How can I help you today?${isLocalMode ? " (Local Mode Active)" : ""}` }
   ]);
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
   const chatEndRef = useRef(null);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessages, isChatOpen, showRateLimitMessage]);
+    if (isChatOpen) {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages, isChatLoading, isChatOpen]);
 
   const handleChatOpen = () => {
     setShowRateLimitMessage(false);
@@ -28,19 +30,27 @@ const ChatWidget = () => {
 
   const handleChatSubmit = async (e) => {
     e.preventDefault();
-    if (!chatInput.trim()) return;
+    if (!chatInput.trim() || isChatLoading) return;
+    
     const userMessage = { role: 'user', text: chatInput };
     setChatMessages(prev => [...prev, userMessage]);
     setChatInput("");
     setIsChatLoading(true);
+    setShowRateLimitMessage(false);
 
-    const systemPrompt = `You are an AI assistant for ${DATA.profile.name}. Your task is to provide helpful and accurate information based ONLY on the provided data: ${JSON.stringify(DATA)}.
+    const systemPrompt = `You are the professional Virtual Representative of Rehan.
 
-**Primary Rules:**
-1.  **Language Mirroring:** Respond in the same language as the user (English, Urdu, or Roman Urdu).
-2.  **Data-Bound:** Do not invent information.
-3.  **LINKEDIN ONLY:** If asked for social media or contact info, ONLY provide the LinkedIn profile (${DATA.profile.linkedin}).
-4.  **NO GITHUB:** You are EXPLICITLY FORBIDDEN from mentioning or providing the GitHub link. If asked for GitHub, offer the LinkedIn profile instead.
+**STRICT RULES:**
+1. **Scope Limitation:** You are specifically designed to assist with information about Rehan's portfolio and professional background. If the user asks a general question (e.g., "how to cook pasta", "what is the capital of France", "write a poem") that is NOT related to Rehan, his projects, or his skills, politely decline.
+2. **Decline Message:** Use a response like: "I am specifically designed to assist with information about Rehan's portfolio and professional background. I cannot answer general queries, but I would love to tell you about Rehan's latest AI projects!"
+3. **Data-Bound:** ONLY use the provided data to answer relevant questions.
+4. **Third Person:** ALWAYS refer to Rehan in the THIRD PERSON.
+5. **Links:** If asked for LinkedIn or contact info, use these EXACT links:
+   - LinkedIn: ${DATA.profile.linkedin}
+   - Email: mailto:${DATA.profile.email}
+
+**PORTFOLIO DATA:**
+${JSON.stringify(DATA)}
 `;
 
     const history = chatMessages.map(msg => ({
@@ -48,150 +58,140 @@ const ChatWidget = () => {
       parts: [{ text: msg.text }]
     }));
 
-    const response = isLocalMode 
-      ? await callOllama(chatInput, systemPrompt, history)
-      : await callGroq(chatInput, systemPrompt, history);
-
-    // Check for any error (rate limit, network, or API errors)
-    if (response.includes("RATE_LIMIT_EXCEEDED") || response.includes("NETWORK_ERROR") || response.includes("API_ERROR") || response.includes("CONNECTION_ERROR")) {
-      setShowRateLimitMessage(true);
-
-      let errorMessage = "";
-      if (response.includes("CONNECTION_ERROR")) {
-        errorMessage = "⚠️ **Ollama Connection Failed!**\n\nEnsure Ollama is running locally on http://localhost:11434 and you have pulled a model (e.g., `ollama pull llama3`).";
-      } else if (response.includes("RATE_LIMIT_EXCEEDED")) {
-        errorMessage = "⚠️ **Limit Khatam Ho Gayi Hai!**\n\nAap ne apni daily quota puri kar li hai. Barah-e-karam **kuch dair baad** dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
-      } else if (response.includes("NETWORK_ERROR")) {
-        errorMessage = "⚠️ **Network Error!**\n\nInternet connection check karein ya baad mein dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
-      } else if (response.includes("API_ERROR")) {
-        errorMessage = "⚠️ **API Error!**\n\nGroq API se koi masla aa gaya hai. Baad mein dobara koshish karein.\n\nAgar aap mazeed information lena chahte hain, toh Rehan se direct raabta karein:";
+    try {
+      let response;
+      if (isLocalMode) {
+        response = await callOllama(chatInput, systemPrompt, history);
+      } else {
+        response = await getAIResponse(chatInput, systemPrompt, history);
       }
 
-      setChatMessages(prev => [...prev, {
-        role: 'assistant',
-        text: errorMessage
-      }]);
-    } else {
-      setChatMessages(prev => [...prev, { role: 'assistant', text: response }]);
+      if (response === "QUOTA_EXHAUSTED") {
+        setShowRateLimitMessage(true);
+        const quotaMsg = "I'm sorry, but our AI's daily conversation quota has been reached. Please come back tomorrow or contact Rehan directly via the links below.";
+        setChatMessages(prev => [...prev, { role: 'assistant', text: quotaMsg }]);
+      } else if (response.includes("CONNECTION_ERROR")) {
+        setChatMessages(prev => [...prev, { role: 'assistant', text: "⚠️ Ollama is not connected locally." }]);
+      } else {
+        setChatMessages(prev => [...prev, { role: 'assistant', text: response }]);
+      }
+    } catch (err) {
+      setChatMessages(prev => [...prev, { role: 'assistant', text: "⚠️ An unexpected error occurred." }]);
+    } finally {
+      setIsChatLoading(false);
     }
-    setIsChatLoading(false);
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 font-sans">
       {!isChatOpen ? (
-        // Floating Toggle Button
         <button
           onClick={handleChatOpen}
-          className="p-4 bg-blue-600 text-white rounded-full shadow-lg shadow-blue-600/40 hover:scale-110 transition-transform hover:bg-blue-500"
+          className="p-3.5 sm:p-4 bg-blue-600 text-white rounded-full shadow-2xl hover:scale-110 transition-all hover:bg-blue-500 group"
         >
-          <Bot size={24} />
+          <Bot size={24} className="sm:hidden group-hover:rotate-12 transition-transform" />
+          <Bot size={28} className="hidden sm:block group-hover:rotate-12 transition-transform" />
         </button>
       ) : (
-        // Chat Container (Fixed Size Widget)
-        <div className="w-[350px] h-[500px] flex flex-col overflow-hidden shadow-2xl transition-all duration-300 ease-in-out border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl animate-in slide-in-from-bottom-5 fade-in">
-
-          {/* --- HEADER --- */}
-          <div className="flex justify-between items-center shrink-0 p-4 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/50 transition-colors">
-            <div className="flex items-center gap-3 font-medium text-slate-800 dark:text-white">
-              <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-blue-400">
-                <Bot size={18} />
+        <div className="w-[calc(100vw-32px)] sm:w-[400px] h-[75vh] sm:h-[600px] max-h-[700px] flex flex-col overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-3xl animate-in slide-in-from-bottom-5 duration-300">
+          
+          <div className="flex justify-between items-center px-5 py-4 sm:px-6 sm:py-5 bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-900 shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="p-2 rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                  <Bot size={18} />
+                </div>
+                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white dark:border-slate-950 rounded-full"></div>
               </div>
-              <span className="text-base tracking-wide">AI Assistant</span>
+              <div>
+                <h3 className="text-sm sm:text-[15px] font-bold text-slate-900 dark:text-white leading-none">AI Assistant</h3>
+                <span className="text-[10px] text-green-600 font-medium">Online</span>
+              </div>
             </div>
-
-            <div className="flex items-center gap-2">
-              {/* Close Button Only */}
-              <button
-                onClick={() => setIsChatOpen(false)}
-                className="text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors"
-              >
-                <X size={18} />
-              </button>
-            </div>
+            <button
+              onClick={() => setIsChatOpen(false)}
+              className="text-slate-400 hover:text-slate-600 p-2 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all"
+            >
+              <X size={18} />
+            </button>
           </div>
 
-          {/* --- MESSAGES AREA --- */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar bg-slate-50 dark:bg-slate-900 transition-colors">
-            <div className="space-y-4">
-              {chatMessages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`prose prose-slate dark:prose-invert max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm prose-p:my-2 prose-ul:list-disc prose-ul:ml-4 prose-strong:font-semibold
+          <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-6 no-scrollbar bg-slate-50/50 dark:bg-slate-950/50">
+            {chatMessages.map((msg, i) => (
+              <div key={i} className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`flex gap-2 sm:gap-3 max-w-[90%] sm:max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                  <div className={`shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow-sm 
+                    ${msg.role === 'user' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'}`}
+                  >
+                    {msg.role === 'user' ? <User size={12} /> : <Bot size={12} />}
+                  </div>
+
+                  <div className={`px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl text-[13px] sm:text-[14px] leading-relaxed shadow-sm
                     ${msg.role === 'user'
-                      ? 'bg-blue-600 text-white rounded-br-none prose-p:text-white prose-strong:text-white'
-                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-bl-none'
+                      ? 'bg-blue-600 text-white rounded-tr-none'
+                      : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-tl-none'
                     }`}
                   >
                     <ChatMessage text={msg.text} />
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
 
-              {isChatLoading && (
-                <div className="flex justify-start">
-                  <div className="p-3 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none flex items-center gap-2 text-sm shadow-sm">
-                    <Loader2 className="animate-spin" size={16} />
-                    <span>Thinking...</span>
+            {isChatLoading && (
+              <div className="flex justify-start">
+                <div className="flex gap-2 sm:gap-3 max-w-[85%]">
+                  <div className="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                    <Bot size={12} className="text-blue-500" />
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-2">
+                    <Loader2 className="animate-spin text-blue-500" size={14} />
+                    <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium tracking-tight">AI is thinking...</span>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Contact Buttons for Errors */}
-              {showRateLimitMessage && (
-                <div className="flex justify-start">
-                  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 max-w-[90%] shadow-sm">
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Need more info? Contact Rehan directly:</p>
-                    <div className="flex flex-col gap-2">
-                      <a
-                        href={`mailto:${DATA.profile.email}`}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-all hover:scale-105"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Mail size={16} />
-                        <span>Email Me</span>
-                      </a>
-                      <a
-                        href={DATA.profile.linkedin}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-[#0077b5] hover:bg-[#006097] text-white rounded-xl text-sm font-medium transition-all hover:scale-105"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Linkedin size={16} />
-                        <span>Connect on LinkedIn</span>
-                      </a>
-                    </div>
+            {showRateLimitMessage && (
+              <div className="pt-2">
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xl">
+                  <div className="flex items-center gap-2 mb-3 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider text-nowrap">
+                    <Sparkles size={14} /> Contact Information
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <a href={`mailto:${DATA.profile.email}`} className="flex items-center justify-center gap-2 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold transition-all hover:opacity-90 active:scale-95 shadow-sm">
+                      <Mail size={12} /> Email Rehan
+                    </a>
+                    <a href={DATA.profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 py-2 bg-[#0077b5] text-white rounded-xl text-xs font-bold transition-all hover:bg-[#006097] active:scale-95 shadow-sm">
+                      <Linkedin size={12} fill="currentColor" strokeWidth={0} /> LinkedIn Profile
+                    </a>
                   </div>
                 </div>
-              )}
-
-              <div ref={chatEndRef} />
-            </div>
+              </div>
+            )}
+            <div ref={chatEndRef} className="h-2" />
           </div>
 
-          {/* --- INPUT AREA --- */}
-          <div className="shrink-0 p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800/50 transition-colors">
-            <form onSubmit={handleChatSubmit} className="relative flex items-center gap-2 w-full">
-              {/* Input Field */}
+          <div className="p-4 sm:p-5 bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-900 shrink-0">
+            <form onSubmit={handleChatSubmit} className="relative flex items-center gap-2">
               <input
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
-                placeholder="Type your message..."
-                className="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-1 focus:ring-blue-500/50 border border-transparent dark:border-slate-700 placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-all"
+                placeholder="Ask Rehan's assistant..."
+                className="flex-1 bg-slate-100 dark:bg-slate-900/50 text-slate-900 dark:text-white rounded-2xl px-4 py-3 sm:px-5 sm:py-3.5 text-xs sm:text-sm outline-none focus:ring-2 focus:ring-blue-500/20 border border-transparent dark:border-slate-800 transition-all"
               />
-
-              {/* Send Button */}
               <button
                 type="submit"
-                disabled={!chatInput.trim()}
-                className="p-3.5 rounded-xl bg-blue-600 text-white hover:bg-blue-500 disabled:opacity-50 disabled:hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20 dark:shadow-blue-900/20"
+                disabled={!chatInput.trim() || isChatLoading}
+                className="absolute right-1.5 sm:right-2 p-1.5 sm:p-2 rounded-xl bg-blue-600 text-white hover:bg-blue-500 disabled:bg-slate-200 dark:disabled:bg-slate-800 transition-all"
               >
-                <Send size={18} className={chatInput.trim() ? "translate-x-0.5" : ""} />
+                <Send size={16} />
               </button>
             </form>
+            <p className="text-xs text-gray-50/20 text-center mt-2">
+              Responses are generated by AI
+            </p>
           </div>
-
         </div>
       )}
     </div>

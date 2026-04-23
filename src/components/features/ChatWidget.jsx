@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Loader2, X, Send, Mail, Linkedin, User, Sparkles } from 'lucide-react';
+import { Bot, Loader2, X, Send, Mail, Linkedin, User, Sparkles, Trash2 } from 'lucide-react';
 import { DATA } from '../../data/portfolioData';
 import { callOllama } from '../../services/ollama';
-import { getAIResponse } from '../../services/aiService';
+import { getAIResponse, getCacheKey } from '../../services/aiService';
+import { loadChatHistory, saveChatHistory, clearChatHistory, manageContextWindow } from '../../utils/chatUtils';
+import { detectLanguage, getLocalizedResponse, shouldRespondInLanguage, runLanguageTests } from '../../utils/languageUtils';
 import ChatMessage from './ChatMessage';
 
 const ChatWidget = () => {
@@ -10,9 +12,10 @@ const ChatWidget = () => {
   const [showRateLimitMessage, setShowRateLimitMessage] = useState(false);
   const isLocalMode = import.meta.env.VITE_USE_OLLAMA === "true";
 
-  const [chatMessages, setChatMessages] = useState([
-    { role: 'assistant', text: `Hi! I'm Rehan's AI assistant. How can I help you today?${isLocalMode ? " (Local Mode Active)" : ""}` }
-  ]);
+  const [chatMessages, setChatMessages] = useState(() => {
+    let welcomeMessage = `${DATA.chatbotConfig.welcomeMessage}${isLocalMode ? " (Local Mode Active)" : ""}`;
+    return loadChatHistory(welcomeMessage);
+  });
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
   const chatEndRef = useRef(null);
@@ -23,35 +26,62 @@ const ChatWidget = () => {
     }
   }, [chatMessages, isChatLoading, isChatOpen]);
 
+  // Save conversation to localStorage whenever it changes
+  useEffect(() => {
+    saveChatHistory(chatMessages);
+  }, [chatMessages]);
+
   const handleChatOpen = () => {
     setShowRateLimitMessage(false);
     setIsChatOpen(true);
   };
 
+  const handleClearChat = () => {
+    let defaultMessage = `${DATA.chatbotConfig.welcomeMessage}${isLocalMode ? " (Local Mode Active)" : ""}`;
+    setChatMessages(clearChatHistory(defaultMessage));
+  };
+
   const handleChatSubmit = async (e) => {
     e.preventDefault();
     if (!chatInput.trim() || isChatLoading) return;
-    
+
     const userMessage = { role: 'user', text: chatInput };
-    setChatMessages(prev => [...prev, userMessage]);
+    setChatMessages(prev => {
+      const newMessages = [...prev, userMessage];
+      return manageContextWindow(newMessages, 25); // Limit to 25 messages to prevent token overflow
+    });
     setChatInput("");
     setIsChatLoading(true);
     setShowRateLimitMessage(false);
 
-    const systemPrompt = `You are the professional Virtual Representative of Rehan.
+    // Detect language from user input
+    const userLanguage = detectLanguage(chatInput);
+    const responseLanguage = shouldRespondInLanguage(chatMessages, userLanguage);
 
-**STRICT RULES:**
-1. **Scope Limitation:** You are specifically designed to assist with information about Rehan's portfolio and professional background. If the user asks a general question (e.g., "how to cook pasta", "what is the capital of France", "write a poem") that is NOT related to Rehan, his projects, or his skills, politely decline.
-2. **Decline Message:** Use a response like: "I am specifically designed to assist with information about Rehan's portfolio and professional background. I cannot answer general queries, but I would love to tell you about Rehan's latest AI projects!"
-3. **Data-Bound:** ONLY use the provided data to answer relevant questions.
-4. **Third Person:** ALWAYS refer to Rehan in the THIRD PERSON.
-5. **Links:** If asked for LinkedIn or contact info, use these EXACT links:
-   - LinkedIn: ${DATA.profile.linkedin}
-   - Email: mailto:${DATA.profile.email}
+    const systemPrompt = `You are the professional ${DATA.chatbotConfig.identity.role} of ${DATA.chatbotConfig.identity.fullName}.
+
+**IDENTITY:**
+- You represent ${DATA.chatbotConfig.identity.fullName}, a ${DATA.chatbotConfig.identity.context}.
+- ALWAYS refer to Rehan in the THIRD PERSON.
+
+**LANGUAGE INSTRUCTIONS:**
+- ALWAYS respond in English, regardless of the language used by the user.
+
+**RULES:**
+${DATA.chatbotConfig.rules.map(rule => `- ${rule}`).join('\n')}
+
+**CONTEXT-AWARE RESPONSE LOGIC:**
+1. **CONTEXTUAL UNDERSTANDING:** Review conversation history for continuations.
+2. **STRICT DATA ADHERENCE:** ONLY use the provided PORTFOLIO DATA.
+3. **UNRELATED QUERIES:** If the user asks anything NOT related to Rehan's professional life, skills, or projects, you MUST respond ONLY with this exact message in English:
+   - "${DATA.chatbotConfig.messages.unrelatedQuery}"
+4. **PORTFOLIO DATA MATCH:** If query matches data, mention Rehan's expertise in English and ask to provide details.
 
 **PORTFOLIO DATA:**
 ${JSON.stringify(DATA)}
-`;
+
+**CURRENT USER LANGUAGE DETECTED:** ${userLanguage}
+**RESPONSE LANGUAGE:** ${responseLanguage}`;
 
     const history = chatMessages.map(msg => ({
       role: msg.role === 'assistant' ? 'model' : msg.role,
@@ -60,20 +90,36 @@ ${JSON.stringify(DATA)}
 
     try {
       let response;
+      let isCached = false;
+
       if (isLocalMode) {
         response = await callOllama(chatInput, systemPrompt, history);
       } else {
+        // Send the entire conversation history for context-aware responses
         response = await getAIResponse(chatInput, systemPrompt, history);
+
+        // Check if response came from cache by looking at the cache key
+        const cacheKey = getCacheKey(chatInput, history);
+        isCached = localStorage.getItem(cacheKey) === response;
       }
 
       if (response === "QUOTA_EXHAUSTED") {
         setShowRateLimitMessage(true);
-        const quotaMsg = "I'm sorry, but our AI's daily conversation quota has been reached. Please come back tomorrow or contact Rehan directly via the links below.";
+        const quotaMsg = getLocalizedResponse('quotaExhausted', responseLanguage);
         setChatMessages(prev => [...prev, { role: 'assistant', text: quotaMsg }]);
       } else if (response.includes("CONNECTION_ERROR")) {
-        setChatMessages(prev => [...prev, { role: 'assistant', text: "⚠️ Ollama is not connected locally." }]);
+        const connectionMsg = getLocalizedResponse('connectionError', responseLanguage);
+        setChatMessages(prev => [...prev, { role: 'assistant', text: connectionMsg }]);
+      } else if (response.includes("API_ERROR") || response.includes("NETWORK_ERROR")) {
+        const errorMsg = getLocalizedResponse('generalError', responseLanguage);
+        setChatMessages(prev => [...prev, { role: 'assistant', text: errorMsg }]);
       } else {
-        setChatMessages(prev => [...prev, { role: 'assistant', text: response }]);
+        const assistantMessage = {
+          role: 'assistant',
+          text: response,
+          metadata: { isCached }
+        };
+        setChatMessages(prev => [...prev, assistantMessage]);
       }
     } catch (err) {
       setChatMessages(prev => [...prev, { role: 'assistant', text: "⚠️ An unexpected error occurred." }]);
@@ -108,19 +154,35 @@ ${JSON.stringify(DATA)}
                 <span className="text-[10px] text-green-600 font-medium">Online</span>
               </div>
             </div>
-            <button
-              onClick={() => setIsChatOpen(false)}
-              className="text-slate-400 hover:text-slate-600 p-2 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all"
-            >
-              <X size={18} />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleClearChat}
+                className="text-slate-400 hover:text-slate-600 p-2 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all"
+                title="Clear chat history"
+              >
+                <Trash2 size={16} />
+              </button>
+              <button
+                onClick={() => setIsChatOpen(false)}
+                className="text-slate-400 hover:text-slate-600 p-2 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all"
+              >
+                <X size={18} />
+              </button>
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-6 no-scrollbar bg-slate-50/50 dark:bg-slate-950/50">
+            {chatMessages.length > 10 && (
+              <div className="text-center mb-4">
+                <span className="text-xs text-slate-500 bg-slate-200 dark:bg-slate-800 px-2 py-1 rounded-full">
+                  Context: {chatMessages.length} messages loaded
+                </span>
+              </div>
+            )}
             {chatMessages.map((msg, i) => (
               <div key={i} className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`flex gap-2 sm:gap-3 max-w-[90%] sm:max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                  <div className={`shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow-sm 
+                  <div className={`shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow-sm
                     ${msg.role === 'user' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'}`}
                   >
                     {msg.role === 'user' ? <User size={12} /> : <Bot size={12} />}
@@ -132,7 +194,7 @@ ${JSON.stringify(DATA)}
                       : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-tl-none'
                     }`}
                   >
-                    <ChatMessage text={msg.text} />
+                    <ChatMessage text={msg.text} metadata={msg.metadata || {}} />
                   </div>
                 </div>
               </div>

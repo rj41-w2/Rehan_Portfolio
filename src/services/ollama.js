@@ -7,7 +7,7 @@
 
 const OLLAMA_URL = "http://localhost:11434/api/chat";
 
-export const callOllama = async (prompt, systemInstruction = "", history = [], model = "llama3.2") => {
+export const callOllama = async (prompt, systemInstruction = "", history = [], model = import.meta.env.VITE_OLLAMA_MODEL || "llama3.2") => {
   try {
     const messages = [];
     

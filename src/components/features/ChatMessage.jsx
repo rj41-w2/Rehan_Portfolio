@@ -5,7 +5,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Linkedin } from 'lucide-react';
 
-const ChatMessage = ({ text }) => {
+const ChatMessage = ({ text, metadata = {} }) => {
 
   // Simple regex to check for Urdu characters (Arabic script)
   const isUrdu = (str) => /[\u0600-\u06FF]/.test(str);
@@ -16,18 +16,24 @@ const ChatMessage = ({ text }) => {
   const linkedinRegex = /https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?/g;
 
   return (
-    <div 
-      dir={direction} 
+    <div
+      dir={direction}
       className={`
-        ${direction === 'rtl' ? 'font-urdu' : ''} 
-        w-full break-words whitespace-pre-wrap overflow-hidden 
+        ${direction === 'rtl' ? 'font-urdu text-[15px] sm:text-[16px]' : ''}
+        w-full break-words whitespace-pre-wrap overflow-hidden
         prose prose-slate dark:prose-invert max-w-none
         prose-p:leading-relaxed prose-p:my-1
         prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-800
         prose-code:text-blue-600 dark:prose-code:text-blue-400
         prose-a:no-underline
+        relative
       `}
     >
+      {metadata.isCached && (
+        <div className="absolute -top-2 -right-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-[10px] px-1.5 py-0.5 rounded-full border border-green-200 dark:border-green-700">
+          cached
+        </div>
+      )}
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{

@@ -29,11 +29,6 @@ const ChatMessage = ({ text, metadata = {} }) => {
         relative
       `}
     >
-      {metadata.isCached && (
-        <div className="absolute -top-2 -right-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-[10px] px-1.5 py-0.5 rounded-full border border-green-200 dark:border-green-700">
-          cached
-        </div>
-      )}
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{

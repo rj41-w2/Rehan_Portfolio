@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Loader2, X, Send, Mail, Linkedin, User, Sparkles, Trash2 } from 'lucide-react';
 import { DATA } from '../../data/portfolioData';
 import { callOllama } from '../../services/ollama';
-import { getAIResponse, getCacheKey } from '../../services/aiService';
+import { getAIResponse } from '../../services/aiService';
 import { loadChatHistory, saveChatHistory, clearChatHistory, manageContextWindow } from '../../utils/chatUtils';
 import { detectLanguage, getLocalizedResponse, shouldRespondInLanguage, runLanguageTests } from '../../utils/languageUtils';
 import ChatMessage from './ChatMessage';
@@ -65,7 +65,8 @@ const ChatWidget = () => {
 - ALWAYS refer to Rehan in the THIRD PERSON.
 
 **LANGUAGE INSTRUCTIONS:**
-- ALWAYS respond in English, regardless of the language used by the user.
+- You are an expert at understanding Roman Urdu/Hinglish (e.g., "aap kaise ho?", "Rehan kya karta hai?", "kaam dikhao").
+- ALWAYS respond in English, regardless of the language used by the user, but ensure you correctly interpret the user's intent in their native chat style.
 
 **RULES:**
 ${DATA.chatbotConfig.rules.map(rule => `- ${rule}`).join('\n')}
@@ -73,9 +74,9 @@ ${DATA.chatbotConfig.rules.map(rule => `- ${rule}`).join('\n')}
 **CONTEXT-AWARE RESPONSE LOGIC:**
 1. **CONTEXTUAL UNDERSTANDING:** Review conversation history for continuations.
 2. **STRICT DATA ADHERENCE:** ONLY use the provided PORTFOLIO DATA.
-3. **UNRELATED QUERIES:** If the user asks anything NOT related to Rehan's professional life, skills, or projects, you MUST respond ONLY with this exact message in English:
+3. **UNRELATED QUERIES:** If the user asks anything NOT related to Rehan's professional life, skills, or projects (like asking for a joke, weather, or generic help), you MUST respond ONLY with this exact message in English:
    - "${DATA.chatbotConfig.messages.unrelatedQuery}"
-4. **PORTFOLIO DATA MATCH:** If query matches data, mention Rehan's expertise in English and ask to provide details.
+4. **PORTFOLIO DATA MATCH:** If query matches data, provide detailed information about Rehan in English.
 
 **PORTFOLIO DATA:**
 ${JSON.stringify(DATA)}
@@ -88,19 +89,29 @@ ${JSON.stringify(DATA)}
       parts: [{ text: msg.text }]
     }));
 
+    // 1. Basic Local Guard for very common unrelated topics (Optional but saves API)
+    const unrelatedKeywords = ['weather', 'news', 'joke', 'recipe', 'bitcoin', 'stock', 'translate', 'story', 'song', 'poetry', 'essay'];
+    const isCommonUnrelated = unrelatedKeywords.some(keyword => chatInput.toLowerCase().includes(keyword));
+
+    if (isCommonUnrelated) {
+      setTimeout(() => {
+        setChatMessages(prev => [...prev, { 
+          role: 'assistant', 
+          text: DATA.chatbotConfig.messages.unrelatedQuery 
+        }]);
+        setIsChatLoading(false);
+      }, 500);
+      return;
+    }
+
     try {
       let response;
-      let isCached = false;
 
       if (isLocalMode) {
         response = await callOllama(chatInput, systemPrompt, history);
       } else {
         // Send the entire conversation history for context-aware responses
         response = await getAIResponse(chatInput, systemPrompt, history);
-
-        // Check if response came from cache by looking at the cache key
-        const cacheKey = getCacheKey(chatInput, history);
-        isCached = localStorage.getItem(cacheKey) === response;
       }
 
       if (response === "QUOTA_EXHAUSTED") {
@@ -116,8 +127,7 @@ ${JSON.stringify(DATA)}
       } else {
         const assistantMessage = {
           role: 'assistant',
-          text: response,
-          metadata: { isCached }
+          text: response
         };
         setChatMessages(prev => [...prev, assistantMessage]);
       }

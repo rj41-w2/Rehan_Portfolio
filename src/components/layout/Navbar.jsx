@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X, Home, User, Briefcase, Mail, Book, Sun, Moon, MoreVertical, Cpu } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,12 +17,47 @@ const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
       { id: 'guestbook', icon: <Book size={20} />, text: 'Guestbook' }
     ];
 
+    const menuVariants = {
+      hidden: { 
+        y: -20, 
+        opacity: 0,
+        scale: 0.95
+      },
+      visible: { 
+        y: 0, 
+        opacity: 1, 
+        scale: 1,
+        transition: {
+          type: "spring",
+          stiffness: 120,
+          damping: 20,
+          staggerChildren: 0.07,
+          delayChildren: 0.1
+        }
+      },
+      exit: { 
+        y: -20, 
+        opacity: 0, 
+        scale: 0.95,
+        transition: {
+          duration: 0.2,
+          ease: "easeIn"
+        }
+      }
+    };
+
+    const itemVariants = {
+      hidden: { y: -10, opacity: 0 },
+      visible: { y: 0, opacity: 1 },
+      exit: { y: -10, opacity: 0 }
+    };
+
     const renderMobileNavLink = (item) => {
       const isRoutable = item.id === 'guestbook' || item.id === 'contact';
-      const className = `flex items-center gap-4 w-full text-left capitalize font-medium py-3 px-4 rounded-lg ${
+      const className = `flex items-center gap-4 w-full text-left capitalize font-medium py-3 px-4 rounded-xl ${
         activeSection === item.id
         ? "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400"
-        : "text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800"
+        : "text-gray-700 dark:text-slate-300 hover:bg-gray-100/80 dark:hover:bg-slate-800/80"
       }`;
 
       const content = (
@@ -33,17 +69,18 @@ const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
         </>
       );
 
-      if (isRoutable) {
-        return (
-          <Link key={item.id} to={`/${item.id}`} onClick={() => { scrollToSection(item.id); setIsMenuOpen(false); }} className={className}>
-            {content}
-          </Link>
-        );
-      }
       return (
-        <button key={item.id} onClick={() => { scrollToSection(item.id); setIsMenuOpen(false); }} className={className}>
-          {content}
-        </button>
+        <motion.div key={item.id} variants={itemVariants}>
+          {isRoutable ? (
+            <Link to={`/${item.id}`} onClick={() => { scrollToSection(item.id); setIsMenuOpen(false); }} className={className}>
+              {content}
+            </Link>
+          ) : (
+            <button onClick={() => { scrollToSection(item.id); setIsMenuOpen(false); }} className={className}>
+              {content}
+            </button>
+          )}
+        </motion.div>
       );
     };
 
@@ -57,14 +94,14 @@ const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => toggleTheme()} 
-                className="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-yellow-400"
+                className="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-yellow-400 active:scale-90 transition-transform"
                 aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               >
                 {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
               </button>
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)} 
-                className="p-2 text-gray-800 dark:text-slate-300"
+                className="p-2 text-gray-800 dark:text-slate-300 active:scale-90 transition-transform"
                 aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={isMenuOpen}
               >
@@ -73,15 +110,33 @@ const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
             </div>
           </div>
         </nav>
-        {isMenuOpen && (
-          <div 
-            className="fixed top-14 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-lg p-4 space-y-2 border-t border-gray-200 dark:border-slate-800"
-            role="menu"
-            aria-label="Navigation menu"
-          >
-            {mobileNavLinks.map(renderMobileNavLink)}
-          </div>
-        )}
+
+        <AnimatePresence>
+          {isMenuOpen && (
+            <div className="fixed inset-0 z-40 md:hidden overflow-hidden">
+              {/* Overlay */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" 
+                onClick={() => setIsMenuOpen(false)}
+              />
+              
+              <motion.div 
+                variants={menuVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="absolute top-16 left-4 right-4 z-50 bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-4 rounded-[2.5rem] border border-white/20 dark:border-slate-800/50"
+              >
+                <div className="flex flex-col gap-1">
+                  {mobileNavLinks.map(renderMobileNavLink)}
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     );
   };

@@ -91,7 +91,7 @@ export const DATA = {
       description: "An advanced AI-powered assistant designed to handle various tasks and improve productivity.",
       tech: ["Python", "LangChain", "Gemini AI"],
       image: "/images/AI-Employee.png",
-      demo: "#",
+      demo: "https://www.loom.com/share/f9edfec79afc417983eb251469abfe34",
       github: "https://github.com/rj41-w2/Personal-AI-Employee-Hackathon-0"
     },
     {

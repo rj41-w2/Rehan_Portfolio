@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Linkedin } from 'lucide-react';
+import { Linkedin, Github, Mail, Copy, Check } from 'lucide-react';
+
+const EmailBox = ({ email }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="my-3 flex items-center gap-3 p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-700 max-w-fit shadow-sm group">
+      <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">
+        <Mail size={18} />
+      </div>
+      <span className="text-sm font-medium text-slate-700 dark:text-slate-300 font-mono">{email}</span>
+      <button
+        onClick={handleCopy}
+        className="ml-2 p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors flex items-center justify-center"
+        title="Copy email"
+      >
+        {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} className="group-hover:text-blue-500 transition-colors" />}
+      </button>
+    </div>
+  );
+};
 
 const ChatMessage = ({ text, metadata = {} }) => {
 
@@ -14,6 +40,10 @@ const ChatMessage = ({ text, metadata = {} }) => {
 
   // Comprehensive regex for LinkedIn URLs
   const linkedinRegex = /https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?/g;
+  // Regex for GitHub URLs
+  const githubRegex = /https:\/\/(www\.)?github\.com\/[a-zA-Z0-9-]+\/?/g;
+  // Regex for Gmail/Email
+  const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 
   return (
     <div
@@ -32,9 +62,36 @@ const ChatMessage = ({ text, metadata = {} }) => {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          // Rich Link Rendering: Detect LinkedIn and show a button
+          // Custom Text Rendering for Emails
+          p: ({ children }) => {
+            const processContent = (content) => {
+              if (typeof content !== 'string') return content;
+              
+              const parts = content.split(emailRegex);
+              return parts.map((part, index) => {
+                if (part.match(emailRegex)) {
+                  return <EmailBox key={index} email={part} />;
+                }
+                return part;
+              });
+            };
+
+            return (
+              <p className="leading-relaxed my-1">
+                {React.Children.map(children, child => {
+                  if (typeof child === 'string') {
+                    return processContent(child);
+                  }
+                  return child;
+                })}
+              </p>
+            );
+          },
+          // Rich Link Rendering: Detect LinkedIn and GitHub and show buttons
           a: ({ node, ...props }) => {
             const isLinkedIn = linkedinRegex.test(props.href);
+            const isGitHub = githubRegex.test(props.href);
+
             if (isLinkedIn) {
               return (
                 <div className="my-3 flex">
@@ -50,6 +107,23 @@ const ChatMessage = ({ text, metadata = {} }) => {
                 </div>
               );
             }
+
+            if (isGitHub) {
+              return (
+                <div className="my-3 flex">
+                  <a
+                    {...props}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#24292e] dark:bg-[#1f2328] text-white rounded-xl text-sm font-bold hover:bg-[#1b1f23] transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 border border-[#24292e] dark:border-slate-700"
+                  >
+                    <Github size={18} />
+                    <span>View on GitHub</span>
+                  </a>
+                </div>
+              );
+            }
+
             return (
               <a 
                 {...props} 
@@ -74,7 +148,7 @@ const ChatMessage = ({ text, metadata = {} }) => {
                   customStyle={{ margin: 0, borderRadius: 0, fontSize: '13px' }}
                   {...props}
                 >
-                  {String(children).replace(/\n$/, '')}
+                  {children ? String(children).replace(/\n$/, '') : ''}
                 </SyntaxHighlighter>
               </div>
             ) : (

@@ -20,7 +20,7 @@ export const DATA = {
 
   // 2. Hero Section
   hero: {
-    title: "FUTURE ARCHITECT",
+    title: "ASPIRING  AI ARCHITECT",
     badge: "Hello, I'm Rehan",
     cta: "See My Work",
     contact: "Contact Me",
@@ -87,7 +87,7 @@ export const DATA = {
   projects: [
     {
       id: 1,
-      title: "Personal AI Employee",
+      title: "Personal AI Employee (Hackathon-0)",
       description: "An advanced AI-powered assistant designed to handle various tasks and improve productivity.",
       tech: ["Python", "LangChain", "Gemini AI"],
       image: "/images/AI-Employee.png",
@@ -96,6 +96,15 @@ export const DATA = {
     },
     {
       id: 2,
+      title: "Physical AI & Robotices (Hackathon-1)",
+      description: "An AI-powered book authored using Gemini & Docusaurus. Features a RAG Chatbot (FastAPI, Neon DB, Qdrant) for real-time reader interaction, user personalization, and Urdu translation for accessibility. Includes secure authentication via better-auth.",
+      tech: ["Gemini AI", "Docusaurus", "FastAPI", "Neon DB", "Qdrant", "better-auth"],
+      image: "/images/physical-ai-book.png",
+      demo: "https://physical-ai-book-hackathon-1.vercel.app/",
+      github: "https://github.com/rj41-w2/physical-ai-book-hackathon-1"
+    },
+    {
+      id: 3,
       title: "Task Manager",
       description: "A productivity app to manage daily tasks efficiently.",
       tech: ["React", "Tailwind", "Vite"],
@@ -104,7 +113,7 @@ export const DATA = {
       github: "https://github.com/rj41-w2/TASK-MASTER"
     },
     {
-      id: 3,
+      id: 4,
       title: "Desktop Window Application",
       description: "A cross-platform desktop application built for enhanced productivity.",
       tech: ["Python", "CustomTkinter", "Node.js"],
@@ -113,22 +122,13 @@ export const DATA = {
       github: "https://github.com/rj41-w2/qwen-manager"
     },
     {
-      id: 4,
+      id: 5,
       title: "Advanced AI Portfolio",
       description: "A professional, high-performance portfolio featuring an AI chatbot with multi-provider failover and semantic caching.",
       tech: ["React 19", "Vite", "Tailwind CSS", "Firebase", "Gemini AI"],
       image: "/images/Portfolio-website.png",
       demo: "https://rehanjamil41.vercel.app/",
       github: "https://github.com/rj41-w2/Rehan_Portfolio"
-    },
-    {
-      id: 5,
-      title: "The Ultimate Cricket Encyclopedia",
-      description: "A comprehensive platform for cricket enthusiasts with AI-powered features.",
-      tech: ["Next.js", "Tailwind CSS", "Firebase"],
-      image: "/images/cricket.png",
-      demo: "https://criclegends41.vercel.app/",
-      github: "https://github.com/rj41-w2/cric-legends"
     }
   ],
 

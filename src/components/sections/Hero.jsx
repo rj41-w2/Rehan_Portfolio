@@ -42,8 +42,11 @@ const Hero = ({ theme, toggleTheme, activeSection, setActiveSection, scrollToSec
             {DATA.hero?.badge || `Hello, I'm ${DATA.profile?.name}`}
           </div>
 
-          <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100 uppercase">
-            {DATA.hero?.title?.split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">{DATA.hero?.title?.split(' ')[1]}</span> <br />
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100 uppercase leading-[1.2] sm:leading-[1.1]">
+            {DATA.hero?.title?.split(' ').slice(0, 2).join(' ')} <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">
+              {DATA.hero?.title?.split(' ').slice(2).join(' ')}
+            </span>
           </h1>
 
           <div className="text-[17px] sm:text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">

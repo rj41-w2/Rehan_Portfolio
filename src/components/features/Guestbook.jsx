@@ -14,6 +14,7 @@ const Guestbook = ({ theme, toggleTheme, showUI, setShowUI }) => {
   const [selectedTag, setSelectedTag] = useState("visitor");
   const [loading, setLoading] = useState(true);
   const [firebaseError, setFirebaseError] = useState(false);
+  const [authError, setAuthError] = useState("");
 
   const navigate = useNavigate();
 
@@ -69,18 +70,28 @@ const Guestbook = ({ theme, toggleTheme, showUI, setShowUI }) => {
 
   // Login Handlers
   const handleGoogleLogin = async () => {
+    setAuthError("");
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      setUser(result.user);
     } catch (error) {
       console.error("Google login failed", error);
+      setAuthError("Google login failed. Please try again.");
     }
   };
 
   const handleGitHubLogin = async () => {
+    setAuthError("");
     try {
-      await signInWithPopup(auth, githubProvider);
+      const result = await signInWithPopup(auth, githubProvider);
+      setUser(result.user);
     } catch (error) {
       console.error("GitHub login failed", error);
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        setAuthError("An account already exists with the same email but a different provider (like Google). Please use that provider to sign in.");
+      } else {
+        setAuthError("GitHub login failed. Ensure you have a public email in your GitHub profile or try again.");
+      }
     }
   };
 
@@ -260,6 +271,12 @@ const Guestbook = ({ theme, toggleTheme, showUI, setShowUI }) => {
                     Sign in with GitHub
                   </button>
                 </div>
+
+                {authError && (
+                  <div className="mt-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm font-medium animate-in fade-in slide-in-from-top-2 duration-300">
+                    {authError}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -277,33 +294,33 @@ const Guestbook = ({ theme, toggleTheme, showUI, setShowUI }) => {
               messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md border border-slate-200 dark:border-slate-700 transition-all hover:shadow-lg ${msg.isDeleted ? 'opacity-50 grayscale' : ''}`}
+                  className={`bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 transition-all hover:shadow-md ${msg.isDeleted ? 'opacity-50 grayscale' : ''}`}
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3">
                     <img 
                       src={msg.photo || `https://ui-avatars.com/api/?name=${msg.name}&background=random`} 
                       alt={msg.name} 
-                      className="w-12 h-12 rounded-full border-2 border-slate-100 dark:border-slate-700 shadow-sm object-cover" 
+                      className="w-9 h-9 rounded-full border border-slate-100 dark:border-slate-700 shadow-sm object-cover" 
                     />
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <div>
-                          <h3 className="font-bold text-slate-900 dark:text-white leading-tight">{msg.name}</h3>
-                          <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">
-                            {msg.createdAt?.toDate().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                          </p>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <h3 className="font-medium text-sm text-slate-900 dark:text-white truncate">{msg.name}</h3>
+                          <span className="text-[10px] text-slate-400 whitespace-nowrap">
+                            • {msg.createdAt?.toDate().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </span>
                         </div>
-                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getTagStyle(msg.tag)?.color}`}>
+                        <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${getTagStyle(msg.tag)?.color}`}>
                           {getTagStyle(msg.tag)?.label}
                         </span>
                       </div>
-                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
+                      <p className="text-[15px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap break-words">
                         {msg.isDeleted ? "This message was removed by the author." : msg.text}
                       </p>
                       {msg.uid === user?.uid && !msg.isDeleted && (
                         <button
                           onClick={() => handleDelete(msg.id)}
-                          className="mt-3 text-xs font-bold text-slate-400 hover:text-red-500 transition-colors uppercase tracking-widest"
+                          className="mt-2 text-[10px] font-bold text-slate-400 hover:text-red-500 transition-colors uppercase tracking-widest"
                         >
                           Delete
                         </button>

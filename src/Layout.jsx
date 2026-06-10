@@ -14,6 +14,7 @@ import Contact from './components/sections/Contact';
 import ChatWidget from './components/features/ChatWidget';
 import LiveSignatures from './components/features/LiveSignatures';
 import Documents from './components/sections/Documents';
+import Package from './components/sections/Package';
 
 // --- HOME PAGE COMPONENT ---
 
@@ -107,7 +108,7 @@ export default function Layout() {
   };
 
   const scrollToSection = (id) => {
-    const validIds = ['home', 'about', 'skills', 'projects', 'contact', 'guestbook'];
+    const validIds = ['home', 'about', 'skills', 'projects', 'contact', 'guestbook', 'package'];
     if (!validIds.includes(id) && id !== 'hero') {
       console.error(`Invalid section id: ${id}`);
       return;
@@ -128,6 +129,13 @@ export default function Layout() {
     if (sectionId === 'guestbook') {
       if (location.pathname !== '/guestbook') {
         navigate('/guestbook');
+      }
+      return;
+    }
+
+    if (sectionId === 'package') {
+      if (location.pathname !== '/package') {
+        navigate('/package');
       }
       return;
     }
@@ -156,7 +164,7 @@ export default function Layout() {
         Skip to main content
       </a>
 
-      {showUI && (location.pathname !== '/guestbook' && location.pathname !== '/documents' && location.pathname !== '/contact' && location.pathname !== '/skills') && (
+      {showUI && (location.pathname !== '/guestbook' && location.pathname !== '/documents' && location.pathname !== '/contact' && location.pathname !== '/skills' && location.pathname !== '/package') && (
         <Link to="/" className="fixed top-4 left-4 z-50 hidden md:block">
           <img src="/images/logo.png" alt="Logo" className="h-12 w-auto" />
         </Link>
@@ -181,6 +189,9 @@ export default function Layout() {
           } />
           <Route path="/contact" element={
             <Contact />
+          } />
+          <Route path="/package" element={
+            <Package />
           } />
         </Routes>
       </main>

@@ -76,14 +76,17 @@ export default function Layout() {
 
   // Effect to scroll after navigation to home page
   useEffect(() => {
-    if (location.pathname === '/' && pendingScrollId) {
-      const element = document.getElementById(pendingScrollId);
+    const scrollTo = location.state?.scrollTo;
+    if (location.pathname === '/' && (pendingScrollId || scrollTo)) {
+      const targetId = pendingScrollId || scrollTo;
+      const element = document.getElementById(targetId);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
         setPendingScrollId(null);
+        window.history.replaceState({}, document.title);
       }
     }
-  }, [location.pathname, pendingScrollId]);
+  }, [location.pathname, pendingScrollId, location.state]);
 
   useEffect(() => {
     const root = window.document.documentElement;

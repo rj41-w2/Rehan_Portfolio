@@ -218,7 +218,7 @@ const Package = () => {
               { emoji: '🌐', title: 'Browser Extension', desc: 'Right-click download, video detection, and auto-interception.' },
               { emoji: '🔒', title: 'Atomic State Management', desc: 'Crash-safe state writes to prevent corruption.' },
             ].map((f) => (
-              <div key={f.title} className="flex gap-3 p-4 rounded-xl transition-colors
+              <div key={f.title} className="flex gap-3 p-4 rounded-xl transition-colors text-left
                 bg-slate-50 border border-slate-200
                 dark:bg-slate-800/50 dark:border-slate-700">
                 <span className="text-xl flex-shrink-0">{f.emoji}</span>

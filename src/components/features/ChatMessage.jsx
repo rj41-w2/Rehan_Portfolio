@@ -4,6 +4,7 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Linkedin, Github, Mail, Copy, Check } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const EmailBox = ({ email }) => {
   const [copied, setCopied] = useState(false);
@@ -32,6 +33,7 @@ const EmailBox = ({ email }) => {
 };
 
 const ChatMessage = ({ text, metadata = {} }) => {
+  const navigate = useNavigate();
 
   // Simple regex to check for Urdu characters (Arabic script)
   const isUrdu = (str) => /[\u0600-\u06FF]/.test(str);
@@ -44,6 +46,11 @@ const ChatMessage = ({ text, metadata = {} }) => {
   const githubRegex = /https:\/\/(www\.)?github\.com\/[a-zA-Z0-9-]+\/?/g;
   // Regex for Gmail/Email
   const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+
+  // Split TIP from main text
+  const tipMatch = text.match(/TIP:\s*Explore in the (.+?) section\.?$/i);
+  const mainText = tipMatch ? text.replace(tipMatch[0], '').trim() : text;
+  const tipSection = tipMatch ? tipMatch[1] : null;
 
   return (
     <div
@@ -159,8 +166,26 @@ const ChatMessage = ({ text, metadata = {} }) => {
           },
         }}
       >
-        {text}
+        {mainText}
       </ReactMarkdown>
+      {tipSection && (
+        <div className="mt-1.5">
+          <button
+            onClick={() => {
+              const section = tipSection.toLowerCase();
+              const routes = ['package', 'contact', 'guestbook'];
+              if (routes.includes(section)) {
+                navigate(`/${section}`);
+              } else {
+                navigate('/', { state: { scrollTo: section } });
+              }
+            }}
+            className="inline-flex items-center gap-1 text-[10px] font-medium text-blue-500 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-500/5 px-2 py-0.5 rounded-full leading-none hover:bg-blue-100 dark:hover:bg-blue-500/10 transition-colors cursor-pointer border-none"
+          >
+            → Explore in <strong>{tipSection}</strong>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

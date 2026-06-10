@@ -107,14 +107,14 @@ const Projects = () => {
                       </div>
 
                       {/* Project Image */}
-                      <div className="relative overflow-hidden aspect-video">
+                      <div className="relative overflow-hidden aspect-video bg-slate-100 dark:bg-slate-900">
                         <div className="absolute inset-0 z-10 transition-colors
                           bg-transparent
                           dark:bg-blue-900/20 dark:group-hover:bg-transparent"></div>
                         <img
                           src={project.image}
                           alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
                         />
                       </div>
                     </div>

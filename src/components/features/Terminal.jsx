@@ -40,7 +40,7 @@ const Terminal = ({ scrollToSection, toggleTheme, showUI, setShowUI }) => {
       icon: <Folder size={14} />,
       action: (args) => {
         const section = args[0] || 'home';
-        const sections = ['home', 'about', 'skills', 'projects', 'contact', 'guestbook'];
+        const sections = ['home', 'about', 'skills', 'projects', 'contact', 'guestbook', 'package'];
         
         if (sections.includes(section)) {
           scrollToSection(section);
@@ -95,7 +95,7 @@ const Terminal = ({ scrollToSection, toggleTheme, showUI, setShowUI }) => {
       icon: <Folder size={14} />,
       action: () => ({
         type: 'list',
-        items: ['home/', 'about/', 'skills/', 'projects/', 'contact/', 'guestbook/']
+        items: ['home/', 'about/', 'skills/', 'projects/', 'contact/', 'guestbook/', 'package/']
       })
     }
   }), [toggleTheme, scrollToSection, setShowUI]);
@@ -241,7 +241,8 @@ const Terminal = ({ scrollToSection, toggleTheme, showUI, setShowUI }) => {
     { label: 'help', icon: <HelpCircle size={12} />, command: 'help' },
     { label: 'sections', icon: <Folder size={12} />, command: 'ls' },
     { label: 'theme', icon: <Moon size={12} />, command: 'mode toggle' },
-    { label: 'about', icon: <User size={12} />, command: 'whoami' }
+    { label: 'about', icon: <User size={12} />, command: 'whoami' },
+    { label: 'package', icon: <Folder size={12} />, command: 'cd package' }
   ];
 
   const handleQuickCommand = (command) => {

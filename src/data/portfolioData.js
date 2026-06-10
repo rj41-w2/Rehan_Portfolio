@@ -114,12 +114,12 @@ export const DATA = {
     },
     {
       id: 4,
-      title: "Desktop Window Application",
-      description: "A cross-platform desktop application built for enhanced productivity.",
-      tech: ["Python", "CustomTkinter", "Node.js"],
-      image: "/images/desktop-app.png",
-      demo: "https://auto-manager-website.vercel.app/",
-      github: "https://github.com/rj41-w2/qwen-manager"
+      title: "IDM-CLI",
+      description: "A blazing-fast, multi-threaded CLI download manager with concurrent downloads, interactive shell, YouTube support, and a Chrome extension.",
+      tech: ["TypeScript", "Bun", "Commander", "Chrome Extension"],
+      image: "/images/idm-cli.png",
+      demo: "https://github.com/rj41-w2/idm-cli",
+      github: "https://github.com/rj41-w2/idm-cli"
     },
     {
       id: 5,
@@ -192,7 +192,29 @@ export const DATA = {
     }
   ],
 
-  // 8. Chatbot Configuration
+  // 8. Package Section - idm-cli
+  packageSection: {
+    name: "idm-cli",
+    version: "0.1.3",
+    description: "A blazing-fast, multi-threaded CLI download manager with concurrent downloads, interactive shell, YouTube support, and a Chrome extension.",
+    route: "/package",
+    installCommand: "bun install -g idm-cli",
+    requirements: "Requires Bun runtime. Install Bun via PowerShell: powershell -c \"irm bun.sh/install.ps1 | iex\"",
+    quickStart: "Type 'idm' in terminal to open the interactive download shell.",
+    features: [
+      "Concurrent Downloads: Split files into up to 32 parallel streams for maximum speed.",
+      "Interactive Shell: Persistent REPL with visual UI for easy link management.",
+      "Auto Quality Selection: Choose from 144p to 4K with automatic audio-video merging.",
+      "Zero Setup: Auto-downloads ffmpeg & yt-dlp binaries. No manual config needed.",
+      "Pause & Resume: Robust state tracking with .dl.json for reliable resume.",
+      "Beautiful Terminal UI: Multi-progress bars with speed, ETA, and percentage display.",
+      "Browser Extension: Manifest V3 Chrome extension for right-click download and video detection."
+    ],
+    chromeExtension: "Ships with a Chrome extension. Install via chrome://extensions > Developer mode > Load unpacked > select extension/ folder.",
+    repo: "https://github.com/rj41-w2/idm-cli"
+  },
+
+  // 9. Chatbot Configuration
   chatbotConfig: {
     name: "AI Assistant",
     welcomeMessage: "Hi! I'm Rehan's AI assistant. How can I help you today?",
@@ -212,7 +234,8 @@ export const DATA = {
       "ALWAYS refer to Rehan in the THIRD PERSON.",
       "ONLY use the provided PORTFOLIO DATA. Do NOT invent or hallucinate information.",
       "If information is not in the data, state that you don't have that information.",
-      "Do NOT confuse Rehan with anyone else from other institutions."
+      "Do NOT confuse Rehan with anyone else from other institutions.",
+      "KEEP RESPONSES EXTREMELY SHORT (2-3 sentences max). Only give a brief overview, then end with the exact phrase: 'TIP: Explore in the [section name] section.' For example: 'Rehan is a passionate student developer dedicated to building scalable and efficient web applications.' TIP: Explore in the About section.'"
     ]
   }
 };

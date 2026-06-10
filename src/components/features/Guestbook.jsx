@@ -167,9 +167,9 @@ const Guestbook = ({ theme, toggleTheme, showUI, setShowUI }) => {
         <div className="absolute bottom-20 right-20 w-72 h-72 bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
 
         {/* Back Button */}
-        <div className="max-w-4xl mx-auto mb-10 flex justify-between items-center relative z-10">
+        <div className="max-w-7xl mx-auto mb-10 flex justify-between items-center relative z-10">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/')}
             className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-medium bg-transparent border-none cursor-pointer"
           >
             <ArrowLeft size={20} /> Back to Home

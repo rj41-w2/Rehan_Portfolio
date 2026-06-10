@@ -6,7 +6,7 @@ import { DATA } from '../../data/portfolioData';
 const About = () => {
   return (
     <section id="about" className="min-h-screen flex flex-col justify-center py-24 px-4 relative">
-      <div className="max-w-6xl mx-auto w-full">
+      <div className="max-w-7xl mx-auto w-full">
 
         {/* 1. Header & Title */}
         <div className="text-center mb-20">

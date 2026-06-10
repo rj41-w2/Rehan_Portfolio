@@ -7,9 +7,9 @@ const Documents = ({ showUI, setShowUI }) => {
 
   return (
     <section className="min-h-screen py-20 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-300 relative overflow-hidden font-sans">
-      <div className="max-w-4xl mx-auto mb-10 flex justify-start items-center relative z-10">
+      <div className="max-w-7xl mx-auto mb-10 flex justify-start items-center relative z-10">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/')}
           className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-medium bg-transparent border-none cursor-pointer"
         >
           <ArrowLeft size={18} /> Back to Home

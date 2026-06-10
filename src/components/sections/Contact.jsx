@@ -77,9 +77,10 @@ export default function Contact() {
     <section id="contact" className="min-h-screen py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-transparent transition-colors duration-300">
 
       {/* Back Button */}
-      <div className="max-w-6xl mx-auto mb-10 flex justify-between items-center relative z-10">
+<div className="max-w-7xl mx-auto mb-10 flex justify-between items-center relative z-10">
+
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/')}
           className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-medium bg-transparent border-none cursor-pointer"
         >
           <ArrowLeft size={20} /> Back to Home
@@ -90,10 +91,9 @@ export default function Contact() {
       <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-10"></div>
       <div className="absolute right-0 bottom-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] -z-10"></div>
 
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
-
+      <div className="max-w-7xl mx-auto lg:grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
         {/* --- LEFT SIDE: Info & Socials --- */}
-        <div className="space-y-8">
+        <div className="space-y-8 text-center lg:text-left">
           <div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
               Let's work <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">together.</span>
@@ -121,8 +121,8 @@ export default function Contact() {
                   <p className="font-semibold text-slate-900 dark:text-white">{DATA.profile.email || "email@example.com"}</p>
                 </div>
               </div>
-              <button onClick={copyEmail} className="p-2 transition-colors text-slate-400 hover:text-slate-900 dark:hover:text-white" title="Copy Email">
-                {copied ? <Check size={20} className="text-green-500" /> : <Copy size={20} />}
+              <button onClick={copyEmail} className="p-1.5 sm:p-2 transition-colors text-slate-400 hover:text-slate-900 dark:hover:text-white" title="Copy Email">
+                {copied ? <Check size={18} className="text-green-500" /> : <Copy size={18} />}
               </button>
             </div>
 
@@ -185,7 +185,7 @@ export default function Contact() {
                   bg-slate-100 border border-slate-200 shadow-xl
                   dark:bg-slate-900 dark:border-slate-800 dark:shadow-2xl">
 
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-8">
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Send a message</h3>
             <div className="flex gap-2">
               <button type="button" onClick={() => draftMessage('recruiter')} disabled={isDrafting} className="text-xs px-3 py-1.5 rounded-full border transition-all flex items-center gap-1
@@ -202,7 +202,7 @@ export default function Contact() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-500 dark:text-slate-400">Name</label>
                 <input

@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronUp } from 'lucide-react';
 
-// Components Import
+// Synchronous (critical path)
 import Background from './components/ui/Background';
 import Navbar from './components/layout/Navbar';
 import Hero from './components/sections/Hero';
 import About from './components/sections/About';
 import Skills from './components/sections/Skills';
 import Projects from './components/sections/Projects';
-import Guestbook from './components/features/Guestbook';
-import Contact from './components/sections/Contact';
-import ChatWidget from './components/features/ChatWidget';
-import LiveSignatures from './components/features/LiveSignatures';
-import Documents from './components/sections/Documents';
-import Package from './components/sections/Package';
+
+// Lazy loaded (route pages)
+const Guestbook = lazy(() => import('./components/features/Guestbook'));
+const Contact = lazy(() => import('./components/sections/Contact'));
+const ChatWidget = lazy(() => import('./components/features/ChatWidget'));
+const Documents = lazy(() => import('./components/sections/Documents'));
+const Package = lazy(() => import('./components/sections/Package'));
 
 // --- HOME PAGE COMPONENT ---
 
@@ -180,23 +181,25 @@ export default function Layout() {
 
       {/* 2. Page Content (Routes) */}
       <main id="main-content" className="relative z-10" role="main" aria-label="Main content">
-        <Routes>
-          <Route path="/" element={
-            <Home theme={theme} toggleTheme={toggleTheme} activeSection={activeSection} setActiveSection={setActiveSection} showUI={showUI} setShowUI={setShowUI} scrollToSection={scrollToSection} />
-          } />
-          <Route path="/guestbook" element={
-            <Guestbook theme={theme} toggleTheme={toggleTheme} showUI={showUI} setShowUI={setShowUI} />
-          } />
-          <Route path="/documents" element={
-            <Documents showUI={showUI} setShowUI={setShowUI} />
-          } />
-          <Route path="/contact" element={
-            <Contact />
-          } />
-          <Route path="/package" element={
-            <Package />
-          } />
-        </Routes>
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-slate-400"><div className="animate-spin h-8 w-8 border-2 border-blue-500 border-t-transparent rounded-full" /></div>}>
+          <Routes>
+            <Route path="/" element={
+              <Home theme={theme} toggleTheme={toggleTheme} activeSection={activeSection} setActiveSection={setActiveSection} showUI={showUI} setShowUI={setShowUI} scrollToSection={scrollToSection} />
+            } />
+            <Route path="/guestbook" element={
+              <Guestbook theme={theme} toggleTheme={toggleTheme} showUI={showUI} setShowUI={setShowUI} />
+            } />
+            <Route path="/documents" element={
+              <Documents showUI={showUI} setShowUI={setShowUI} />
+            } />
+            <Route path="/contact" element={
+              <Contact />
+            } />
+            <Route path="/package" element={
+              <Package />
+            } />
+          </Routes>
+        </Suspense>
       </main>
 
       {/* 3. Global Chat Widget */}

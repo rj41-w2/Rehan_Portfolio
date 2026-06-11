@@ -1,78 +1,92 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Heart } from 'lucide-react';
-import { auth, db, googleProvider } from '../../firebase';
-import { signInWithPopup } from 'firebase/auth';
-import { doc, onSnapshot, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+
+const MOCK_LIKES = { 1: 5, 2: 3, 3: 7, 4: 2, 5: 9 };
+
+function generateMockLikes(pid) {
+  const count = MOCK_LIKES[pid] || Math.floor(Math.random() * 10) + 2;
+  return Array.from({ length: count }, (_, i) => `mock-user-${pid}-${i}`);
+}
 
 const LikeButton = ({ projectId }) => {
-  const [likes, setLikes] = useState([]);
+  const [likes, setLikes] = useState(() => generateMockLikes(projectId));
   const [user, setUser] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [animate, setAnimate] = useState(false);
-  const [firebaseAvailable, setFirebaseAvailable] = useState(true);
+  const [firebaseReady, setFirebaseReady] = useState(false);
+  const [firebaseConnected, setFirebaseConnected] = useState(false);
+  const fbRef = useRef(null);
+  const unsubAuthRef = useRef(null);
+  const unsubLikesRef = useRef(null);
 
-  // Check Firebase availability
   useEffect(() => {
-    if (!db || !auth) {
-      setFirebaseAvailable(false);
-      // Use local state only for demo
-      setLikes([1, 2, 3]); // Mock likes for demo
-    }
-  }, []);
+    let cancelled = false;
+    (async () => {
+      try {
+        const fb = await import('../../firebase');
+        if (cancelled) return;
+        if (!fb.db || !fb.auth) return;
+        fbRef.current = fb;
+        setFirebaseReady(true);
 
-  // Check User Auth Status
-  useEffect(() => {
-    if (!auth) return;
-    const unsubscribe = auth.onAuthStateChanged((u) => {
-      setUser(u);
-    });
-    return () => unsubscribe();
-  }, []);
+        const { auth, db } = fb;
 
-  // Real-time Listeners for Likes (Firestore)
-  useEffect(() => {
-    if (!db || !firebaseAvailable) return;
-    
-    const likesRef = doc(db, "projectLikes", String(projectId));
+        const unsubAuth = auth.onAuthStateChanged((u) => {
+          if (!cancelled) setUser(u);
+        });
+        unsubAuthRef.current = unsubAuth;
 
-    const unsubscribe = onSnapshot(likesRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setLikes(data.userIds || []);
-      } else {
-        setLikes([]);
+        const { doc, onSnapshot } = await import('firebase/firestore');
+
+        const likesRef = doc(db, "projectLikes", String(projectId));
+        const unsubLikes = onSnapshot(likesRef, (snap) => {
+          if (cancelled) return;
+          setFirebaseConnected(true);
+          if (snap.exists()) {
+            setLikes(snap.data().userIds || []);
+          } else {
+            setLikes([]);
+          }
+        });
+        unsubLikesRef.current = unsubLikes;
+      } catch {
+        // Firebase failed — keep mock data
       }
-    });
+    })();
+    return () => {
+      cancelled = true;
+      if (unsubAuthRef.current) unsubAuthRef.current();
+      if (unsubLikesRef.current) unsubLikesRef.current();
+    };
+  }, [projectId]);
 
-    return () => unsubscribe();
-  }, [projectId, firebaseAvailable]);
-
-  // Check if current user has already liked
   useEffect(() => {
-    if (user) {
+    if (user && firebaseConnected) {
       setIsLiked(likes.includes(user.uid));
     } else {
       setIsLiked(false);
     }
-  }, [user, likes]);
+  }, [user, likes, firebaseConnected]);
 
-  // Handle Click
   const handleLike = async () => {
-    if (!firebaseAvailable) {
-      // Demo mode - just toggle locally
+    if (!firebaseReady || !fbRef.current) {
       setAnimate(true);
       setTimeout(() => setAnimate(false), 300);
       if (isLiked) {
-        setLikes(likes.slice(0, -1));
+        setLikes((prev) => prev.slice(0, -1));
       } else {
-        setLikes([...likes, 'demo-user']);
+        setLikes((prev) => [...prev, 'demo-user']);
       }
       return;
     }
 
-    // Agar user login nahi hai, to pehle login karwao
+    const { auth, db } = fbRef.current;
+    const { signInWithPopup } = await import('firebase/auth');
+    const { doc, updateDoc, setDoc, arrayUnion, arrayRemove } = await import('firebase/firestore');
+
     if (!user) {
       try {
+        const { googleProvider } = await import('../../firebase');
         await signInWithPopup(auth, googleProvider);
       } catch (error) {
         console.error("Login failed", error);
@@ -80,7 +94,6 @@ const LikeButton = ({ projectId }) => {
       return;
     }
 
-    // Animation trigger
     setAnimate(true);
     setTimeout(() => setAnimate(false), 300);
 
@@ -88,15 +101,9 @@ const LikeButton = ({ projectId }) => {
 
     try {
       if (isLiked) {
-        // UNLIKE: ID remove karo
-        await updateDoc(likesRef, {
-          userIds: arrayRemove(user.uid)
-        });
+        await updateDoc(likesRef, { userIds: arrayRemove(user.uid) });
       } else {
-        // LIKE: ID add karo
-        await setDoc(likesRef, {
-          userIds: arrayUnion(user.uid)
-        }, { merge: true });
+        await setDoc(likesRef, { userIds: arrayUnion(user.uid) }, { merge: true });
       }
     } catch (error) {
       console.error("Error updating like", error);
@@ -118,7 +125,7 @@ const LikeButton = ({ projectId }) => {
         className={`transition-all duration-300 ${isLiked ? "fill-current" : ""} ${animate ? "scale-125" : "scale-100"}`}
       />
       <span className="font-semibold text-sm">
-        {likes.length > 0 ? likes.length : "Like"}
+        {likes.length}
       </span>
     </button>
   );

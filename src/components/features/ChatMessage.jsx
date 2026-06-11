@@ -32,6 +32,27 @@ const EmailBox = ({ email }) => {
   );
 };
 
+const SocialBox = ({ url, type }) => {
+  const isLinkedIn = type === 'linkedin';
+  const Icon = isLinkedIn ? Linkedin : Github;
+  const label = isLinkedIn ? 'Connect on LinkedIn' : 'View on GitHub';
+  const bgColor = isLinkedIn ? 'bg-[#0077b5] hover:bg-[#006097]' : 'bg-[#24292e] dark:bg-[#1f2328] hover:bg-[#1b1f23]';
+
+  return (
+    <div className="my-3 flex">
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`inline-flex items-center gap-2 px-5 py-2.5 ${bgColor} text-white rounded-xl text-sm font-bold transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 border ${isLinkedIn ? 'border-[#0077b5]' : 'border-[#24292e] dark:border-slate-700'}`}
+      >
+        <Icon size={18} {...(isLinkedIn ? { fill: 'currentColor', strokeWidth: 0 } : {})} />
+        <span>{label}</span>
+      </a>
+    </div>
+  );
+};
+
 const ChatMessage = ({ text, metadata = {} }) => {
   const navigate = useNavigate();
 
@@ -48,9 +69,9 @@ const ChatMessage = ({ text, metadata = {} }) => {
   const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 
   // Split TIP from main text
-  const tipMatch = text.match(/TIP:\s*Explore in the (.+?) section\.?$/i);
+  const tipMatch = text.match(/TIP:\s*Explore in the (.+?) section\.?\s*$/i);
   const mainText = tipMatch ? text.replace(tipMatch[0], '').trim() : text;
-  const tipSection = tipMatch ? tipMatch[1] : null;
+  const tipSection = tipMatch ? tipMatch[1].trim() : null;
 
   return (
     <div
@@ -99,37 +120,8 @@ const ChatMessage = ({ text, metadata = {} }) => {
             const isLinkedIn = linkedinRegex.test(props.href);
             const isGitHub = githubRegex.test(props.href);
 
-            if (isLinkedIn) {
-              return (
-                <div className="my-3 flex">
-                  <a
-                    {...props}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0077b5] text-white rounded-xl text-sm font-bold hover:bg-[#006097] transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 border border-[#0077b5]"
-                  >
-                    <Linkedin size={18} fill="currentColor" strokeWidth={0} />
-                    <span>Connect on LinkedIn</span>
-                  </a>
-                </div>
-              );
-            }
-
-            if (isGitHub) {
-              return (
-                <div className="my-3 flex">
-                  <a
-                    {...props}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#24292e] dark:bg-[#1f2328] text-white rounded-xl text-sm font-bold hover:bg-[#1b1f23] transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 border border-[#24292e] dark:border-slate-700"
-                  >
-                    <Github size={18} />
-                    <span>View on GitHub</span>
-                  </a>
-                </div>
-              );
-            }
+            if (isLinkedIn) return <SocialBox url={props.href} type="linkedin" />;
+            if (isGitHub) return <SocialBox url={props.href} type="github" />;
 
             return (
               <a 

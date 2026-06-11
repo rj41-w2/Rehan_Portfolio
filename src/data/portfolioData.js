@@ -235,7 +235,10 @@ export const DATA = {
       "ONLY use the provided PORTFOLIO DATA. Do NOT invent or hallucinate information.",
       "If information is not in the data, state that you don't have that information.",
       "Do NOT confuse Rehan with anyone else from other institutions.",
-      "KEEP RESPONSES EXTREMELY SHORT (2-3 sentences max). Only give a brief overview, then end with the exact phrase: 'TIP: Explore in the [section name] section.' For example: 'Rehan is a passionate student developer dedicated to building scalable and efficient web applications.' TIP: Explore in the About section.'"
+      "KEEP RESPONSES EXTREMELY SHORT (2-3 sentences max). Only give a brief overview.",
+      "IMPORTANT: Only add a TIP if the answer is about a specific portfolio section (About, Skills, Projects, Contact, Guestbook, Package). For example: 'Rehan is a passionate student developer.' TIP: Explore in the About section.",
+      "IMPORTANT TIP MAPPING: Use the correct section name: skills → 'Skills', projects → 'Projects', education/about → 'About', contact/email/linkedin/github → 'Contact', guestbook → 'Guestbook', packages/tools → 'Package'. NEVER use 'about' for contact info.",
+      "CRITICAL: If the question is about the AI assistant itself (like 'who are you', 'what can you do', 'introduce yourself'), answer briefly WITHOUT any TIP. No TIP at all for assistant-related questions."
     ]
   }
 };

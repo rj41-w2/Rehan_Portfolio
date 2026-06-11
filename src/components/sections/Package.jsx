@@ -16,6 +16,7 @@ const PACKAGE_DATA = {
 const Package = () => {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(null);
+  const [osTab, setOsTab] = useState('Windows');
 
   const copyCommand = (text, id) => {
     navigator.clipboard.writeText(text);
@@ -96,6 +97,35 @@ const Package = () => {
           </div>
         </div>
 
+        {/* Features */}
+        <div className="rounded-3xl p-8 transition-all duration-300 border
+          bg-white border-slate-200 shadow-xl
+          dark:bg-slate-900 dark:border-slate-800 dark:shadow-2xl">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Key Features</h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            {[
+              { emoji: '🚀', title: 'Concurrent Downloads', desc: 'Split files into up to 32 parallel streams for maximum speed.' },
+              { emoji: '💬', title: 'Interactive Shell', desc: 'Persistent REPL with visual UI for easy link management.' },
+              { emoji: '🎭', title: 'Auto Quality Selection', desc: 'Choose from 144p to 4K with automatic audio-video merging.' },
+              { emoji: '🔌', title: 'Zero Setup', desc: 'Auto-downloads ffmpeg & yt-dlp binaries. No manual config needed.' },
+              { emoji: '⏯️', title: 'Pause & Resume', desc: 'Robust state tracking with .dl.json for reliable resume.' },
+              { emoji: '🎨', title: 'Beautiful Terminal UI', desc: 'Multi-progress bars with speed, ETA, and percentage display.' },
+              { emoji: '🌐', title: 'Browser Extension', desc: 'Right-click download, video detection, and auto-interception.' },
+              { emoji: '🔒', title: 'Atomic State Management', desc: 'Crash-safe state writes to prevent corruption.' },
+            ].map((f) => (
+              <div key={f.title} className="flex gap-3 p-4 rounded-xl transition-colors text-left
+                bg-slate-50 border border-slate-200
+                dark:bg-slate-800/50 dark:border-slate-700">
+                <span className="text-xl flex-shrink-0">{f.emoji}</span>
+                <div>
+                  <h3 className="font-semibold text-slate-900 dark:text-white text-sm">{f.title}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Installation */}
         <div className="rounded-3xl p-8 transition-all duration-300 border
           bg-white border-slate-200 shadow-xl
@@ -134,22 +164,46 @@ const Package = () => {
             <Terminal size={24} className="text-purple-500" />
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Install Bun (if not installed)</h2>
           </div>
-          <p className="text-slate-600 dark:text-slate-400 mb-2">
-            If you don't have Bun installed, run this command in <strong className="text-slate-900 dark:text-white">PowerShell</strong>:
+          <p className="text-slate-600 dark:text-slate-400 mb-4">
+            Select your OS to get the install command:
           </p>
+          <div className="flex gap-2 mb-4">
+            {['Windows', 'Linux & macOS'].map((os) => (
+              <button
+                key={os}
+                onClick={() => setOsTab(os)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border
+                  ${osTab === os
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700 dark:hover:bg-slate-700'
+                  }`}
+              >
+                {os}
+              </button>
+            ))}
+          </div>
           <div className="rounded-xl overflow-hidden border bg-slate-950 border-slate-800">
             <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800">
-              <span className="text-xs text-slate-400 font-mono">powershell</span>
+              <span className="text-xs text-slate-400 font-mono">{osTab === 'Windows' ? 'powershell' : 'bash'}</span>
               <button
-                onClick={() => copyCommand('powershell -c "irm bun.sh/install.ps1 | iex"', 'bun-install')}
+                onClick={() => copyCommand(osTab === 'Windows'
+                  ? 'powershell -c "irm bun.sh/install.ps1 | iex"'
+                  : 'curl -fsSL https://bun.sh/install | bash', 'bun-install')}
                 className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors"
               >
                 {copied === 'bun-install' ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
                 {copied === 'bun-install' ? 'Copied' : 'Copy'}
               </button>
             </div>
-            <pre className="px-4 py-3 text-sm font-mono text-green-400 overflow-x-auto">powershell -c "irm bun.sh/install.ps1 | iex"</pre>
+            <pre className="px-4 py-3 text-sm font-mono text-green-400 overflow-x-auto">
+              {osTab === 'Windows'
+                ? 'powershell -c "irm bun.sh/install.ps1 | iex"'
+                : '$ curl -fsSL https://bun.sh/install | bash'}
+            </pre>
           </div>
+          <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+            After Bun is installed, follow <strong className="text-slate-900 dark:text-white">Step 1</strong> above.
+          </p>
         </div>
 
         {/* Quick Start */}
@@ -161,7 +215,7 @@ const Package = () => {
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Quick Start</h2>
           </div>
           <p className="text-slate-600 dark:text-slate-400 mb-4">
-            After installation, just type <code className="px-1.5 py-0.5 rounded text-sm font-mono bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">idm</code> to open the interactive download shell:
+            Just type <code className="px-1.5 py-0.5 rounded text-sm font-mono bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">idm</code> in any terminal to open the interactive download shell:
           </p>
           <div className="rounded-xl overflow-hidden border bg-slate-950 border-slate-800">
             <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800">
@@ -199,35 +253,6 @@ const Package = () => {
               <li>Click <strong>Load unpacked</strong> and select the <code className="px-1.5 py-0.5 rounded font-mono bg-slate-200 dark:bg-slate-700">extension/</code> folder</li>
               <li>Make sure <code className="px-1.5 py-0.5 rounded font-mono bg-slate-200 dark:bg-slate-700">idm</code> REPL is running in terminal</li>
             </ol>
-          </div>
-        </div>
-
-        {/* Features */}
-        <div className="rounded-3xl p-8 transition-all duration-300 border
-          bg-white border-slate-200 shadow-xl
-          dark:bg-slate-900 dark:border-slate-800 dark:shadow-2xl">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Key Features</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {[
-              { emoji: '🚀', title: 'Concurrent Downloads', desc: 'Split files into up to 32 parallel streams for maximum speed.' },
-              { emoji: '💬', title: 'Interactive Shell', desc: 'Persistent REPL with visual UI for easy link management.' },
-              { emoji: '🎭', title: 'Auto Quality Selection', desc: 'Choose from 144p to 4K with automatic audio-video merging.' },
-              { emoji: '🔌', title: 'Zero Setup', desc: 'Auto-downloads ffmpeg & yt-dlp binaries. No manual config needed.' },
-              { emoji: '⏯️', title: 'Pause & Resume', desc: 'Robust state tracking with .dl.json for reliable resume.' },
-              { emoji: '🎨', title: 'Beautiful Terminal UI', desc: 'Multi-progress bars with speed, ETA, and percentage display.' },
-              { emoji: '🌐', title: 'Browser Extension', desc: 'Right-click download, video detection, and auto-interception.' },
-              { emoji: '🔒', title: 'Atomic State Management', desc: 'Crash-safe state writes to prevent corruption.' },
-            ].map((f) => (
-              <div key={f.title} className="flex gap-3 p-4 rounded-xl transition-colors text-left
-                bg-slate-50 border border-slate-200
-                dark:bg-slate-800/50 dark:border-slate-700">
-                <span className="text-xl flex-shrink-0">{f.emoji}</span>
-                <div>
-                  <h3 className="font-semibold text-slate-900 dark:text-white text-sm">{f.title}</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{f.desc}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 

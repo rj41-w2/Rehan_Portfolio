@@ -113,15 +113,6 @@ export const DATA = {
       github: "https://github.com/rj41-w2/TASK-MASTER"
     },
     {
-      id: 4,
-      title: "IDM-CLI",
-      description: "A blazing-fast, multi-threaded CLI download manager with concurrent downloads, interactive shell, YouTube support, and a Chrome extension.",
-      tech: ["TypeScript", "Bun", "Commander", "Chrome Extension"],
-      image: "/images/idm-cli.png",
-      demo: "https://github.com/rj41-w2/idm-cli",
-      github: "https://github.com/rj41-w2/idm-cli"
-    },
-    {
       id: 5,
       title: "Advanced AI Portfolio",
       description: "A professional, high-performance portfolio featuring an AI chatbot with multi-provider failover and semantic caching.",

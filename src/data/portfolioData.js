@@ -192,29 +192,7 @@ export const DATA = {
     }
   ],
 
-  // 8. Package Section - idm-cli
-  packageSection: {
-    name: "idm-cli",
-    version: "0.1.3",
-    description: "A blazing-fast, multi-threaded CLI download manager with concurrent downloads, interactive shell, YouTube support, and a Chrome extension.",
-    route: "/package",
-    installCommand: "bun install -g idm-cli",
-    requirements: "Requires Bun runtime. Install Bun via PowerShell: powershell -c \"irm bun.sh/install.ps1 | iex\"",
-    quickStart: "Type 'idm' in terminal to open the interactive download shell.",
-    features: [
-      "Concurrent Downloads: Split files into up to 32 parallel streams for maximum speed.",
-      "Interactive Shell: Persistent REPL with visual UI for easy link management.",
-      "Auto Quality Selection: Choose from 144p to 4K with automatic audio-video merging.",
-      "Zero Setup: Auto-downloads ffmpeg & yt-dlp binaries. No manual config needed.",
-      "Pause & Resume: Robust state tracking with .dl.json for reliable resume.",
-      "Beautiful Terminal UI: Multi-progress bars with speed, ETA, and percentage display.",
-      "Browser Extension: Manifest V3 Chrome extension for right-click download and video detection."
-    ],
-    chromeExtension: "Ships with a Chrome extension. Install via chrome://extensions > Developer mode > Load unpacked > select extension/ folder.",
-    repo: "https://github.com/rj41-w2/idm-cli"
-  },
-
-  // 9. Chatbot Configuration
+  // 8. Chatbot Configuration
   chatbotConfig: {
     name: "AI Assistant",
     welcomeMessage: "Hi! I'm Rehan's AI assistant. How can I help you today?",
@@ -236,8 +214,8 @@ export const DATA = {
       "If information is not in the data, state that you don't have that information.",
       "Do NOT confuse Rehan with anyone else from other institutions.",
       "KEEP RESPONSES EXTREMELY SHORT (2-3 sentences max). Only give a brief overview.",
-      "IMPORTANT: Only add a TIP if the answer is about a specific portfolio section (About, Skills, Projects, Contact, Guestbook, Package). For example: 'Rehan is a passionate student developer.' TIP: Explore in the About section.",
-      "IMPORTANT TIP MAPPING: Use the correct section name: skills → 'Skills', projects → 'Projects', education/about → 'About', contact/email/linkedin/github → 'Contact', guestbook → 'Guestbook', packages/tools → 'Package'. NEVER use 'about' for contact info.",
+      "IMPORTANT: Only add a TIP if the answer is about a specific portfolio section (About, Skills, Projects, Contact, Guestbook). For example: 'Rehan is a passionate student developer.' TIP: Explore in the About section.",
+      "IMPORTANT TIP MAPPING: Use the correct section name: skills → 'Skills', projects → 'Projects', education/about → 'About', contact/email/linkedin/github → 'Contact', guestbook → 'Guestbook'. NEVER use 'about' for contact info.",
       "CRITICAL: If the question is about the AI assistant itself (like 'who are you', 'what can you do', 'introduce yourself'), answer briefly WITHOUT any TIP. No TIP at all for assistant-related questions."
     ]
   }

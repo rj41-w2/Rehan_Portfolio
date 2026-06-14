@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Home, User, Briefcase, Mail, Book, Sun, Moon, MoreVertical, Cpu, Package } from 'lucide-react';
+import { Menu, X, Home, User, Briefcase, Mail, Book, Sun, Moon, MoreVertical, Cpu } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -14,8 +14,7 @@ const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
       { id: 'skills', icon: <Cpu size={20} />, text: 'Skills' },
       { id: 'projects', icon: <Briefcase size={20} />, text: 'Projects' },
       { id: 'contact', icon: <Mail size={20} />, text: 'Contact' },
-      { id: 'guestbook', icon: <Book size={20} />, text: 'Guestbook' },
-      { id: 'package', icon: <Package size={20} />, text: 'Package' }
+      { id: 'guestbook', icon: <Book size={20} />, text: 'Guestbook' }
     ];
 
     const menuVariants = {
@@ -54,7 +53,7 @@ const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
     };
 
     const renderMobileNavLink = (item) => {
-      const isRoutable = item.id === 'guestbook' || item.id === 'contact' || item.id === 'package';
+      const isRoutable = item.id === 'guestbook' || item.id === 'contact';
       const className = `flex items-center gap-4 w-full text-left capitalize font-medium py-3 px-4 rounded-xl ${
         activeSection === item.id
         ? "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400"
@@ -149,12 +148,11 @@ const Navbar = ({ activeSection, scrollToSection, theme, toggleTheme }) => {
       { id: 'about', icon: <User size={20} />, text: 'About' },
       { id: 'skills', icon: <Cpu size={20} />, text: 'Skills' },
       { id: 'projects', icon: <Briefcase size={20} />, text: 'Projects' },
-      { id: 'contact', icon: <Mail size={20} />, text: 'Contact' },
-      { id: 'package', icon: <Package size={20} />, text: 'Package' }
+      { id: 'contact', icon: <Mail size={20} />, text: 'Contact' }
     ];
 
     const renderDesktopNavLink = (item) => {
-      const isRoutable = item.id === 'contact' || item.id === 'package';
+      const isRoutable = item.id === 'contact';
       const className = `flex items-center gap-2 px-3 py-2 rounded-full font-medium text-sm transition-all duration-300 group ${
         activeSection === item.id
           ? "text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-500/10"

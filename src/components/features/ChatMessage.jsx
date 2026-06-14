@@ -165,7 +165,7 @@ const ChatMessage = ({ text, metadata = {} }) => {
           <button
             onClick={() => {
               const section = tipSection.toLowerCase();
-              const routes = ['package', 'contact', 'guestbook'];
+              const routes = ['contact', 'guestbook'];
               if (routes.includes(section)) {
                 navigate(`/${section}`);
               } else {

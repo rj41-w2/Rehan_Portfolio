@@ -14,8 +14,6 @@ import Projects from './components/sections/Projects';
 const Guestbook = lazy(() => import('./components/features/Guestbook'));
 const Contact = lazy(() => import('./components/sections/Contact'));
 const ChatWidget = lazy(() => import('./components/features/ChatWidget'));
-const Documents = lazy(() => import('./components/sections/Documents'));
-const Package = lazy(() => import('./components/sections/Package'));
 
 // --- HOME PAGE COMPONENT ---
 
@@ -112,7 +110,7 @@ export default function Layout() {
   };
 
   const scrollToSection = (id) => {
-    const validIds = ['home', 'about', 'skills', 'projects', 'contact', 'guestbook', 'package'];
+    const validIds = ['home', 'about', 'skills', 'projects', 'contact', 'guestbook'];
     if (!validIds.includes(id) && id !== 'hero') {
       console.error(`Invalid section id: ${id}`);
       return;
@@ -133,13 +131,6 @@ export default function Layout() {
     if (sectionId === 'guestbook') {
       if (location.pathname !== '/guestbook') {
         navigate('/guestbook');
-      }
-      return;
-    }
-
-    if (sectionId === 'package') {
-      if (location.pathname !== '/package') {
-        navigate('/package');
       }
       return;
     }
@@ -168,7 +159,7 @@ export default function Layout() {
         Skip to main content
       </a>
 
-      {showUI && (location.pathname !== '/guestbook' && location.pathname !== '/documents' && location.pathname !== '/contact' && location.pathname !== '/skills' && location.pathname !== '/package') && (
+      {showUI && (location.pathname !== '/guestbook' && location.pathname !== '/contact' && location.pathname !== '/skills') && (
         <Link to="/" className="fixed top-4 left-4 z-50 hidden md:block">
           <img src="/images/logo.png" alt="Logo" className="h-12 w-auto" />
         </Link>
@@ -189,14 +180,8 @@ export default function Layout() {
             <Route path="/guestbook" element={
               <Guestbook theme={theme} toggleTheme={toggleTheme} showUI={showUI} setShowUI={setShowUI} />
             } />
-            <Route path="/documents" element={
-              <Documents showUI={showUI} setShowUI={setShowUI} />
-            } />
             <Route path="/contact" element={
               <Contact />
-            } />
-            <Route path="/package" element={
-              <Package />
             } />
           </Routes>
         </Suspense>
